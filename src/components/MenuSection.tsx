@@ -64,14 +64,14 @@ const desserts = [
 
 const MenuSection = () => {
   return (
-    <section id="menu" className="relative py-32 bg-void">
+    <section id="menu" className="relative py-32 bg-background">
       {/* Decorative top border */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Section header */}
         <div className="text-center mb-20">
-          <span className="text-primary text-3xl mb-4 block">☽</span>
+          <span className="text-foreground text-3xl mb-4 block">☽</span>
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
             THE OFFERINGS
           </h2>
@@ -83,9 +83,9 @@ const MenuSection = () => {
         {/* Main courses */}
         <div className="mb-20">
           <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-primary/20" />
-            <h3 className="font-display text-sm tracking-[0.3em] text-primary/70">MAIN RITES</h3>
-            <div className="flex-1 h-px bg-primary/20" />
+            <div className="flex-1 h-px bg-border" />
+            <h3 className="font-display text-xs tracking-[0.3em] text-muted-foreground">MAIN RITES</h3>
+            <div className="flex-1 h-px bg-border" />
           </div>
           
           <div className="space-y-2">
@@ -98,9 +98,9 @@ const MenuSection = () => {
         {/* Desserts */}
         <div>
           <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-primary/20" />
-            <h3 className="font-display text-sm tracking-[0.3em] text-primary/70">FINAL RITES</h3>
-            <div className="flex-1 h-px bg-primary/20" />
+            <div className="flex-1 h-px bg-border" />
+            <h3 className="font-display text-xs tracking-[0.3em] text-muted-foreground">FINAL RITES</h3>
+            <div className="flex-1 h-px bg-border" />
           </div>
           
           <div className="space-y-2">
