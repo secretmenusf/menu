@@ -6,6 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import SeedOfLife from './SeedOfLife';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -34,10 +35,10 @@ const Header = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="group flex items-center gap-3 focus:outline-none">
-              {/* Triangle logo */}
-              <span className="text-2xl text-foreground transition-transform duration-300 group-hover:scale-110 group-data-[state=open]:scale-110">
-                △
-              </span>
+              {/* Seed of Life logo */}
+              <div className="transition-transform duration-300 group-hover:scale-110 group-data-[state=open]:scale-110">
+                <SeedOfLife size={28} className="text-foreground" />
+              </div>
               {/* Brand text that appears on hover */}
               <span className="font-display text-sm tracking-[0.3em] text-foreground overflow-hidden transition-all duration-300 max-w-0 group-hover:max-w-[200px] group-data-[state=open]:max-w-[200px] whitespace-nowrap">
                 SECRET MENU
