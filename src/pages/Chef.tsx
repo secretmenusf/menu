@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import SeedOfLife from '@/components/SeedOfLife';
+import ConnectWallet from '@/components/ConnectWallet';
+import chefPortrait from '@/assets/chef-antje.jpg';
 
 const Chef = () => {
   return (
@@ -19,6 +21,7 @@ const Chef = () => {
             <Link to="/entry" className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
               ORDER
             </Link>
+            <ConnectWallet />
           </div>
         </nav>
       </header>
@@ -29,15 +32,13 @@ const Chef = () => {
             {/* Portrait area */}
             <div className="relative">
               <div className="aspect-[3/4] bg-card border border-border rounded-2xl relative overflow-hidden">
-                {/* Stylized portrait placeholder with mystical frame */}
-                <div className="absolute inset-4 border border-border rounded-xl" />
-                <div className="absolute inset-8 border border-muted rounded-lg" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <SeedOfLife size={80} className="text-muted-foreground mx-auto mb-4" />
-                    <p className="font-display text-sm tracking-[0.3em] text-muted-foreground">THE CHEF</p>
-                  </div>
-                </div>
+                <img 
+                  src={chefPortrait} 
+                  alt="Chef Antje Worring" 
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* Subtle overlay frame */}
+                <div className="absolute inset-0 border-[8px] border-background/20 rounded-2xl" />
               </div>
               
               {/* Name plaque */}
