@@ -61,12 +61,31 @@ const SeedOfLifeGeometry = () => {
 const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
   return (
     <div 
-      className={className}
+      className={`relative ${className}`}
       style={{ width: size, height: size }}
     >
+      {/* Pulsing glow aura */}
+      <div 
+        className="absolute inset-0 rounded-full animate-pulse"
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 40%, transparent 70%)',
+          filter: 'blur(4px)',
+          transform: 'scale(1.5)',
+        }}
+      />
+      <div 
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 50%)',
+          filter: 'blur(2px)',
+          transform: 'scale(1.3)',
+          animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          animationDelay: '0.5s',
+        }}
+      />
       <Canvas
         camera={{ position: [0, 0, 2], fov: 50 }}
-        style={{ background: 'transparent' }}
+        style={{ background: 'transparent', position: 'relative', zIndex: 1 }}
         gl={{ alpha: true, antialias: true }}
       >
         <ambientLight intensity={0.5} />
