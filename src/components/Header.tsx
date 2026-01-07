@@ -80,24 +80,17 @@ const Header = () => {
         {/* Desktop navigation */}
         <div className="hidden md:flex items-center gap-12">
           <button
-            onClick={() => scrollToSection('menu')}
-            className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors relative group"
-          >
-            MENU
-            <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
-          </button>
-          <button
             onClick={() => scrollToSection('about')}
             className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors relative group"
           >
-            THE KEEPER
+            CHEF
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
           </button>
           <button
             onClick={() => scrollToSection('contact')}
             className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors relative group"
           >
-            SEEK ENTRY
+            ORDER
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
           </button>
         </div>
