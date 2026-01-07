@@ -165,7 +165,7 @@ const Menu = () => {
               THE MENU
             </h1>
             <p className="font-body text-lg text-muted-foreground">
-              Five days of curated culinary experiences
+              Week of January 5, 2026
             </p>
           </div>
 
