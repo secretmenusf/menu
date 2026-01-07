@@ -17,7 +17,7 @@ const Chef = () => {
               MENU
             </Link>
             <Link to="/entry" className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-              SEEK ENTRY
+              ORDER
             </Link>
           </div>
         </nav>

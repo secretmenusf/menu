@@ -37,7 +37,7 @@ const Entry = () => {
               MENU
             </Link>
             <Link to="/chef" className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-              THE KEEPER
+              CHEF
             </Link>
           </div>
         </nav>
@@ -48,25 +48,25 @@ const Entry = () => {
           <div className="text-center mb-12">
             <SeedOfLife size={60} className="text-foreground mx-auto mb-6" />
             <h1 className="font-display text-3xl tracking-[0.2em] text-foreground mb-4">
-              SEEK ENTRY
+              ORDER
             </h1>
             <p className="font-body text-muted-foreground">
               Access members-only weekly delivery
             </p>
           </div>
 
-          <div className="border border-border bg-card p-8">
+          <div className="border border-border bg-card p-8 rounded-2xl">
             <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-background border border-border mb-8">
+              <TabsList className="grid w-full grid-cols-2 bg-background border border-border mb-8 rounded-full p-1">
                 <TabsTrigger 
                   value="login" 
-                  className="font-display text-xs tracking-[0.15em] data-[state=active]:bg-foreground data-[state=active]:text-background"
+                  className="font-display text-xs tracking-[0.15em] rounded-full data-[state=active]:bg-foreground data-[state=active]:text-background"
                 >
                   LOGIN
                 </TabsTrigger>
                 <TabsTrigger 
                   value="invite"
-                  className="font-display text-xs tracking-[0.15em] data-[state=active]:bg-foreground data-[state=active]:text-background"
+                  className="font-display text-xs tracking-[0.15em] rounded-full data-[state=active]:bg-foreground data-[state=active]:text-background"
                 >
                   INVITE CODE
                 </TabsTrigger>
@@ -83,7 +83,7 @@ const Entry = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="bg-background border-border focus:border-foreground font-body"
+                      className="bg-background border-border focus:border-foreground font-body rounded-full focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                   </div>
                   
@@ -96,13 +96,13 @@ const Entry = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="bg-background border-border focus:border-foreground font-body"
+                      className="bg-background border-border focus:border-foreground font-body rounded-full focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                   </div>
                   
                   <Button 
                     type="submit" 
-                    className="w-full font-display text-xs tracking-[0.2em] bg-foreground text-background hover:bg-foreground/90"
+                    className="w-full font-display text-xs tracking-[0.2em] bg-foreground text-background hover:bg-foreground/90 rounded-full"
                   >
                     ENTER
                   </Button>
@@ -120,7 +120,7 @@ const Entry = () => {
                       value={inviteCode}
                       onChange={(e) => setInviteCode(e.target.value)}
                       placeholder="Enter your invitation code"
-                      className="bg-background border-border focus:border-foreground font-body text-center tracking-widest"
+                      className="bg-background border-border focus:border-foreground font-body text-center tracking-widest rounded-full focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                   </div>
                   
@@ -130,7 +130,7 @@ const Entry = () => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full font-display text-xs tracking-[0.2em] bg-foreground text-background hover:bg-foreground/90"
+                    className="w-full font-display text-xs tracking-[0.2em] bg-foreground text-background hover:bg-foreground/90 rounded-full"
                   >
                     VALIDATE
                   </Button>
@@ -143,7 +143,7 @@ const Entry = () => {
           <div className="mt-12 text-center border-t border-border pt-8">
             <p className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-4">DELIVERY HOURS</p>
             <div className="font-body text-foreground/70 space-y-1">
-              <p>Wednesday through Saturday</p>
+              <p>8am – 1am daily</p>
               <p className="text-sm text-muted-foreground">SF Bay Area only</p>
             </div>
           </div>
