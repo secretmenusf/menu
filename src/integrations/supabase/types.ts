@@ -14,16 +14,235 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      menu_items: {
+        Row: {
+          created_at: string
+          day_number: number
+          description: string | null
+          gluten_free: boolean
+          id: string
+          meal_type: string
+          menu_week_id: string
+          name: string
+          ritual: string | null
+          symbol: string | null
+          vegetarian: boolean
+        }
+        Insert: {
+          created_at?: string
+          day_number: number
+          description?: string | null
+          gluten_free?: boolean
+          id?: string
+          meal_type?: string
+          menu_week_id: string
+          name: string
+          ritual?: string | null
+          symbol?: string | null
+          vegetarian?: boolean
+        }
+        Update: {
+          created_at?: string
+          day_number?: number
+          description?: string | null
+          gluten_free?: boolean
+          id?: string
+          meal_type?: string
+          menu_week_id?: string
+          name?: string
+          ritual?: string | null
+          symbol?: string | null
+          vegetarian?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_menu_week_id_fkey"
+            columns: ["menu_week_id"]
+            isOneToOne: false
+            referencedRelation: "menu_weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menu_weeks: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          price_cents: number
+          updated_at: string
+          week_start_date: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          price_cents?: number
+          updated_at?: string
+          week_start_date: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          price_cents?: number
+          updated_at?: string
+          week_start_date?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          delivery_notes: string | null
+          id: string
+          menu_week_id: string
+          payment_method: string
+          payment_status: string
+          status: string
+          stripe_payment_id: string | null
+          total_cents: number
+          updated_at: string
+          user_id: string
+          wallet_tx_hash: string | null
+        }
+        Insert: {
+          created_at?: string
+          delivery_notes?: string | null
+          id?: string
+          menu_week_id: string
+          payment_method: string
+          payment_status?: string
+          status?: string
+          stripe_payment_id?: string | null
+          total_cents: number
+          updated_at?: string
+          user_id: string
+          wallet_tx_hash?: string | null
+        }
+        Update: {
+          created_at?: string
+          delivery_notes?: string | null
+          id?: string
+          menu_week_id?: string
+          payment_method?: string
+          payment_status?: string
+          status?: string
+          stripe_payment_id?: string | null
+          total_cents?: number
+          updated_at?: string
+          user_id?: string
+          wallet_tx_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_menu_week_id_fkey"
+            columns: ["menu_week_id"]
+            isOneToOne: false
+            referencedRelation: "menu_weeks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          phone: string | null
+          updated_at: string
+          wallet_address: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id: string
+          name?: string | null
+          phone?: string | null
+          updated_at?: string
+          wallet_address?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          phone?: string | null
+          updated_at?: string
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cancelled_at: string | null
+          created_at: string
+          id: string
+          payment_method: string
+          status: string
+          stripe_subscription_id: string | null
+          user_id: string
+          wallet_address: string | null
+        }
+        Insert: {
+          cancelled_at?: string | null
+          created_at?: string
+          id?: string
+          payment_method: string
+          status?: string
+          stripe_subscription_id?: string | null
+          user_id: string
+          wallet_address?: string | null
+        }
+        Update: {
+          cancelled_at?: string | null
+          created_at?: string
+          id?: string
+          payment_method?: string
+          status?: string
+          stripe_subscription_id?: string | null
+          user_id?: string
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +369,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
