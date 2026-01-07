@@ -66,13 +66,13 @@ const Header = () => {
               onClick={() => scrollToSection('about')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              THE KEEPER
+              CHEF
             </DropdownMenuItem>
             <DropdownMenuItem 
               onClick={() => scrollToSection('contact')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              SEEK ENTRY
+              ORDER
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
