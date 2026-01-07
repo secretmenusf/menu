@@ -102,7 +102,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="..."
-                className={`w-64 text-center font-body tracking-widest bg-transparent border-foreground/50 focus:border-foreground transition-all ${error ? 'animate-shake border-destructive' : ''}`}
+                className={`w-64 text-center font-body tracking-widest bg-transparent border-foreground/50 focus:border-foreground focus-visible:ring-0 focus-visible:ring-offset-0 transition-all ${error ? 'animate-shake border-destructive' : ''}`}
               />
               <Button 
                 type="submit" 
@@ -121,7 +121,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
           <div className="relative">
             {/* Chat bubble */}
-            <div className="bg-card border border-border p-5 pt-8 rounded-3xl max-w-xs shadow-lg">
+            <div className="bg-card p-5 pt-8 rounded-3xl max-w-xs shadow-lg">
               <button 
                 onClick={() => setShowHint(false)}
                 className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
@@ -141,7 +141,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
               )}
             </div>
             {/* Bubble tail */}
-            <div className="absolute -bottom-2 right-6 w-3 h-3 bg-card border-r border-b border-border transform rotate-45 rounded-sm" />
+            <div className="absolute -bottom-2 right-6 w-3 h-3 bg-card transform rotate-45 rounded-sm" />
           </div>
           
           {/* Floating icon when collapsed */}
