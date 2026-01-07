@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
 import SeedOfLife from '@/components/SeedOfLife';
+import { Leaf, WheatOff } from 'lucide-react';
+
+interface MenuItem {
+  name: string;
+  vegetarian?: boolean;
+  glutenFree?: boolean;
+}
 
 interface DayMenu {
   day: string;
   meals: {
     type: string;
-    items: string[];
+    items: MenuItem[];
   }[];
 }
 
@@ -16,24 +23,24 @@ const menuData: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          "Caprese panini on freshly baked artisan bread",
-          "Mixed green salad with vinaigrette & pickled red onions"
+          { name: "Caprese panini on freshly baked artisan bread", vegetarian: true },
+          { name: "Mixed green salad with vinaigrette & pickled red onions", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Snack",
-        items: ["Spanish gildas with anchovies"]
+        items: [{ name: "Spanish gildas with anchovies", glutenFree: true }]
       },
       {
         type: "Dinner",
         items: [
-          "Chicken & beef andouille sausage paella",
-          "Grilled padrón peppers"
+          { name: "Chicken & beef andouille sausage paella", glutenFree: true },
+          { name: "Grilled padrón peppers", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: ["Burnt Basque cheesecake"]
+        items: [{ name: "Burnt Basque cheesecake", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -43,24 +50,24 @@ const menuData: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          "Grilled chicken Caesar kale wrap",
-          "Beet salad"
+          { name: "Grilled chicken Caesar kale wrap" },
+          { name: "Beet salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Snack",
-        items: ["Carrots with hummus"]
+        items: [{ name: "Carrots with hummus", vegetarian: true, glutenFree: true }]
       },
       {
         type: "Dinner",
         items: [
-          "Pita sandwich with freshly made falafel",
-          "Tabbouleh"
+          { name: "Pita sandwich with freshly made falafel", vegetarian: true },
+          { name: "Tabbouleh", vegetarian: true }
         ]
       },
       {
         type: "Dessert",
-        items: ["Chocolate chip cookies"]
+        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
       }
     ]
   },
@@ -70,22 +77,22 @@ const menuData: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          "Bulgogi bowl with steamed jasmine rice, garlic broccoli, preserved egg, pickled carrots & chili crunch"
+          { name: "Bulgogi bowl with steamed jasmine rice, garlic broccoli, preserved egg, pickled carrots & chili crunch", glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          "Mezze spread: beet hummus, roasted pepper hummus & roasted garlic hummus",
-          "Fresh pita bread",
-          "Grilled meat skewers",
-          "Saffron rice",
-          "Beet salad"
+          { name: "Mezze spread: beet hummus, roasted pepper hummus & roasted garlic hummus", vegetarian: true, glutenFree: true },
+          { name: "Fresh pita bread", vegetarian: true },
+          { name: "Grilled meat skewers", glutenFree: true },
+          { name: "Saffron rice", vegetarian: true, glutenFree: true },
+          { name: "Beet salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: ["Chocolate chip cookies"]
+        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
       }
     ]
   },
@@ -95,20 +102,20 @@ const menuData: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          "Spanish albondigas with almond saffron sauce",
-          "Smashed potatoes with bravas sauce"
+          { name: "Spanish albondigas with almond saffron sauce", glutenFree: true },
+          { name: "Smashed potatoes with bravas sauce", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          "Beef \"Sunday roast\" with rosemary potatoes, carrots & gravy",
-          "Side salad with vinaigrette"
+          { name: "Beef \"Sunday roast\" with rosemary potatoes, carrots & gravy", glutenFree: true },
+          { name: "Side salad with vinaigrette", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: ["Rice pudding"]
+        items: [{ name: "Rice pudding", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -118,22 +125,40 @@ const menuData: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          "Duck confit (48-hour)",
-          "Seasonal vegetable medley",
-          "French lentil salad"
+          { name: "Duck confit (48-hour)", glutenFree: true },
+          { name: "Seasonal vegetable medley", vegetarian: true, glutenFree: true },
+          { name: "French lentil salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          "Grilled cheese sandwich on fresh sourdough",
-          "Tomato soup"
+          { name: "Grilled cheese sandwich on fresh sourdough", vegetarian: true },
+          { name: "Tomato soup", vegetarian: true, glutenFree: true }
         ]
       }
     ]
   }
 ];
 
+const DietaryIcon = ({ vegetarian, glutenFree }: { vegetarian?: boolean; glutenFree?: boolean }) => {
+  if (!vegetarian && !glutenFree) return null;
+  
+  return (
+    <span className="inline-flex items-center gap-1.5 ml-2">
+      {vegetarian && (
+        <span className="inline-flex items-center justify-center" title="Vegetarian">
+          <Leaf size={14} className="text-green-600" />
+        </span>
+      )}
+      {glutenFree && (
+        <span className="inline-flex items-center justify-center" title="Gluten-Free">
+          <WheatOff size={14} className="text-amber-600" />
+        </span>
+      )}
+    </span>
+  );
+};
 const Menu = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -193,9 +218,10 @@ const Menu = () => {
                         {meal.items.map((item, itemIndex) => (
                           <p 
                             key={itemIndex} 
-                            className="font-body text-foreground/90 leading-relaxed"
+                            className="font-body text-foreground/90 leading-relaxed inline-flex items-center flex-wrap"
                           >
-                            {item}
+                            {item.name}
+                            <DietaryIcon vegetarian={item.vegetarian} glutenFree={item.glutenFree} />
                           </p>
                         ))}
                       </div>
