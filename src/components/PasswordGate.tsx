@@ -12,8 +12,7 @@ const hints = [
   "Think about what the initiated already know...",
   "It's a phrase, not a word.",
   "Four letters. An acronym of sorts.",
-  "If you know, you know... literally.",
-  "iykyk - still confused?",
+  "If you know, you know...",
 ];
 
 const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
@@ -97,14 +96,16 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
               <p className="font-body text-sm text-muted-foreground tracking-wider mb-2">
                 speak the passphrase
               </p>
-              <Input
-                ref={inputRef}
-                type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="..."
-                className={`w-64 text-center font-body tracking-widest bg-transparent border-border focus:border-foreground transition-all ${error ? 'animate-shake border-destructive' : ''}`}
-              />
+              <div className={`p-1 rounded-full border border-foreground/30 ${error ? 'border-destructive' : ''}`}>
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="..."
+                  className={`w-64 text-center font-body tracking-widest bg-transparent border-foreground/50 focus:border-foreground transition-all ${error ? 'animate-shake border-destructive' : ''}`}
+                />
+              </div>
               <Button 
                 type="submit" 
                 variant="outline"
@@ -122,7 +123,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
           <div className="relative">
             {/* Chat bubble */}
-            <div className="bg-card border border-border p-4 rounded-lg max-w-xs shadow-lg">
+            <div className="bg-card border border-border p-4 rounded-3xl max-w-xs shadow-lg">
               <button 
                 onClick={() => setShowHint(false)}
                 className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -142,7 +143,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
               )}
             </div>
             {/* Bubble tail */}
-            <div className="absolute -bottom-2 right-4 w-4 h-4 bg-card border-r border-b border-border transform rotate-45" />
+            <div className="absolute -bottom-2 right-6 w-3 h-3 bg-card border-r border-b border-border transform rotate-45 rounded-sm" />
           </div>
           
           {/* Floating icon when collapsed */}
