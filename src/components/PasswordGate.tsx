@@ -116,42 +116,46 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
         </div>
       </div>
 
-      {/* Hint bubble */}
-      {showHint && phase === 'password' && (
-        <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
-          <div className="relative">
-            {/* Chat bubble */}
-            <div className="bg-card p-5 pt-8 rounded-3xl max-w-xs shadow-lg">
-              <button 
-                onClick={() => setShowHint(false)}
-                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <X size={16} />
-              </button>
-              <p className="font-body text-sm text-foreground/80 pr-4">
-                {hints[hintIndex]}
-              </p>
-              {hintIndex < hints.length - 1 && (
-                <button 
-                  onClick={nextHint}
-                  className="mt-3 font-display text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  need more help?
-                </button>
-              )}
+      {/* Hint system - always show after trigger */}
+      {phase === 'password' && (
+        <>
+          {/* Chat bubble - shown when open */}
+          {showHint && (
+            <div className="fixed bottom-20 right-6 z-[60] animate-fade-in">
+              <div className="relative">
+                <div className="bg-card border border-border p-5 pt-8 rounded-3xl max-w-xs shadow-lg">
+                  <button 
+                    onClick={() => setShowHint(false)}
+                    className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X size={16} />
+                  </button>
+                  <p className="font-body text-sm text-foreground/80 pr-4">
+                    {hints[hintIndex]}
+                  </p>
+                  {hintIndex < hints.length - 1 && (
+                    <button 
+                      onClick={nextHint}
+                      className="mt-3 font-display text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      need more help?
+                    </button>
+                  )}
+                </div>
+                {/* Bubble tail pointing to icon */}
+                <div className="absolute -bottom-2 right-8 w-3 h-3 bg-card border-r border-b border-border transform rotate-45" />
+              </div>
             </div>
-            {/* Bubble tail */}
-            <div className="absolute -bottom-2 right-6 w-3 h-3 bg-card transform rotate-45 rounded-sm" />
-          </div>
+          )}
           
-          {/* Floating icon when collapsed */}
+          {/* Floating chat icon - always visible */}
           <button 
-            className="absolute -bottom-2 -right-2 w-10 h-10 bg-foreground text-background rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-            onClick={() => setShowHint(true)}
+            className="fixed bottom-6 right-6 z-[70] w-12 h-12 bg-foreground text-background rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+            onClick={() => setShowHint(!showHint)}
           >
-            <MessageCircle size={18} />
+            {showHint ? <X size={20} /> : <MessageCircle size={20} />}
           </button>
-        </div>
+        </>
       )}
     </div>
   );
