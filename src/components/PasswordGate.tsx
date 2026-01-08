@@ -10,9 +10,10 @@ interface PasswordGateProps {
 
 const hints = [
   "Think about what the initiated already know...",
-  "It's a phrase, not a word.",
   "What do you feel about secrets?",
-  "Express your affection for secrets...",
+  "Express your affection for the hidden...",
+  "Three words. First word: 'I'. Put them together.",
+  "Almost there... type: ilovesecrets",
 ];
 
 const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
@@ -22,7 +23,9 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
   const [showHint, setShowHint] = useState(false);
   const [hintIndex, setHintIndex] = useState(0);
   const [failedAttempts, setFailedAttempts] = useState(0);
+  const [autoRevealCountdown, setAutoRevealCountdown] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const autoRevealTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Phase 1: Complete black for 1 second
@@ -42,6 +45,36 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
     }
   }, [phase]);
 
+  // Auto-reveal timer - starts when password phase begins
+  useEffect(() => {
+    if (phase === 'password') {
+      // Start 5 minute countdown (300 seconds)
+      autoRevealTimerRef.current = setTimeout(() => {
+        // Auto-type the password
+        setPassword('ilovesecrets');
+        setAutoRevealCountdown(3);
+      }, 300000); // 5 minutes
+      
+      return () => {
+        if (autoRevealTimerRef.current) {
+          clearTimeout(autoRevealTimerRef.current);
+        }
+      };
+    }
+  }, [phase]);
+
+  // Auto-submit after countdown
+  useEffect(() => {
+    if (autoRevealCountdown !== null && autoRevealCountdown > 0) {
+      const timer = setTimeout(() => {
+        setAutoRevealCountdown(autoRevealCountdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (autoRevealCountdown === 0) {
+      onSuccess();
+    }
+  }, [autoRevealCountdown, onSuccess]);
+
   useEffect(() => {
     // Show hint bubble after 10 seconds on password phase, or after 2 failed attempts
     if (phase === 'password') {
@@ -57,6 +90,10 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password.toLowerCase().trim() === 'ilovesecrets') {
+      // Clear auto-reveal timer on success
+      if (autoRevealTimerRef.current) {
+        clearTimeout(autoRevealTimerRef.current);
+      }
       onSuccess();
     } else {
       setError(true);
@@ -110,6 +147,13 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
               >
                 ENTER
               </Button>
+              
+              {/* Auto-reveal countdown message */}
+              {autoRevealCountdown !== null && (
+                <p className="font-body text-xs text-muted-foreground mt-2">
+                  Entering in {autoRevealCountdown}...
+                </p>
+              )}
             </div>
           </form>
         </div>
