@@ -1,8 +1,26 @@
+import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 const Support = () => {
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Message sent! We'll get back to you within 24 hours.");
+    setContactForm({ name: '', email: '', subject: '', message: '' });
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -20,25 +38,71 @@ const Support = () => {
             </p>
           </div>
 
-          {/* Contact */}
-          <section className="mb-16 text-center">
-            <h2 className="font-display text-2xl tracking-[0.1em] mb-6">CONTACT US</h2>
-            <div className="space-y-4 font-body text-foreground/80">
+          {/* Contact Form */}
+          <section id="contact" className="mb-16">
+            <h2 className="font-display text-2xl tracking-[0.1em] mb-8 text-center">CONTACT US</h2>
+            <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-display tracking-[0.1em] mb-2">NAME</label>
+                  <Input
+                    value={contactForm.name}
+                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                    placeholder="Your name"
+                    required
+                    className="rounded-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-display tracking-[0.1em] mb-2">EMAIL</label>
+                  <Input
+                    type="email"
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                    placeholder="your@email.com"
+                    required
+                    className="rounded-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-display tracking-[0.1em] mb-2">SUBJECT</label>
+                <Input
+                  value={contactForm.subject}
+                  onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                  placeholder="What's this about?"
+                  required
+                  className="rounded-full"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-display tracking-[0.1em] mb-2">MESSAGE</label>
+                <Textarea
+                  value={contactForm.message}
+                  onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                  placeholder="Tell us more..."
+                  required
+                  rows={5}
+                  className="rounded-3xl"
+                />
+              </div>
+              <div className="text-center">
+                <Button type="submit" className="rounded-full px-12">
+                  SEND MESSAGE
+                </Button>
+              </div>
+            </form>
+            <div className="mt-8 text-center space-y-2 font-body text-sm text-muted-foreground">
               <p>
-                <span className="text-muted-foreground">Email:</span>{' '}
-                <a href="mailto:support@secretmenu.sf" className="hover:text-primary transition-colors">
-                  support@secretmenu.sf
+                <a href="mailto:hello@secretmenu.xyz" className="hover:text-foreground transition-colors">
+                  hello@secretmenu.xyz
+                </a>
+                {' · '}
+                <a href="tel:+13235551234" className="hover:text-foreground transition-colors">
+                  (323) 555-1234
                 </a>
               </p>
-              <p>
-                <span className="text-muted-foreground">Phone:</span>{' '}
-                <a href="tel:+14155551234" className="hover:text-primary transition-colors">
-                  (415) 555-1234
-                </a>
-              </p>
-              <p className="text-sm text-muted-foreground/60">
-                Response time: Within 24 hours
-              </p>
+              <p className="text-muted-foreground/60">Response time: Within 24 hours</p>
             </div>
           </section>
 
@@ -61,7 +125,7 @@ const Support = () => {
                   What are your delivery hours?
                 </AccordionTrigger>
                 <AccordionContent className="font-body text-muted-foreground">
-                  We deliver from 8am to 1am daily throughout the San Francisco Bay Area. 
+                  We deliver from 8am to 1am daily throughout the Los Angeles area. 
                   Orders placed after 1am will be scheduled for the next delivery window.
                 </AccordionContent>
               </AccordionItem>
@@ -91,8 +155,8 @@ const Support = () => {
                   What payment methods do you accept?
                 </AccordionTrigger>
                 <AccordionContent className="font-body text-muted-foreground">
-                  We accept all major credit cards through Stripe, as well as cryptocurrency payments 
-                  via connected wallets. All transactions are secure and encrypted.
+                  We exclusively accept cryptocurrency payments. Connect your wallet (MetaMask, WalletConnect, 
+                  Coinbase Wallet, etc.) to pay with ETH or supported tokens on Ethereum mainnet or L2s.
                 </AccordionContent>
               </AccordionItem>
 
@@ -109,20 +173,54 @@ const Support = () => {
           </section>
 
           {/* Policies */}
-          <section className="grid md:grid-cols-2 gap-8">
-            <div className="p-6 border border-border rounded-2xl">
-              <h3 className="font-display text-lg tracking-[0.1em] mb-4">REFUND POLICY</h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                Not satisfied? Contact us within 24 hours of delivery for a full refund or credit 
-                toward your next order. We stand behind every dish that leaves our kitchen.
-              </p>
+          <section id="refund" className="mb-12">
+            <div className="p-8 border border-border rounded-2xl">
+              <h3 className="font-display text-xl tracking-[0.1em] mb-4">REFUND POLICY</h3>
+              <div className="font-body text-sm text-muted-foreground leading-relaxed space-y-3">
+                <p>
+                  Not satisfied? Contact us within 24 hours of delivery for a full refund or credit 
+                  toward your next order. We stand behind every dish that leaves our kitchen.
+                </p>
+                <p>
+                  Refunds are processed back to your original wallet and typically complete within 3-5 business days.
+                </p>
+              </div>
             </div>
-            <div className="p-6 border border-border rounded-2xl">
-              <h3 className="font-display text-lg tracking-[0.1em] mb-4">PRIVACY</h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                Your data is sacred. We never share your personal information with third parties. 
-                All payment data is encrypted and handled by trusted payment processors.
-              </p>
+          </section>
+
+          <section id="privacy" className="mb-12">
+            <div className="p-8 border border-border rounded-2xl">
+              <h3 className="font-display text-xl tracking-[0.1em] mb-4">PRIVACY POLICY</h3>
+              <div className="font-body text-sm text-muted-foreground leading-relaxed space-y-3">
+                <p>
+                  Your data is sacred. We collect only what's necessary: wallet address (for payments), 
+                  delivery address, and contact information.
+                </p>
+                <p>
+                  We never share your personal information with third parties. All payment data is 
+                  encrypted and handled securely through blockchain transactions.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section id="terms" className="mb-12">
+            <div className="p-8 border border-border rounded-2xl">
+              <h3 className="font-display text-xl tracking-[0.1em] mb-4">TERMS OF SERVICE</h3>
+              <div className="font-body text-sm text-muted-foreground leading-relaxed space-y-3">
+                <p>
+                  By using Secret Menu, you agree to these terms. You must be at least 18 years old 
+                  and have a valid crypto wallet to use our services.
+                </p>
+                <p>
+                  All orders are subject to availability. Payments are final once confirmed on the blockchain. 
+                  We are not responsible for delays caused by incorrect addresses or recipient unavailability.
+                </p>
+                <p>
+                  Secret Menu is not liable for allergic reactions or adverse effects from food consumption. 
+                  Please review all ingredients carefully.
+                </p>
+              </div>
             </div>
           </section>
         </div>
