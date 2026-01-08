@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
 import SeedOfLife from '@/components/SeedOfLife';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Leaf, WheatOff } from 'lucide-react';
 
 interface MenuItem {
@@ -162,24 +163,8 @@ const DietaryIcon = ({ vegetarian, glutenFree }: { vegetarian?: boolean; glutenF
 const Menu = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="group flex items-center gap-3">
-            <SeedOfLife size={32} className="text-foreground transition-transform duration-300 group-hover:scale-110" />
-            <span className="font-display text-sm tracking-[0.3em] text-foreground">SECRET MENU</span>
-          </Link>
-          
-          <div className="flex items-center gap-8">
-            <Link to="/chef" className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-              CHEF
-            </Link>
-            <Link to="/entry" className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-              ORDER
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Header />
+      <Footer />
 
       <main className="pt-24 pb-20">
         <div className="container mx-auto px-6 max-w-3xl">
