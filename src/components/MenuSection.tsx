@@ -1,66 +1,53 @@
 import MenuItem from './MenuItem';
 
-const menuItems = [
-  {
-    name: "THE PHILOSOPHER'S STONE",
-    description: "Aged bone marrow, black truffle essence, gold leaf, charred sourdough",
-    price: "32",
-    symbol: "◈",
-    ritual: "Served with a flame that reveals the hidden text beneath"
-  },
-  {
-    name: "MIDNIGHT'S VEIL",
-    description: "Squid ink risotto, forbidden rice, charred octopus, smoke",
-    price: "45",
-    symbol: "◉",
-    ritual: "The dish arrives concealed; only your breath unveils it"
-  },
-  {
-    name: "THE ALCHEMIST'S GARDEN",
-    description: "Foraged greens, edible flowers, 23-year aged balsamic, herb ash",
-    price: "28",
-    symbol: "❋",
-    ritual: "Each element represents a stage of transformation"
-  },
-  {
-    name: "EMBER & SHADOW",
-    description: "Wagyu beef heart, burnt onion purée, black garlic, blood orange",
-    price: "58",
-    symbol: "◆",
-    ritual: "Carved tableside by candlelight"
-  },
-  {
-    name: "THE HERMETIC SEAL",
-    description: "Duck confit, foie gras terrine, fig essence, ancient grain crackers",
-    price: "52",
-    symbol: "⬡",
-    ritual: "Opened only when the key phrase is spoken"
-  },
-  {
-    name: "CELESTIAL WATERS",
-    description: "Oysters three ways, champagne mignonette, caviar, crystallized sea",
-    price: "48",
-    symbol: "◇",
-    ritual: "Presented under a dome of aromatic mist"
-  },
-];
+const dayA = {
+  day: "A",
+  lunch: { name: "Leek & Goat Cheese Tart", description: "With radicchio salad" },
+  dinner: [
+    { name: "Sweet Potato Gnocchi", description: "" },
+    { name: "Zucchini Tartare", description: "With pine nuts" }
+  ],
+  dessert: { name: "Chilled Sweet Mango-Cream", description: "" }
+};
 
-const desserts = [
-  {
-    name: "THE FINAL REVELATION",
-    description: "Dark chocolate sphere, molten gold center, salt of the earth",
-    price: "24",
-    symbol: "⬢",
-    ritual: "Shattered to reveal the treasure within"
-  },
-  {
-    name: "ETERNAL FLAME",
-    description: "Crème brûlée noire, activated charcoal, vanilla from the old world",
-    price: "18",
-    symbol: "✧",
-    ritual: "The torch is passed to the seeker"
-  },
-];
+const dayB = {
+  day: "B",
+  lunch: { name: "Crab Cakes", description: "With asparagus and corn salad" },
+  dinner: [
+    { name: "Duck Breast", description: "With port wine reduction and silky carrots" }
+  ],
+  dessert: { name: "Avocado Chocolate Mousse", description: "" }
+};
+
+const dayC = {
+  day: "C",
+  lunch: { name: "Arugula Salad", description: "With lemon, artichoke hearts, sunflower seeds, pecorino, thinly shaved sweet onion + slice of artisan bread" },
+  dinner: [
+    { name: "Shepherd's Pie", description: "" },
+    { name: "Spinach Walnut Goat Cheese & Apple Salad", description: "" }
+  ],
+  dessert: null
+};
+
+const dayD = {
+  day: "D",
+  lunch: { name: "Rosemary Lemon Braised Chicken", description: "With wild farro and roasted carrots" },
+  dinner: [
+    { name: "Nobu Inspired Miso Glazed Cod", description: "" }
+  ],
+  dessert: { name: "Bread Pudding", description: "With rum-raisin" }
+};
+
+const dayE = {
+  day: "E",
+  lunch: { name: "Roasted Cauliflower & Butternut Squash Soup", description: "With slice of artisan bread" },
+  dinner: [
+    { name: "Chicken Piccata", description: "Sautéed in bright lemon-white wine butter sauce, fried capers, fresh parsley, served over angel hair pasta" }
+  ],
+  dessert: null
+};
+
+const weeklyMenu = [dayA, dayB, dayC, dayD, dayE];
 
 const MenuSection = () => {
   return (
@@ -76,38 +63,53 @@ const MenuSection = () => {
             THE OFFERINGS
           </h2>
           <p className="font-body text-lg text-muted-foreground italic">
-            Each dish contains secrets known only to the initiated
+            Five days of curated nourishment
           </p>
         </div>
 
-        {/* Main courses */}
-        <div className="mb-20">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-border" />
-            <h3 className="font-display text-xs tracking-[0.3em] text-muted-foreground">MAIN RITES</h3>
-            <div className="flex-1 h-px bg-border" />
-          </div>
-          
-          <div className="space-y-2">
-            {menuItems.map((item, index) => (
-              <MenuItem key={index} {...item} />
-            ))}
-          </div>
-        </div>
+        {/* Weekly Menu */}
+        <div className="space-y-12">
+          {weeklyMenu.map((day) => (
+            <div key={day.day} className="border border-border/30 rounded-lg p-6 bg-card/30">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="font-display text-2xl tracking-[0.2em] text-mystical">DAY {day.day}</span>
+                <div className="flex-1 h-px bg-border/50" />
+              </div>
+              
+              {/* Lunch */}
+              <div className="mb-4">
+                <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">LUNCH</h4>
+                <p className="font-body text-foreground">{day.lunch.name}</p>
+                {day.lunch.description && (
+                  <p className="font-body text-sm text-muted-foreground italic">{day.lunch.description}</p>
+                )}
+              </div>
 
-        {/* Desserts */}
-        <div>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-border" />
-            <h3 className="font-display text-xs tracking-[0.3em] text-muted-foreground">FINAL RITES</h3>
-            <div className="flex-1 h-px bg-border" />
-          </div>
-          
-          <div className="space-y-2">
-            {desserts.map((item, index) => (
-              <MenuItem key={index} {...item} />
-            ))}
-          </div>
+              {/* Dinner */}
+              <div className="mb-4">
+                <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">DINNER</h4>
+                {day.dinner.map((item, idx) => (
+                  <div key={idx} className="mb-1">
+                    <p className="font-body text-foreground">{item.name}</p>
+                    {item.description && (
+                      <p className="font-body text-sm text-muted-foreground italic">{item.description}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Dessert */}
+              {day.dessert && (
+                <div>
+                  <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">DESSERT</h4>
+                  <p className="font-body text-foreground">{day.dessert.name}</p>
+                  {day.dessert.description && (
+                    <p className="font-body text-sm text-muted-foreground italic">{day.dessert.description}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Footer note */}
