@@ -1,17 +1,47 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
+// Import gallery images
+import spanishgildas from '@/assets/gallery/spanishgildas.png';
+import spanishchickenpaella from '@/assets/gallery/spanishchickenpaella.png';
+import spaininspireddinner from '@/assets/gallery/spaininspireddinner.png';
+import roastbeef from '@/assets/gallery/roastbeef.png';
+import ricepudding from '@/assets/gallery/ricepudding.png';
+import mixedgreens from '@/assets/gallery/mixedgreens.png';
+import mixedbeetsalad from '@/assets/gallery/mixedbeetsalad.png';
+import kalechickenwrap from '@/assets/gallery/kalechickenwrap.png';
+import grilledcheese from '@/assets/gallery/grilledcheese.png';
+import falafelpita from '@/assets/gallery/falafelpita.png';
+
 const galleryImages = [
-  '/lovable-uploads/1c6a1b50-b2c5-45f7-ac79-1e20c5b29cd7.png',
-  '/lovable-uploads/66a0e9f1-4b56-4d70-957b-45a73568f46e.png',
-  '/lovable-uploads/c5269a9e-1e19-48e1-8e91-b8ad29cc6ffd.png',
-  '/lovable-uploads/e2e7f7b1-18ed-4e59-9e4f-e29fd6f1dd58.png',
-  '/lovable-uploads/69e5d405-b6d0-4aca-9953-eff9fb1c6b64.png',
-  '/lovable-uploads/0faa65a3-2aa7-4e9c-9b15-0f51b0cbb9ab.png',
+  spanishgildas,
+  spanishchickenpaella,
+  spaininspireddinner,
+  roastbeef,
+  ricepudding,
+  mixedgreens,
+  mixedbeetsalad,
+  kalechickenwrap,
+  grilledcheese,
+  falafelpita,
 ];
 
 const Gallery = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [visibleImages, setVisibleImages] = useState<boolean[]>(new Array(galleryImages.length).fill(false));
+
+  // Staggered animation on mount
+  useEffect(() => {
+    galleryImages.forEach((_, index) => {
+      setTimeout(() => {
+        setVisibleImages(prev => {
+          const newState = [...prev];
+          newState[index] = true;
+          return newState;
+        });
+      }, index * 150); // 150ms stagger between each image
+    });
+  }, []);
 
   const openLightbox = (index: number) => {
     setSelectedIndex(index);
@@ -71,22 +101,29 @@ const Gallery = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 max-w-6xl mx-auto">
             {galleryImages.map((src, index) => (
               <button
                 key={index}
                 onClick={() => openLightbox(index)}
-                className="group relative aspect-square overflow-hidden rounded-xl bg-card cursor-pointer transition-transform duration-300 hover:scale-[1.02]"
+                className={`group relative aspect-square overflow-visible rounded-xl cursor-pointer transition-all duration-700 ease-out ${
+                  visibleImages[index] 
+                    ? 'opacity-100 translate-y-0 scale-100' 
+                    : 'opacity-0 translate-y-8 scale-95'
+                }`}
+                style={{ transitionDelay: `${index * 50}ms` }}
               >
-                {/* Subtle backglow */}
-                <div className="absolute inset-0 bg-gradient-radial from-foreground/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute -inset-4 bg-foreground/10 blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
+                {/* Subtle backglow for PNG transparency */}
+                <div className="absolute inset-0 -m-2 bg-foreground/5 blur-xl rounded-2xl opacity-60 group-hover:opacity-100 group-hover:bg-foreground/10 transition-all duration-500" />
                 
-                <img
-                  src={src}
-                  alt={`Gallery dish ${index + 1}`}
-                  className="relative w-full h-full object-cover transition-all duration-500 group-hover:brightness-110"
-                />
+                {/* Image container */}
+                <div className="relative w-full h-full bg-card/30 rounded-xl overflow-hidden">
+                  <img
+                    src={src}
+                    alt={`Gallery dish ${index + 1}`}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
+                  />
+                </div>
               </button>
             ))}
           </div>
@@ -123,18 +160,18 @@ const Gallery = () => {
             <ChevronRight size={24} />
           </button>
 
-          {/* Image container */}
+          {/* Image container with backglow */}
           <div 
             className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Backglow effect */}
-            <div className="absolute inset-0 bg-foreground/5 blur-3xl scale-110" />
+            {/* Backglow effect for fullscreen */}
+            <div className="absolute inset-0 -m-8 bg-foreground/10 blur-3xl rounded-3xl" />
             
             <img
               src={galleryImages[selectedIndex]}
               alt={`Gallery dish ${selectedIndex + 1}`}
-              className="relative max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+              className="relative max-w-full max-h-[85vh] object-contain drop-shadow-2xl"
             />
           </div>
 
