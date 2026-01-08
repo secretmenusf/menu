@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Import gallery images
@@ -65,6 +65,9 @@ const shuffleArray = <T,>(array: T[], seed: number): T[] => {
 const Gallery = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [visibleImages, setVisibleImages] = useState<boolean[]>(new Array(galleryItems.length).fill(false));
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const timeoutsRef = useRef<number[]>([]);
   
   // Generate a random starting seed once per session
   const shuffledItems = useMemo(() => {
@@ -72,18 +75,42 @@ const Gallery = () => {
     return shuffleArray(galleryItems, seed);
   }, []);
 
-  // Staggered animation on mount
+  // Staggered animation on first reveal
   useEffect(() => {
+    if (!sectionRef.current || hasAnimated) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasAnimated(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  useEffect(() => {
+    if (!hasAnimated) return;
+
     shuffledItems.forEach((_, index) => {
-      setTimeout(() => {
+      const timeoutId = window.setTimeout(() => {
         setVisibleImages(prev => {
           const newState = [...prev];
           newState[index] = true;
           return newState;
         });
-      }, index * 100);
+      }, index * 90);
+      timeoutsRef.current.push(timeoutId);
     });
-  }, [shuffledItems]);
+
+    return () => {
+      timeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId));
+      timeoutsRef.current = [];
+    };
+  }, [hasAnimated, shuffledItems]);
 
   const openLightbox = (index: number) => {
     setSelectedIndex(index);
@@ -134,7 +161,7 @@ const Gallery = () => {
   return (
     <>
       {/* Gallery Grid */}
-      <section className="py-20 bg-background">
+      <section ref={sectionRef} className="py-20 bg-background" data-testid="gallery">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <span className="text-foreground text-2xl mb-4 block">✦</span>
@@ -154,6 +181,8 @@ const Gallery = () => {
                     : 'opacity-0 translate-y-8 scale-95'
                 }`}
                 style={{ transitionDelay: `${index * 50}ms` }}
+                data-testid={`gallery-item-${index}`}
+                data-visible={visibleImages[index] ? 'true' : 'false'}
               >
                 {/* Subtle backglow for PNG transparency */}
                 <div className="absolute inset-0 -m-2 bg-foreground/5 blur-xl rounded-2xl opacity-60 group-hover:opacity-100 group-hover:bg-foreground/10 transition-all duration-500" />

@@ -6,7 +6,7 @@ const HeroSection = () => {
       <SacredGeometry />
       
       {/* Radial vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(0_0%_2%)_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(0_0%_1%)_75%)]" />
       
       <div className="relative z-10 text-center px-6 animate-reveal">
         {/* Mystical symbol */}

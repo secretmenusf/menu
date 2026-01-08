@@ -88,11 +88,22 @@ const Particles = () => {
 
 const SeedOfLifeGeometry = () => {
   const groupRef = useRef<THREE.Group>(null);
+  const orbitRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.5;
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.7;
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+      groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.35) * 0.12;
+    }
+
+    if (orbitRef.current) {
+      const t = state.clock.elapsedTime * 1.2;
+      orbitRef.current.position.set(
+        Math.cos(t) * 0.6,
+        Math.sin(t) * 0.6,
+        Math.sin(t * 0.7) * 0.2
+      );
     }
   });
 
@@ -138,6 +149,11 @@ const SeedOfLifeGeometry = () => {
           <primitive object={glassMaterial} attach="material" />
         </mesh>
       ))}
+
+      <mesh ref={orbitRef}>
+        <sphereGeometry args={[0.035, 24, 24]} />
+        <meshStandardMaterial color="#f8f8ff" emissive="#ffffff" emissiveIntensity={1.2} />
+      </mesh>
       
       <Particles />
     </group>
@@ -172,11 +188,12 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
         camera={{ position: [0, 0, 2], fov: 50 }}
         style={{ background: 'transparent', position: 'relative', zIndex: 1 }}
         gl={{ alpha: true, antialias: true }}
+        frameloop="always"
       >
-        <ambientLight intensity={1.0} />
-        <pointLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
-        <pointLight position={[-5, -5, 5]} intensity={1} color="#ffffff" />
-        <pointLight position={[0, 0, 5]} intensity={0.8} color="#ffffff" />
+        <ambientLight intensity={0.8} />
+        <pointLight position={[5, 5, 5]} intensity={1.6} color="#ffffff" />
+        <pointLight position={[-5, -5, 5]} intensity={0.8} color="#ffffff" />
+        <pointLight position={[0, 0, 5]} intensity={0.6} color="#ffffff" />
         <SeedOfLifeGeometry />
       </Canvas>
     </div>

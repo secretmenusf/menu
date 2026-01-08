@@ -115,7 +115,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
       <div className={`transition-all duration-1000 ${phase === 'black' ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}>
         <div className="flex flex-col items-center gap-8">
           {/* Animated 3D Seed of Life Logo */}
-          <div className={`transition-all duration-1000 ${phase === 'logo' ? 'animate-pulse-slow' : ''}`}>
+          <div className={`transition-all duration-1000 ${phase === 'logo' ? 'animate-pulse-slow animate-rotate-slow' : ''}`}>
             <SeedOfLife3D size={140} />
           </div>
           

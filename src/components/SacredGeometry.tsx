@@ -3,7 +3,7 @@ const SacredGeometry = () => {
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Rotating outer geometry */}
       <svg
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-10 animate-rotate-slow"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-7 animate-rotate-slow"
         viewBox="0 0 400 400"
       >
         {/* Metatron's Cube outer circles */}
@@ -56,7 +56,7 @@ const SacredGeometry = () => {
 
       {/* Inner rotating triangle */}
       <svg
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-20"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-15"
         viewBox="0 0 200 200"
         style={{ animation: 'rotate-slow 40s linear infinite reverse' }}
       >
@@ -76,7 +76,7 @@ const SacredGeometry = () => {
       {[...Array(20)].map((_, i) => (
         <div
           key={i}
-          className="absolute w-1 h-1 bg-foreground/20 rounded-full animate-pulse-slow"
+          className="absolute w-1 h-1 bg-foreground/12 rounded-full animate-pulse-slow"
           style={{
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
