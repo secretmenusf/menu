@@ -11,8 +11,8 @@ interface PasswordGateProps {
 const hints = [
   "Think about what the initiated already know...",
   "It's a phrase, not a word.",
-  "Four letters. An acronym of sorts.",
-  "If you know, you know...",
+  "What do you feel about secrets?",
+  "Express your affection for secrets...",
 ];
 
 const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
@@ -56,7 +56,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.toLowerCase().trim() === 'iykyk') {
+    if (password.toLowerCase().trim() === 'ilovesecrets') {
       onSuccess();
     } else {
       setError(true);
