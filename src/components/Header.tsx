@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,9 +21,16 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const goToOrder = () => {
+    navigate('/order');
   };
 
   return (
@@ -70,7 +78,7 @@ const Header = () => {
               CHEF
             </DropdownMenuItem>
             <DropdownMenuItem 
-              onClick={() => scrollToSection('contact')}
+              onClick={goToOrder}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
               ORDER
@@ -88,7 +96,7 @@ const Header = () => {
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
           </button>
           <button
-            onClick={() => scrollToSection('contact')}
+            onClick={goToOrder}
             className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors relative group"
           >
             ORDER
