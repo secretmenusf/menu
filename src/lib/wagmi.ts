@@ -18,7 +18,7 @@ export const PAYMENT_CONFIG = {
   recipientAddress: '0xdA93811B968bA9d3b69EeF9b0178DA651006Cf5C' as `0x${string}`,
   regularMealPrice: 50, // USD
   premiumMealPrice: 80, // USD
-  minimumOrder: 200, // USD
+  minimumOrder: 900, // USD - custom menu minimum
   
   // Token addresses
   tokens: {

@@ -25,17 +25,57 @@ interface MealSelection {
   quantity: number;
 }
 
+interface UpsellSelection {
+  id: string;
+  name: string;
+  variant?: string;
+  price: number;
+  quantity: number;
+}
+
+const upsellItems = [
+  { id: 'sourdough', name: 'Homemade Sourdough', description: 'Kansas City starter, baked fresh', price: 20 },
+  { id: 'chilicrunch', name: 'Chili Crunch', description: 'House-made spicy condiment', price: 18 },
+  { id: 'hummus-redpepper', name: 'Roasted Red Bell Pepper Hummus', description: 'Pint size', price: 35, variant: 'roasted red bell pepper' },
+  { id: 'hummus-lemon', name: 'Lemony Hummus', description: 'Pint size', price: 35, variant: 'lemony' },
+  { id: 'hummus-beet', name: 'Beetroot Hummus', description: 'Pint size', price: 35, variant: 'beetroot' },
+];
+
 const Order = () => {
   const navigate = useNavigate();
   const { isConnected } = useAccount();
   const { toast } = useToast();
   
   const [selections, setSelections] = useState<MealSelection[]>([]);
+  const [upsells, setUpsells] = useState<UpsellSelection[]>([]);
   const [deliveryDate, setDeliveryDate] = useState<Date | undefined>();
   const [deliveryTime, setDeliveryTime] = useState('18:00');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryNotes, setDeliveryNotes] = useState('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  const updateUpsell = (id: string, name: string, price: number, delta: number, variant?: string) => {
+    setUpsells(prev => {
+      const existingIndex = prev.findIndex(u => u.id === id);
+      if (existingIndex >= 0) {
+        const newUpsells = [...prev];
+        const newQty = newUpsells[existingIndex].quantity + delta;
+        if (newQty <= 0) {
+          newUpsells.splice(existingIndex, 1);
+        } else {
+          newUpsells[existingIndex] = { ...newUpsells[existingIndex], quantity: newQty };
+        }
+        return newUpsells;
+      } else if (delta > 0) {
+        return [...prev, { id, name, variant, price, quantity: delta }];
+      }
+      return prev;
+    });
+  };
+
+  const getUpsellQuantity = (id: string) => {
+    return upsells.find(u => u.id === id)?.quantity || 0;
+  };
 
   const updateSelection = (
     dayId: string,
@@ -72,32 +112,45 @@ const Order = () => {
     return selection?.quantity || 0;
   };
 
-  const { regularMeals, premiumMeals, totalUsd } = useMemo(() => {
+  const { regularMeals, premiumMeals, upsellTotal, totalUsd } = useMemo(() => {
     let regular = 0;
     let premium = 0;
     selections.forEach(s => {
       if (s.tier === 'regular') regular += s.quantity;
       else premium += s.quantity;
     });
+    const upsellSum = upsells.reduce((sum, u) => sum + (u.price * u.quantity), 0);
     return {
       regularMeals: regular,
       premiumMeals: premium,
-      totalUsd: regular * PAYMENT_CONFIG.regularMealPrice + premium * PAYMENT_CONFIG.premiumMealPrice
+      upsellTotal: upsellSum,
+      totalUsd: regular * PAYMENT_CONFIG.regularMealPrice + premium * PAYMENT_CONFIG.premiumMealPrice + upsellSum
     };
-  }, [selections]);
+  }, [selections, upsells]);
 
   const isMinimumMet = totalUsd >= PAYMENT_CONFIG.minimumOrder;
 
   const buildWhatsAppMessage = () => {
     const lines = ['🍽️ *SECRET MENU ORDER*\n'];
     
-    selections.forEach(s => {
-      lines.push(`• Day ${s.dayId} ${s.mealType}: ${s.mealName} (${s.tier}) x${s.quantity}`);
-    });
+    if (selections.length > 0) {
+      lines.push('*MEALS:*');
+      selections.forEach(s => {
+        lines.push(`• Day ${s.dayId} ${s.mealType}: ${s.mealName} (${s.tier}) x${s.quantity}`);
+      });
+    }
+    
+    if (upsells.length > 0) {
+      lines.push('\n*EXTRAS:*');
+      upsells.forEach(u => {
+        lines.push(`• ${u.name} x${u.quantity} - $${u.price * u.quantity}`);
+      });
+    }
     
     lines.push(`\n💰 *Total: $${totalUsd}*`);
-    lines.push(`Regular meals: ${regularMeals} × $${PAYMENT_CONFIG.regularMealPrice}`);
-    lines.push(`Premium meals: ${premiumMeals} × $${PAYMENT_CONFIG.premiumMealPrice}`);
+    if (regularMeals > 0) lines.push(`Regular meals: ${regularMeals} × $${PAYMENT_CONFIG.regularMealPrice}`);
+    if (premiumMeals > 0) lines.push(`Premium meals: ${premiumMeals} × $${PAYMENT_CONFIG.premiumMealPrice}`);
+    if (upsellTotal > 0) lines.push(`Extras: $${upsellTotal}`);
     
     if (deliveryDate) {
       lines.push(`\n📅 *Delivery:* ${format(deliveryDate, 'EEEE, MMMM d, yyyy')} at ${deliveryTime}`);
@@ -174,7 +227,7 @@ const Order = () => {
               PLACE YOUR ORDER
             </h1>
             <p className="font-body text-lg text-muted-foreground">
-              Select your meals for the week • $50 regular / $80 premium • $200 minimum
+              Custom menu • $50 regular / $80 premium • $900 minimum
             </p>
           </div>
 
@@ -220,6 +273,66 @@ const Order = () => {
                   </div>
                 </div>
               ))}
+
+              {/* Extras / Upsells Section */}
+              <div className="border border-border/30 rounded-lg p-6 bg-card/30">
+                <div className="flex items-center gap-4 mb-6">
+                  <span className="font-display text-xl tracking-[0.2em] text-mystical">EXTRAS</span>
+                  <div className="flex-1 h-px bg-border/50" />
+                </div>
+                
+                <div className="space-y-4">
+                  {upsellItems.map((item) => (
+                    <div key={item.id} className="py-3 border-b border-border/20 last:border-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex-1">
+                          <p className="font-body text-foreground">{item.name}</p>
+                          <p className="font-body text-sm text-muted-foreground italic">{item.description}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground font-display tracking-wider">${item.price}</span>
+                          <div className="flex items-center gap-1 bg-secondary/50 rounded-full px-1">
+                            <button
+                              onClick={() => updateUpsell(item.id, item.name, item.price, -1, item.variant)}
+                              className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                              disabled={getUpsellQuantity(item.id) === 0}
+                            >
+                              <Minus size={14} />
+                            </button>
+                            <span className="w-6 text-center text-sm font-display">{getUpsellQuantity(item.id)}</span>
+                            <button
+                              onClick={() => updateUpsell(item.id, item.name, item.price, 1, item.variant)}
+                              className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              <Plus size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="font-body text-sm text-muted-foreground mt-6 italic">
+                  Tea, coffee, and other beverages available upon request.
+                </p>
+              </div>
+
+              {/* WhatsApp Note */}
+              <div className="text-center py-6">
+                <p className="font-body text-sm text-muted-foreground">
+                  Questions or secret menu items not listed?{' '}
+                  <a 
+                    href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground hover:underline inline-flex items-center gap-1"
+                  >
+                    <MessageCircle size={14} />
+                    Contact us on WhatsApp
+                  </a>
+                </p>
+              </div>
             </div>
 
             {/* Sidebar - Delivery & Summary */}
@@ -305,6 +418,12 @@ const Order = () => {
                       <span>${premiumMeals * PAYMENT_CONFIG.premiumMealPrice}</span>
                     </div>
                   )}
+                  {upsellTotal > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span>Extras</span>
+                      <span>${upsellTotal}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between font-display tracking-wider pt-2 border-t border-border/30">
                     <span>TOTAL</span>
                     <span>${totalUsd}</span>
@@ -321,14 +440,14 @@ const Order = () => {
                 {/* Checkout Button */}
                 <Button
                   onClick={handleCheckout}
-                  disabled={selections.length === 0}
+                  disabled={selections.length === 0 && upsells.length === 0}
                   className="w-full font-display tracking-wider mb-3"
                 >
                   CHECKOUT ${totalUsd}
                 </Button>
 
                 {/* WhatsApp confirmation */}
-                {selections.length > 0 && (
+                {(selections.length > 0 || upsells.length > 0) && (
                   <Button
                     variant="outline"
                     onClick={sendWhatsAppConfirmation}
