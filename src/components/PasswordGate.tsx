@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import SeedOfLife from './SeedOfLife';
+import SeedOfLife3D from './SeedOfLife3D';
 import { MessageCircle, X } from 'lucide-react';
 
 interface PasswordGateProps {
@@ -114,9 +114,9 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
       {/* Logo container */}
       <div className={`transition-all duration-1000 ${phase === 'black' ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}>
         <div className="flex flex-col items-center gap-8">
-          {/* Animated Seed of Life Logo */}
+          {/* Animated 3D Seed of Life Logo */}
           <div className={`transition-all duration-1000 ${phase === 'logo' ? 'animate-pulse-slow' : ''}`}>
-            <SeedOfLife size={120} className="text-foreground" />
+            <SeedOfLife3D size={140} />
           </div>
           
           {/* Brand name */}

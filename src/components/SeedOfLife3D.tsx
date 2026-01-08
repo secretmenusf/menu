@@ -150,33 +150,22 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
       className={`relative ${className}`}
       style={{ width: size, height: size }}
     >
-      {/* macOS-style glass blur background */}
+      {/* Subtle background glow */}
       <div 
         className="absolute inset-0 rounded-full"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          transform: 'scale(1.8)',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%)',
+          transform: 'scale(1.5)',
         }}
       />
-      {/* Subtle pulsing glow */}
-      <div 
-        className="absolute inset-0 rounded-full animate-pulse"
-        style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(200,220,255,0.1) 40%, transparent 70%)',
-          filter: 'blur(6px)',
-          transform: 'scale(1.6)',
-        }}
-      />
-      {/* Rainbow prismatic edge glow */}
+      {/* Very subtle rainbow edge */}
       <div 
         className="absolute inset-0 rounded-full"
         style={{
-          background: 'conic-gradient(from 0deg, rgba(255,100,100,0.15), rgba(255,200,100,0.15), rgba(100,255,100,0.15), rgba(100,200,255,0.15), rgba(200,100,255,0.15), rgba(255,100,100,0.15))',
-          filter: 'blur(8px)',
-          transform: 'scale(1.4)',
-          animation: 'spin 8s linear infinite',
+          background: 'conic-gradient(from 0deg, rgba(255,100,100,0.08), rgba(255,200,100,0.08), rgba(100,255,100,0.08), rgba(100,200,255,0.08), rgba(200,100,255,0.08), rgba(255,100,100,0.08))',
+          filter: 'blur(4px)',
+          transform: 'scale(1.3)',
+          animation: 'spin 12s linear infinite',
         }}
       />
       <Canvas
@@ -184,10 +173,10 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
         style={{ background: 'transparent', position: 'relative', zIndex: 1 }}
         gl={{ alpha: true, antialias: true }}
       >
-        <ambientLight intensity={0.8} />
-        <pointLight position={[5, 5, 5]} intensity={1.5} color="#ffffff" />
-        <pointLight position={[-5, -5, 5]} intensity={0.8} color="#aaccff" />
-        <pointLight position={[0, 0, 5]} intensity={0.5} color="#ffaacc" />
+        <ambientLight intensity={1.0} />
+        <pointLight position={[5, 5, 5]} intensity={2} color="#ffffff" />
+        <pointLight position={[-5, -5, 5]} intensity={1} color="#ffffff" />
+        <pointLight position={[0, 0, 5]} intensity={0.8} color="#ffffff" />
         <SeedOfLifeGeometry />
       </Canvas>
     </div>

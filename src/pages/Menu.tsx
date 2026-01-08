@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import SeedOfLife from '@/components/SeedOfLife';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Leaf, WheatOff } from 'lucide-react';
+import { Leaf, WheatOff, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface MenuItem {
   name: string;
@@ -17,7 +19,125 @@ interface DayMenu {
   }[];
 }
 
-const menuData: DayMenu[] = [
+// Week of January 12, 2026 (Current Week)
+const week2Data: DayMenu[] = [
+  {
+    day: "Day 1",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Bulgogi bowl with steamed jasmine rice, garlic broccoli & preserved egg", glutenFree: true }
+        ]
+      },
+      {
+        type: "Snack",
+        items: [{ name: "Blistered padrón peppers with sea salt", vegetarian: true, glutenFree: true }]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Duck confit with roasted root vegetables", glutenFree: true },
+          { name: "Mixed greens with lemon vinaigrette", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Rice pudding with blueberries", vegetarian: true, glutenFree: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 2",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Caprese panini with green goddess sauce", vegetarian: true },
+          { name: "Fennel dill cucumber & bulgur salad", vegetarian: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Crispy Persian rice with spiced beef skewers", glutenFree: true },
+          { name: "Beet salad with feta & caramelized onions", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Colossal chocolate chip cookies", vegetarian: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 3",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Kale chicken Caesar wrap with crudités", },
+          { name: "Roasted garlic hummus", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Spanish chicken paella with chorizo", glutenFree: true },
+          { name: "Spanish gildas with anchovies", glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Burnt Basque cheesecake", vegetarian: true, glutenFree: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 4",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Grilled cheese on fresh sourdough", vegetarian: true },
+          { name: "Roasted tomato soup", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Almond saffron albondigas", glutenFree: true },
+          { name: "Roasted smashed potatoes", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 5",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Fresh falafel stuffed pita", vegetarian: true },
+          { name: "Tabbouleh salad", vegetarian: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Classic dinner favorites: Duck confit, mixed greens & rice pudding", glutenFree: true }
+        ]
+      }
+    ]
+  }
+];
+
+// Week of January 5, 2026 (Last Week)
+const week1Data: DayMenu[] = [
   {
     day: "Day 1",
     meals: [
@@ -142,6 +262,11 @@ const menuData: DayMenu[] = [
   }
 ];
 
+const weeks = [
+  { id: 0, label: "January 5, 2026", data: week1Data },
+  { id: 1, label: "January 12, 2026", data: week2Data },
+];
+
 const DietaryIcon = ({ vegetarian, glutenFree }: { vegetarian?: boolean; glutenFree?: boolean }) => {
   if (!vegetarian && !glutenFree) return null;
   
@@ -160,13 +285,19 @@ const DietaryIcon = ({ vegetarian, glutenFree }: { vegetarian?: boolean; glutenF
     </span>
   );
 };
-const Menu = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <Footer />
 
-      <main className="pt-24 pb-20">
+const Menu = () => {
+  const [weekIndex, setWeekIndex] = useState(1); // Start on current week (Jan 12)
+  
+  const currentWeek = weeks[weekIndex];
+  const canGoPrev = weekIndex > 0;
+  const canGoNext = weekIndex < weeks.length - 1;
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
+
+      <main className="flex-1 pt-24 pb-20">
         <div className="container mx-auto px-6 max-w-3xl">
           {/* Section header */}
           <div className="text-center mb-16">
@@ -174,14 +305,45 @@ const Menu = () => {
             <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-foreground mb-4">
               THE MENU
             </h1>
-            <p className="font-body text-lg text-muted-foreground">
-              Week of January 5, 2026
-            </p>
+            
+            {/* Week Navigation */}
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setWeekIndex(prev => prev - 1)}
+                disabled={!canGoPrev}
+                className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+              >
+                <ChevronLeft size={20} />
+              </Button>
+              
+              <p className="font-body text-lg text-muted-foreground min-w-[200px]">
+                Week of {currentWeek.label}
+              </p>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setWeekIndex(prev => prev + 1)}
+                disabled={!canGoNext}
+                className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+              >
+                <ChevronRight size={20} />
+              </Button>
+            </div>
+
+            {/* Next week tease */}
+            {weekIndex === weeks.length - 1 && (
+              <p className="font-body text-sm text-muted-foreground/60 mt-4 italic">
+                January 19 menu coming soon... ✦
+              </p>
+            )}
           </div>
 
           {/* Menu by day */}
           <div className="space-y-16">
-            {menuData.map((day, dayIndex) => (
+            {currentWeek.data.map((day, dayIndex) => (
               <div key={dayIndex} className="space-y-8">
                 {/* Day header */}
                 <div className="flex items-center gap-4">
@@ -226,6 +388,8 @@ const Menu = () => {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };
