@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Import gallery images
@@ -12,36 +12,78 @@ import mixedbeetsalad from '@/assets/gallery/mixedbeetsalad.png';
 import kalechickenwrap from '@/assets/gallery/kalechickenwrap.png';
 import grilledcheese from '@/assets/gallery/grilledcheese.png';
 import falafelpita from '@/assets/gallery/falafelpita.png';
+import fennelbulgursalad from '@/assets/gallery/fennelbulgursalad.png';
+import duckconfit from '@/assets/gallery/duckconfit.png';
+import persianrice from '@/assets/gallery/persianrice.png';
+import colossalcookies from '@/assets/gallery/colossalcookies.png';
+import classicdinner from '@/assets/gallery/classicdinner.png';
+import capresepanini from '@/assets/gallery/capresepanini.png';
+import basquecheesecake from '@/assets/gallery/basquecheesecake.png';
+import padronpeppers from '@/assets/gallery/padronpeppers.png';
+import beefbulgogi from '@/assets/gallery/beefbulgogi.png';
+import saffronalbondigas from '@/assets/gallery/saffronalbondigas.png';
 
-const galleryImages = [
-  spanishgildas,
-  spanishchickenpaella,
-  spaininspireddinner,
-  roastbeef,
-  ricepudding,
-  mixedgreens,
-  mixedbeetsalad,
-  kalechickenwrap,
-  grilledcheese,
-  falafelpita,
+const galleryItems = [
+  { src: spanishgildas, title: 'Spanish Gildas' },
+  { src: spanishchickenpaella, title: 'Spanish Chicken Paella' },
+  { src: spaininspireddinner, title: 'Spain Inspired Dinner' },
+  { src: roastbeef, title: 'Roast Beef' },
+  { src: ricepudding, title: 'Rice Pudding' },
+  { src: mixedgreens, title: 'Mixed Greens' },
+  { src: mixedbeetsalad, title: 'Mixed Beet Salad' },
+  { src: kalechickenwrap, title: 'Kale Chicken Wrap' },
+  { src: grilledcheese, title: 'Grilled Cheese' },
+  { src: falafelpita, title: 'Falafel Pita' },
+  { src: fennelbulgursalad, title: 'Fennel Bulgur Salad' },
+  { src: duckconfit, title: 'Duck Confit' },
+  { src: persianrice, title: 'Persian Rice' },
+  { src: colossalcookies, title: 'Colossal Cookies' },
+  { src: classicdinner, title: 'Classic Dinner' },
+  { src: capresepanini, title: 'Caprese Panini' },
+  { src: basquecheesecake, title: 'Basque Cheesecake' },
+  { src: padronpeppers, title: 'Padrón Peppers' },
+  { src: beefbulgogi, title: 'Beef Bulgogi Bowl' },
+  { src: saffronalbondigas, title: 'Saffron Albondigas' },
 ];
+
+// Shuffle array with a seed for consistent random order per session
+const shuffleArray = <T,>(array: T[], seed: number): T[] => {
+  const shuffled = [...array];
+  let currentIndex = shuffled.length;
+  let randomValue = seed;
+  
+  while (currentIndex !== 0) {
+    randomValue = (randomValue * 9301 + 49297) % 233280;
+    const randomIndex = Math.floor((randomValue / 233280) * currentIndex);
+    currentIndex--;
+    [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
+  }
+  
+  return shuffled;
+};
 
 const Gallery = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [visibleImages, setVisibleImages] = useState<boolean[]>(new Array(galleryImages.length).fill(false));
+  const [visibleImages, setVisibleImages] = useState<boolean[]>(new Array(galleryItems.length).fill(false));
+  
+  // Generate a random starting seed once per session
+  const shuffledItems = useMemo(() => {
+    const seed = Math.floor(Math.random() * 1000000);
+    return shuffleArray(galleryItems, seed);
+  }, []);
 
   // Staggered animation on mount
   useEffect(() => {
-    galleryImages.forEach((_, index) => {
+    shuffledItems.forEach((_, index) => {
       setTimeout(() => {
         setVisibleImages(prev => {
           const newState = [...prev];
           newState[index] = true;
           return newState;
         });
-      }, index * 150); // 150ms stagger between each image
+      }, index * 100);
     });
-  }, []);
+  }, [shuffledItems]);
 
   const openLightbox = (index: number) => {
     setSelectedIndex(index);
@@ -53,15 +95,15 @@ const Gallery = () => {
 
   const goNext = useCallback(() => {
     if (selectedIndex !== null) {
-      setSelectedIndex((selectedIndex + 1) % galleryImages.length);
+      setSelectedIndex((selectedIndex + 1) % shuffledItems.length);
     }
-  }, [selectedIndex]);
+  }, [selectedIndex, shuffledItems.length]);
 
   const goPrev = useCallback(() => {
     if (selectedIndex !== null) {
-      setSelectedIndex((selectedIndex - 1 + galleryImages.length) % galleryImages.length);
+      setSelectedIndex((selectedIndex - 1 + shuffledItems.length) % shuffledItems.length);
     }
-  }, [selectedIndex]);
+  }, [selectedIndex, shuffledItems.length]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -101,8 +143,8 @@ const Gallery = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 max-w-6xl mx-auto">
-            {galleryImages.map((src, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-7xl mx-auto">
+            {shuffledItems.map((item, index) => (
               <button
                 key={index}
                 onClick={() => openLightbox(index)}
@@ -119,10 +161,16 @@ const Gallery = () => {
                 {/* Image container */}
                 <div className="relative w-full h-full bg-card/30 rounded-xl overflow-hidden">
                   <img
-                    src={src}
-                    alt={`Gallery dish ${index + 1}`}
+                    src={item.src}
+                    alt={item.title}
                     className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
                   />
+                  {/* Title overlay on hover */}
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="font-display text-xs tracking-[0.1em] text-foreground text-center truncate">
+                      {item.title.toUpperCase()}
+                    </p>
+                  </div>
                 </div>
               </button>
             ))}
@@ -162,22 +210,27 @@ const Gallery = () => {
 
           {/* Image container with backglow */}
           <div 
-            className="relative max-w-[90vw] max-h-[85vh] flex items-center justify-center"
+            className="relative max-w-[90vw] max-h-[80vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Backglow effect for fullscreen */}
             <div className="absolute inset-0 -m-8 bg-foreground/10 blur-3xl rounded-3xl" />
             
             <img
-              src={galleryImages[selectedIndex]}
-              alt={`Gallery dish ${selectedIndex + 1}`}
-              className="relative max-w-full max-h-[85vh] object-contain drop-shadow-2xl"
+              src={shuffledItems[selectedIndex].src}
+              alt={shuffledItems[selectedIndex].title}
+              className="relative max-w-full max-h-[75vh] object-contain drop-shadow-2xl"
             />
+            
+            {/* Title below image */}
+            <p className="relative mt-6 font-display text-lg tracking-[0.2em] text-foreground">
+              {shuffledItems[selectedIndex].title.toUpperCase()}
+            </p>
           </div>
 
           {/* Image counter */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 font-display text-sm tracking-[0.2em] text-muted-foreground">
-            {selectedIndex + 1} / {galleryImages.length}
+            {selectedIndex + 1} / {shuffledItems.length}
           </div>
         </div>
       )}
