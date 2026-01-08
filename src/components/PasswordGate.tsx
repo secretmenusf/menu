@@ -94,14 +94,13 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
           >
             <div className="flex flex-col items-center gap-4">
               <p className="font-body text-sm text-muted-foreground tracking-wider mb-2">
-                speak the passphrase
+                enter secret password
               </p>
               <Input
                 ref={inputRef}
                 type="text"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="..."
                 className={`w-64 text-center font-body tracking-widest bg-transparent border-foreground/50 focus:border-foreground focus-visible:ring-0 focus-visible:ring-offset-0 transition-all ${error ? 'animate-shake border-destructive' : ''}`}
               />
               <Button 
