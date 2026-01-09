@@ -1,4 +1,8 @@
-import { getCurrentWeekMenu, dietaryInfo, pricingInfo, type MenuItem as MenuItemType } from '@/data/menus';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { allMenus, dietaryInfo, pricingInfo, type MenuItem as MenuItemType, type WeekMenu } from '@/data/menus';
+import { Button } from '@/components/ui/button';
 
 const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
   const info = dietaryInfo[tag];
@@ -30,8 +34,60 @@ const MenuItemDisplay = ({ item }: { item: MenuItemType }) => (
   </div>
 );
 
+const WeekSelector = ({
+  weeks,
+  currentIndex,
+  onSelect
+}: {
+  weeks: WeekMenu[];
+  currentIndex: number;
+  onSelect: (index: number) => void;
+}) => {
+  const formatShortDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  return (
+    <div className="flex items-center justify-center gap-2 mb-8 overflow-x-auto pb-2">
+      <button
+        onClick={() => onSelect(Math.max(0, currentIndex - 1))}
+        disabled={currentIndex === 0}
+        className="p-2 rounded-full border border-border/50 hover:bg-card disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+      >
+        <ChevronLeft size={20} />
+      </button>
+
+      <div className="flex gap-2">
+        {weeks.map((week, idx) => (
+          <button
+            key={week.id}
+            onClick={() => onSelect(idx)}
+            className={`px-4 py-2 rounded-full border transition-all font-display text-xs tracking-wider whitespace-nowrap ${
+              idx === currentIndex
+                ? 'bg-foreground text-background border-foreground'
+                : 'border-border/50 hover:border-foreground/50 text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {formatShortDate(week.startDate)}
+          </button>
+        ))}
+      </div>
+
+      <button
+        onClick={() => onSelect(Math.min(weeks.length - 1, currentIndex + 1))}
+        disabled={currentIndex === weeks.length - 1}
+        className="p-2 rounded-full border border-border/50 hover:bg-card disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+      >
+        <ChevronRight size={20} />
+      </button>
+    </div>
+  );
+};
+
 const MenuSection = () => {
-  const currentMenu = getCurrentWeekMenu();
+  const [selectedWeekIndex, setSelectedWeekIndex] = useState(0);
+  const currentMenu = allMenus[selectedWeekIndex];
 
   const formatDateRange = (start: string, end: string) => {
     const startDate = new Date(start);
@@ -54,17 +110,28 @@ const MenuSection = () => {
 
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Section header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <span className="text-foreground text-3xl mb-4 block">☽</span>
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
             THE OFFERINGS
           </h2>
+        </div>
+
+        {/* Week selector */}
+        <WeekSelector
+          weeks={allMenus}
+          currentIndex={selectedWeekIndex}
+          onSelect={setSelectedWeekIndex}
+        />
+
+        {/* Current week info */}
+        <div className="text-center mb-12">
           {currentMenu.theme && (
-            <p className="font-display text-sm tracking-[0.3em] text-muted-foreground mb-2">
+            <p className="font-display text-lg tracking-[0.3em] text-foreground mb-2">
               {currentMenu.theme.toUpperCase()}
             </p>
           )}
-          <p className="font-body text-lg text-muted-foreground italic">
+          <p className="font-body text-muted-foreground italic">
             {formatDateRange(currentMenu.startDate, currentMenu.endDate)}
           </p>
         </div>
@@ -82,13 +149,18 @@ const MenuSection = () => {
               <p className="font-display text-2xl text-foreground">${pricingInfo.monthlyPlan}</p>
             </div>
           </div>
-          <p className="font-body text-sm text-muted-foreground/80">
+          <p className="font-body text-sm text-muted-foreground/80 mb-4">
             {pricingInfo.note}
           </p>
+          <Link to={`/entry?week=${currentMenu.id}`}>
+            <Button className="rounded-full px-8 font-display tracking-wider">
+              ORDER THIS WEEK
+            </Button>
+          </Link>
         </div>
 
         {/* Dietary legend */}
-        <div className="flex justify-center gap-6 mb-12 text-sm text-muted-foreground">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12 text-sm text-muted-foreground">
           {Object.entries(dietaryInfo).map(([key, info]) => (
             <div key={key} className="flex items-center gap-2">
               <DietaryTag tag={key as 'gf' | 'df' | 'v' | 'vg'} />
@@ -131,9 +203,14 @@ const MenuSection = () => {
           ))}
         </div>
 
-        {/* Footer note */}
-        <div className="mt-16 text-center">
-          <p className="font-body text-sm text-muted-foreground/60 tracking-wide">
+        {/* Order CTA */}
+        <div className="mt-12 text-center">
+          <Link to={`/entry?week=${currentMenu.id}`}>
+            <Button size="lg" className="rounded-full px-12 font-display tracking-wider text-lg">
+              ORDER {currentMenu.theme?.toUpperCase()} WEEK
+            </Button>
+          </Link>
+          <p className="font-body text-sm text-muted-foreground/60 tracking-wide mt-4">
             A gratuity of 20% is included for all who partake
           </p>
         </div>

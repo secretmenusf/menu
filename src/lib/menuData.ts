@@ -59,4 +59,4 @@ export const dayE: DayMenu = {
 
 export const weeklyMenu: DayMenu[] = [dayA, dayB, dayC, dayD, dayE];
 
-export const WHATSAPP_NUMBER = '+14153724496';
+export const WHATSAPP_NUMBER = '+14153732496';
