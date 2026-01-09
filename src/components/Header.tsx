@@ -46,7 +46,7 @@ const Header = () => {
             <button className="group flex items-center gap-3 focus:outline-none">
               {/* 3D Seed of Life logo */}
               <div className="transition-transform duration-300 group-hover:scale-110 group-data-[state=open]:scale-110">
-                <SeedOfLife3D size={32} />
+                <SeedOfLife3D size={48} />
               </div>
               {/* Brand text that appears on hover */}
               <span className="font-display text-sm tracking-[0.3em] text-foreground overflow-hidden transition-all duration-300 max-w-0 group-hover:max-w-[200px] group-data-[state=open]:max-w-[200px] whitespace-nowrap">

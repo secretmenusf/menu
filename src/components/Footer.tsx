@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="font-display text-sm tracking-[0.3em] text-foreground">SECRET MENU</span>
             </div>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
-              Chef-crafted meals delivered to your door. Los Angeles area.
+              Chef-crafted meals delivered to your door. San Francisco Bay Area.
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-4">
@@ -118,20 +118,20 @@ const Footer = () => {
             <h4 className="font-display text-xs tracking-[0.2em] text-foreground mb-4">CONTACT</h4>
             <ul className="space-y-3 font-body text-sm text-muted-foreground">
               <li>
-                <a href="mailto:hello@secretmenu.xyz" className="hover:text-foreground transition-colors">
-                  hello@secretmenu.xyz
+                <a href="mailto:hello@sfsecretmenu.com" className="hover:text-foreground transition-colors">
+                  hello@sfsecretmenu.com
                 </a>
               </li>
               <li>
-                <a href="tel:+13235551234" className="hover:text-foreground transition-colors">
-                  (323) 555-1234
+                <a href="https://wa.me/14153732496" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  (415) 373-2496
                 </a>
               </li>
               <li className="text-muted-foreground/60">
                 Delivery: 8am – 1am daily
               </li>
               <li className="text-muted-foreground/60">
-                Los Angeles, CA
+                San Francisco, CA
               </li>
             </ul>
           </div>

@@ -45,7 +45,7 @@ const Refund = () => {
                   <li>Contact us within 24 hours of delivery</li>
                   <li>Provide your order number and details of the issue</li>
                   <li>Include photos if applicable (quality issues, wrong items)</li>
-                  <li>Reach out via WhatsApp at +1 (415) 372-4496 or email support@secretmenu.xyz</li>
+                  <li>Reach out via WhatsApp at +1 (415) 373-2496 or email support@sfsecretmenu.com</li>
                 </ol>
               </div>
             </section>
@@ -91,10 +91,10 @@ const Refund = () => {
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">CONTACT US</h2>
               <p className="font-body text-muted-foreground">
                 For refund inquiries, please contact us at{' '}
-                <a href="mailto:support@secretmenu.xyz" className="text-foreground hover:underline">
-                  support@secretmenu.xyz
+                <a href="mailto:support@sfsecretmenu.com" className="text-foreground hover:underline">
+                  support@sfsecretmenu.com
                 </a>
-                {' '}or via WhatsApp at +1 (415) 372-4496.
+                {' '}or via WhatsApp at +1 (415) 373-2496.
               </p>
             </section>
           </div>

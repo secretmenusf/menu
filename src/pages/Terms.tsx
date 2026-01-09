@@ -26,7 +26,7 @@ const Terms = () => {
             <section>
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">2. SERVICE DESCRIPTION</h2>
               <p className="font-body text-muted-foreground">
-                Secret Menu provides chef-prepared meal delivery services in the Los Angeles area. Our menu changes regularly based on seasonal availability and chef inspiration. We reserve the right to modify, suspend, or discontinue any aspect of our service at any time.
+                Secret Menu provides chef-prepared meal delivery services in the San Francisco Bay Area. Our menu changes regularly based on seasonal availability and chef inspiration. We reserve the right to modify, suspend, or discontinue any aspect of our service at any time.
               </p>
             </section>
 
@@ -47,7 +47,7 @@ const Terms = () => {
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">4. DELIVERY</h2>
               <div className="font-body text-muted-foreground space-y-4">
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Delivery is available within the Los Angeles area</li>
+                  <li>Delivery is available within the San Francisco Bay Area</li>
                   <li>Delivery hours are 8:00 AM to 1:00 AM daily</li>
                   <li>You must provide accurate delivery information</li>
                   <li>Someone must be available to receive the order</li>
@@ -87,7 +87,7 @@ const Terms = () => {
             <section>
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">8. GOVERNING LAW</h2>
               <p className="font-body text-muted-foreground">
-                These terms are governed by the laws of the State of California. Any disputes shall be resolved in the courts of Los Angeles County, California.
+                These terms are governed by the laws of the State of California. Any disputes shall be resolved in the courts of San Francisco County, California.
               </p>
             </section>
 
@@ -95,8 +95,8 @@ const Terms = () => {
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">9. CONTACT</h2>
               <p className="font-body text-muted-foreground">
                 For questions about these terms, contact us at{' '}
-                <a href="mailto:legal@secretmenu.xyz" className="text-foreground hover:underline">
-                  legal@secretmenu.xyz
+                <a href="mailto:legal@sfsecretmenu.com" className="text-foreground hover:underline">
+                  legal@sfsecretmenu.com
                 </a>
               </p>
             </section>
