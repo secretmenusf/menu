@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
+import Gallery from '@/components/Gallery';
 import MenuSection from '@/components/MenuSection';
 import AboutSection from '@/components/AboutSection';
 import ContactSection from '@/components/ContactSection';
@@ -12,6 +13,7 @@ const Home = () => {
 
       <main>
         <HeroSection />
+        <Gallery />
         <MenuSection />
         <AboutSection />
         <ContactSection />

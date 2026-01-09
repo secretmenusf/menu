@@ -4,7 +4,7 @@ const ContactSection = () => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       
       <div className="container mx-auto px-6 max-w-2xl text-center">
-        <span className="text-foreground text-3xl mb-6 block">△</span>
+        <span className="text-foreground text-3xl mb-6 block">☽</span>
         
         <h2 className="font-display text-3xl md:text-4xl tracking-[0.2em] text-mystical mb-4">
           SEEK ENTRY

@@ -9,9 +9,6 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(0_0%_1%)_75%)]" />
       
       <div className="relative z-10 text-center px-6 animate-reveal">
-        {/* Mystical symbol */}
-        <div className="mb-8 text-foreground text-6xl animate-float">△</div>
-        
         <p className="font-body text-lg tracking-[0.5em] text-muted-foreground mb-4 uppercase">
           By Invitation Only
         </p>
@@ -30,10 +27,9 @@ const HeroSection = () => {
         <div className="mt-16 flex justify-center">
           <button
             onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group relative font-display text-xs tracking-[0.3em] text-foreground border border-border px-10 py-4 hover:border-foreground transition-all duration-500"
+            className="group relative font-display text-xs tracking-[0.3em] text-foreground border border-border px-10 py-4 rounded-full hover:border-foreground hover:bg-foreground/10 transition-all duration-500"
           >
             <span className="relative z-10">ENTER THE SANCTUM</span>
-            <div className="absolute inset-0 bg-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </button>
         </div>
       </div>
