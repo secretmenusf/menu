@@ -17,22 +17,22 @@ const SeedOfLifeGeometry = () => {
     const PHI = 1.618033988749; // Golden ratio
 
     if (groupRef.current) {
-      // Oscillating left-right rotation (not full rotation)
-      groupRef.current.rotation.y = Math.sin(t * (1 / PHI) * 0.3) * 0.4;
+      // Continuous rotation - faster spin
+      groupRef.current.rotation.y = t * 0.8;
 
       // Subtle golden ratio vibration on z-axis
-      groupRef.current.rotation.z = Math.sin(t * PHI * 0.2) * 0.015;
+      groupRef.current.rotation.z = Math.sin(t * PHI * 0.3) * 0.02;
 
       // Subtle scale breathing based on phi
-      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.4) * 0.02;
+      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.025;
       groupRef.current.scale.setScalar(breathe);
     }
 
-    // Strong glow pulse using golden ratio harmonics
+    // Strong golden glow pulse using golden ratio harmonics
     if (materialRef.current) {
-      const pulse1 = Math.sin(t * (1 / PHI) * 0.3);
-      const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.5);
-      const combined = 1.2 + (pulse1 * 0.4 + pulse2 * 0.2);
+      const pulse1 = Math.sin(t * (1 / PHI) * 0.4);
+      const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.6);
+      const combined = 1.8 + (pulse1 * 0.5 + pulse2 * 0.3);
       materialRef.current.emissiveIntensity = combined;
     }
   });
@@ -46,13 +46,13 @@ const SeedOfLifeGeometry = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Pure white glowing material with strong emission
+  // Golden glowing material with warm emission
   const goldenMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
-      color: '#ffffff',
-      emissive: '#ffffff',
-      emissiveIntensity: 1.5,
-      metalness: 0.1,
+      color: '#ffd700',
+      emissive: '#ffb347',
+      emissiveIntensity: 2.0,
+      metalness: 0.3,
       roughness: 0.0,
       toneMapped: false,
     });
