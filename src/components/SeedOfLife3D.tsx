@@ -13,15 +13,27 @@ const SeedOfLifeGeometry = () => {
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
   useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const PHI = 1.618033988749; // Golden ratio
+
     if (groupRef.current) {
-      // Slow, smooth rotation around Y-axis
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.25;
+      // Slow rotation based on golden ratio
+      groupRef.current.rotation.y = t * (1 / PHI) * 0.1;
+
+      // Subtle golden ratio vibration on z-axis
+      groupRef.current.rotation.z = Math.sin(t * PHI * 0.3) * 0.02;
+
+      // Subtle scale breathing based on phi
+      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.015;
+      groupRef.current.scale.setScalar(breathe);
     }
 
-    // Bright, slow pulse effect on emissive intensity
+    // Gentle pulse effect using golden ratio harmonics
     if (materialRef.current) {
-      const pulse = 0.6 + Math.sin(state.clock.elapsedTime * 0.5) * 0.4;
-      materialRef.current.emissiveIntensity = pulse;
+      const pulse1 = Math.sin(t * (1 / PHI) * 0.4);
+      const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.6);
+      const combined = 0.7 + (pulse1 * 0.2 + pulse2 * 0.1);
+      materialRef.current.emissiveIntensity = combined;
     }
   });
 
@@ -34,14 +46,14 @@ const SeedOfLifeGeometry = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Bright golden material with strong glow
+  // Pure white glowing material
   const goldenMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
-      color: '#f0c675',
-      emissive: '#ffd700',
-      emissiveIntensity: 0.6,
-      metalness: 0.7,
-      roughness: 0.2,
+      color: '#ffffff',
+      emissive: '#ffffff',
+      emissiveIntensity: 0.8,
+      metalness: 0.3,
+      roughness: 0.1,
     });
     return mat;
   }, []);
@@ -87,10 +99,10 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
           frameloop="always"
           dpr={[1, 2]}
         >
-          <ambientLight intensity={0.8} />
-          <pointLight position={[0, 0, 5]} intensity={2.5} color="#fff8e7" />
-          <pointLight position={[3, 3, 3]} intensity={1.2} color="#ffd700" />
-          <pointLight position={[-3, -3, 3]} intensity={1.2} color="#ffd700" />
+          <ambientLight intensity={1.0} />
+          <pointLight position={[0, 0, 5]} intensity={2.0} color="#ffffff" />
+          <pointLight position={[3, 3, 3]} intensity={1.0} color="#ffffff" />
+          <pointLight position={[-3, -3, 3]} intensity={1.0} color="#ffffff" />
           <Center>
             <SeedOfLifeGeometry />
           </Center>

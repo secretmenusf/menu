@@ -111,7 +111,6 @@ const MenuSection = () => {
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Section header */}
         <div className="text-center mb-8">
-          <span className="text-foreground text-3xl mb-4 block">☽</span>
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
             THE OFFERINGS
           </h2>
