@@ -19,6 +19,6 @@ test('logged-in header shows 3D logo on menu', async ({ page }) => {
   });
 
   await page.goto('/');
-  await expect(page).toHaveURL(/\/menu$/);
+  await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('header canvas')).toBeVisible();
 });

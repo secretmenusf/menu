@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import PasswordGate from '@/components/PasswordGate';
+import Home from '@/pages/Home';
 
 const Index = () => {
   const [authenticated, setAuthenticated] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user has already passed the gate
@@ -19,18 +18,11 @@ const Index = () => {
     setAuthenticated(true);
   };
 
-  useEffect(() => {
-    if (authenticated) {
-      // Redirect to menu after successful auth
-      navigate('/menu');
-    }
-  }, [authenticated, navigate]);
-
   if (!authenticated) {
     return <PasswordGate onSuccess={handleSuccess} />;
   }
 
-  return null;
+  return <Home />;
 };
 
 export default Index;
