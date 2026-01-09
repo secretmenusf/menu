@@ -9,11 +9,11 @@ interface PasswordGateProps {
 }
 
 const hints = [
-  "Think about what the initiated already know...",
-  "What do you feel about secrets?",
-  "Express your affection for the hidden...",
-  "Three words. First word: 'I'. Put them together.",
-  "Almost there... type: ilovesecrets",
+  "Some doors only open for those who truly desire what's behind them...",
+  "Whisper your devotion to the unseen...",
+  "Three words that unlock everything hidden...",
+  "Say it: I... love... secrets",
+  "Type: ilovesecrets ✨",
 ];
 
 const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
