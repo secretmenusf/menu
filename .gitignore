@@ -25,3 +25,4 @@ visual-check
 *.njsproj
 *.sln
 *.sw?
+.playwright-mcp/
