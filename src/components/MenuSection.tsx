@@ -137,17 +137,8 @@ const MenuSection = () => {
 
         {/* Pricing info */}
         <div className="text-center mb-12 p-6 border border-border/30 rounded-lg bg-card/30">
-          <div className="flex justify-center gap-8 mb-4">
-            <div>
-              <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-1">WEEKLY</p>
-              <p className="font-display text-2xl text-foreground">${pricingInfo.weeklyPlan}</p>
-            </div>
-            <div className="w-px bg-border/50" />
-            <div>
-              <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-1">MONTHLY</p>
-              <p className="font-display text-2xl text-foreground">${pricingInfo.monthlyPlan}</p>
-            </div>
-          </div>
+          <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-2">STARTING AT</p>
+          <p className="font-display text-3xl text-foreground mb-4">$395<span className="text-lg text-muted-foreground">/month</span></p>
           <p className="font-body text-sm text-muted-foreground/80 mb-4">
             {pricingInfo.note}
           </p>
