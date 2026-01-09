@@ -17,22 +17,22 @@ const SeedOfLifeGeometry = () => {
     const PHI = 1.618033988749; // Golden ratio
 
     if (groupRef.current) {
-      // Slow rotation based on golden ratio
-      groupRef.current.rotation.y = t * (1 / PHI) * 0.1;
+      // Oscillating left-right rotation (not full rotation)
+      groupRef.current.rotation.y = Math.sin(t * (1 / PHI) * 0.3) * 0.4;
 
       // Subtle golden ratio vibration on z-axis
-      groupRef.current.rotation.z = Math.sin(t * PHI * 0.3) * 0.02;
+      groupRef.current.rotation.z = Math.sin(t * PHI * 0.2) * 0.015;
 
       // Subtle scale breathing based on phi
-      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.015;
+      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.4) * 0.02;
       groupRef.current.scale.setScalar(breathe);
     }
 
-    // Gentle pulse effect using golden ratio harmonics
+    // Strong glow pulse using golden ratio harmonics
     if (materialRef.current) {
-      const pulse1 = Math.sin(t * (1 / PHI) * 0.4);
-      const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.6);
-      const combined = 0.7 + (pulse1 * 0.2 + pulse2 * 0.1);
+      const pulse1 = Math.sin(t * (1 / PHI) * 0.3);
+      const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.5);
+      const combined = 1.2 + (pulse1 * 0.4 + pulse2 * 0.2);
       materialRef.current.emissiveIntensity = combined;
     }
   });
@@ -46,14 +46,15 @@ const SeedOfLifeGeometry = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Pure white glowing material
+  // Pure white glowing material with strong emission
   const goldenMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
       color: '#ffffff',
       emissive: '#ffffff',
-      emissiveIntensity: 0.8,
-      metalness: 0.3,
-      roughness: 0.1,
+      emissiveIntensity: 1.5,
+      metalness: 0.1,
+      roughness: 0.0,
+      toneMapped: false,
     });
     return mat;
   }, []);
@@ -92,6 +93,49 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
         position: 'relative',
       }}
     >
+      {/* Outer glow layer */}
+      <div
+        className="absolute animate-pulse-glow"
+        style={{
+          inset: '-30%',
+          filter: 'blur(40px)',
+          opacity: 0.7,
+        }}
+      >
+        <Canvas
+          camera={{ position: [0, 0, 2.5], fov: 40 }}
+          gl={{ alpha: true, antialias: true }}
+          frameloop="always"
+          dpr={[1, 1]}
+        >
+          <ambientLight intensity={3} />
+          <Center>
+            <SeedOfLifeGeometry />
+          </Center>
+        </Canvas>
+      </div>
+      {/* Inner glow layer */}
+      <div
+        className="absolute"
+        style={{
+          inset: '-15%',
+          filter: 'blur(15px)',
+          opacity: 0.5,
+        }}
+      >
+        <Canvas
+          camera={{ position: [0, 0, 2.5], fov: 40 }}
+          gl={{ alpha: true, antialias: true }}
+          frameloop="always"
+          dpr={[1, 1]}
+        >
+          <ambientLight intensity={2} />
+          <Center>
+            <SeedOfLifeGeometry />
+          </Center>
+        </Canvas>
+      </div>
+      {/* Main layer */}
       <div style={{ position: 'absolute', inset: 0 }}>
         <Canvas
           camera={{ position: [0, 0, 2.5], fov: 40 }}
@@ -99,10 +143,10 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
           frameloop="always"
           dpr={[1, 2]}
         >
-          <ambientLight intensity={1.0} />
-          <pointLight position={[0, 0, 5]} intensity={2.0} color="#ffffff" />
-          <pointLight position={[3, 3, 3]} intensity={1.0} color="#ffffff" />
-          <pointLight position={[-3, -3, 3]} intensity={1.0} color="#ffffff" />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[0, 0, 4]} intensity={3.0} color="#ffffff" />
+          <pointLight position={[2, 2, 2]} intensity={1.5} color="#ffffff" />
+          <pointLight position={[-2, -2, 2]} intensity={1.5} color="#ffffff" />
           <Center>
             <SeedOfLifeGeometry />
           </Center>
