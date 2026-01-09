@@ -94,8 +94,8 @@ const Support = () => {
             </form>
             <div className="mt-8 text-center space-y-2 font-body text-sm text-muted-foreground">
               <p>
-                <a href="mailto:hello@secretmenu.xyz" className="hover:text-foreground transition-colors">
-                  hello@secretmenu.xyz
+                <a href="mailto:hello@sfsecretmenu.com" className="hover:text-foreground transition-colors">
+                  hello@sfsecretmenu.com
                 </a>
                 {' · '}
                 <a href="tel:+13235551234" className="hover:text-foreground transition-colors">
@@ -125,7 +125,7 @@ const Support = () => {
                   What are your delivery hours?
                 </AccordionTrigger>
                 <AccordionContent className="font-body text-muted-foreground">
-                  We deliver from 8am to 1am daily throughout the Los Angeles area. 
+                  We deliver from 8am to 1am daily throughout the San Francisco Bay Area. 
                   Orders placed after 1am will be scheduled for the next delivery window.
                 </AccordionContent>
               </AccordionItem>

@@ -19,10 +19,10 @@ const ContactSection = () => {
               Speak your intention to the void
             </p>
             <a 
-              href="mailto:enter@secretmenu.com" 
+              href="mailto:enter@sfsecretmenu.com" 
               className="inline-block font-body text-lg text-foreground/70 hover:text-foreground transition-colors mt-2"
             >
-              enter@secretmenu.com
+              enter@sfsecretmenu.com
             </a>
           </div>
 

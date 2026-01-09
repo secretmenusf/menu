@@ -1,30 +1,31 @@
-import SacredGeometry from './SacredGeometry';
+import SeedOfLife3D from './SeedOfLife3D';
 
 const HeroSection = () => {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden">
-      <SacredGeometry />
-      
       {/* Radial vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(0_0%_1%)_75%)]" />
-      
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(0_0%_1%)_80%)]" />
+
       <div className="relative z-10 text-center px-6 animate-reveal">
         <p className="font-body text-lg tracking-[0.5em] text-muted-foreground mb-4 uppercase">
           By Invitation Only
         </p>
-        
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] text-mystical mb-6">
+
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] text-mystical mb-8">
           SECRET
           <span className="block text-muted-foreground mt-2">MENU</span>
         </h1>
-        
-        <div className="w-32 h-px bg-gradient-to-r from-transparent via-foreground/50 to-transparent mx-auto mb-8" />
-        
-        <p className="font-body text-xl md:text-2xl text-muted-foreground italic max-w-xl mx-auto">
+
+        {/* Prominent Seed of Life */}
+        <div className="flex justify-center mb-8">
+          <SeedOfLife3D size={280} />
+        </div>
+
+        <p className="font-body text-xl md:text-2xl text-muted-foreground italic max-w-xl mx-auto mb-12">
           "In food, as in all sacred arts, the invisible becomes visible"
         </p>
-        
-        <div className="mt-16 flex justify-center">
+
+        <div className="flex justify-center">
           <button
             onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}
             className="group relative font-display text-xs tracking-[0.3em] text-foreground border border-border px-10 py-4 rounded-full hover:border-foreground hover:bg-foreground/10 transition-all duration-500"
