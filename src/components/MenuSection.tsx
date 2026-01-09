@@ -1,100 +1,122 @@
-import MenuItem from './MenuItem';
+import { getCurrentWeekMenu, dietaryInfo, pricingInfo, type MenuItem as MenuItemType } from '@/data/menus';
 
-const dayA = {
-  day: "A",
-  lunch: { name: "Leek & Goat Cheese Tart", description: "With radicchio salad" },
-  dinner: [
-    { name: "Sweet Potato Gnocchi", description: "" },
-    { name: "Zucchini Tartare", description: "With pine nuts" }
-  ],
-  dessert: { name: "Chilled Sweet Mango-Cream", description: "" }
+const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
+  const info = dietaryInfo[tag];
+  return (
+    <span
+      className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-display tracking-wider border border-border/50 rounded-full text-muted-foreground"
+      title={info.label}
+    >
+      {info.icon}
+    </span>
+  );
 };
 
-const dayB = {
-  day: "B",
-  lunch: { name: "Crab Cakes", description: "With asparagus and corn salad" },
-  dinner: [
-    { name: "Duck Breast", description: "With port wine reduction and silky carrots" }
-  ],
-  dessert: { name: "Avocado Chocolate Mousse", description: "" }
-};
-
-const dayC = {
-  day: "C",
-  lunch: { name: "Arugula Salad", description: "With lemon, artichoke hearts, sunflower seeds, pecorino, thinly shaved sweet onion + slice of artisan bread" },
-  dinner: [
-    { name: "Shepherd's Pie", description: "" },
-    { name: "Spinach Walnut Goat Cheese & Apple Salad", description: "" }
-  ],
-  dessert: null
-};
-
-const dayD = {
-  day: "D",
-  lunch: { name: "Rosemary Lemon Braised Chicken", description: "With wild farro and roasted carrots" },
-  dinner: [
-    { name: "Nobu Inspired Miso Glazed Cod", description: "" }
-  ],
-  dessert: { name: "Bread Pudding", description: "With rum-raisin" }
-};
-
-const dayE = {
-  day: "E",
-  lunch: { name: "Roasted Cauliflower & Butternut Squash Soup", description: "With slice of artisan bread" },
-  dinner: [
-    { name: "Chicken Piccata", description: "Sautéed in bright lemon-white wine butter sauce, fried capers, fresh parsley, served over angel hair pasta" }
-  ],
-  dessert: null
-};
-
-const weeklyMenu = [dayA, dayB, dayC, dayD, dayE];
+const MenuItemDisplay = ({ item }: { item: MenuItemType }) => (
+  <div className="mb-2">
+    <div className="flex items-center gap-2">
+      <p className="font-body text-foreground">{item.name}</p>
+      {item.tags && item.tags.length > 0 && (
+        <div className="flex gap-1">
+          {item.tags.map(tag => (
+            <DietaryTag key={tag} tag={tag} />
+          ))}
+        </div>
+      )}
+    </div>
+    {item.description && (
+      <p className="font-body text-sm text-muted-foreground italic">{item.description}</p>
+    )}
+  </div>
+);
 
 const MenuSection = () => {
+  const currentMenu = getCurrentWeekMenu();
+
+  const formatDateRange = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const startMonth = startDate.toLocaleDateString('en-US', { month: 'short' });
+    const endMonth = endDate.toLocaleDateString('en-US', { month: 'short' });
+    const startDay = startDate.getDate();
+    const endDay = endDate.getDate();
+
+    if (startMonth === endMonth) {
+      return `${startMonth} ${startDay}-${endDay}`;
+    }
+    return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+  };
+
   return (
     <section id="menu" className="relative py-32 bg-background">
       {/* Decorative top border */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      
+
       <div className="container mx-auto px-6 max-w-4xl">
         {/* Section header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <span className="text-foreground text-3xl mb-4 block">☽</span>
           <h2 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
             THE OFFERINGS
           </h2>
+          {currentMenu.theme && (
+            <p className="font-display text-sm tracking-[0.3em] text-muted-foreground mb-2">
+              {currentMenu.theme.toUpperCase()}
+            </p>
+          )}
           <p className="font-body text-lg text-muted-foreground italic">
-            Five days of curated nourishment
+            {formatDateRange(currentMenu.startDate, currentMenu.endDate)}
           </p>
         </div>
 
+        {/* Pricing info */}
+        <div className="text-center mb-12 p-6 border border-border/30 rounded-lg bg-card/30">
+          <div className="flex justify-center gap-8 mb-4">
+            <div>
+              <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-1">WEEKLY</p>
+              <p className="font-display text-2xl text-foreground">${pricingInfo.weeklyPlan}</p>
+            </div>
+            <div className="w-px bg-border/50" />
+            <div>
+              <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-1">MONTHLY</p>
+              <p className="font-display text-2xl text-foreground">${pricingInfo.monthlyPlan}</p>
+            </div>
+          </div>
+          <p className="font-body text-sm text-muted-foreground/80">
+            {pricingInfo.note}
+          </p>
+        </div>
+
+        {/* Dietary legend */}
+        <div className="flex justify-center gap-6 mb-12 text-sm text-muted-foreground">
+          {Object.entries(dietaryInfo).map(([key, info]) => (
+            <div key={key} className="flex items-center gap-2">
+              <DietaryTag tag={key as 'gf' | 'df' | 'v' | 'vg'} />
+              <span className="font-body">{info.label}</span>
+            </div>
+          ))}
+        </div>
+
         {/* Weekly Menu */}
-        <div className="space-y-12">
-          {weeklyMenu.map((day) => (
+        <div className="space-y-8">
+          {currentMenu.days.map((day) => (
             <div key={day.day} className="border border-border/30 rounded-lg p-6 bg-card/30">
               <div className="flex items-center gap-4 mb-6">
-                <span className="font-display text-2xl tracking-[0.2em] text-mystical">DAY {day.day}</span>
+                <span className="font-display text-xl tracking-[0.2em] text-mystical">{day.day}</span>
                 <div className="flex-1 h-px bg-border/50" />
               </div>
-              
+
               {/* Lunch */}
               <div className="mb-4">
                 <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">LUNCH</h4>
-                <p className="font-body text-foreground">{day.lunch.name}</p>
-                {day.lunch.description && (
-                  <p className="font-body text-sm text-muted-foreground italic">{day.lunch.description}</p>
-                )}
+                <MenuItemDisplay item={day.lunch} />
               </div>
 
               {/* Dinner */}
               <div className="mb-4">
                 <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">DINNER</h4>
                 {day.dinner.map((item, idx) => (
-                  <div key={idx} className="mb-1">
-                    <p className="font-body text-foreground">{item.name}</p>
-                    {item.description && (
-                      <p className="font-body text-sm text-muted-foreground italic">{item.description}</p>
-                    )}
-                  </div>
+                  <MenuItemDisplay key={idx} item={item} />
                 ))}
               </div>
 
@@ -102,10 +124,7 @@ const MenuSection = () => {
               {day.dessert && (
                 <div>
                   <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">DESSERT</h4>
-                  <p className="font-body text-foreground">{day.dessert.name}</p>
-                  {day.dessert.description && (
-                    <p className="font-body text-sm text-muted-foreground italic">{day.dessert.description}</p>
-                  )}
+                  <MenuItemDisplay item={day.dessert} />
                 </div>
               )}
             </div>
@@ -113,9 +132,9 @@ const MenuSection = () => {
         </div>
 
         {/* Footer note */}
-        <div className="mt-20 text-center">
+        <div className="mt-16 text-center">
           <p className="font-body text-sm text-muted-foreground/60 tracking-wide">
-            A gratuity of 20% is included for all who partake in the mysteries
+            A gratuity of 20% is included for all who partake
           </p>
         </div>
       </div>

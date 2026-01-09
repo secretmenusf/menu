@@ -115,7 +115,7 @@ const Support = () => {
                   How does the weekly menu work?
                 </AccordionTrigger>
                 <AccordionContent className="font-body text-muted-foreground">
-                  Each week, Chef Antje creates a new curated menu. You can view the current week's offerings 
+                  Each week, Chef A.K. creates a new curated menu. You can view the current week's offerings 
                   on our Menu page and place orders for delivery. The menu changes every Monday at midnight.
                 </AccordionContent>
               </AccordionItem>
