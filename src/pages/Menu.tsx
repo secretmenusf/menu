@@ -262,9 +262,127 @@ const week1Data: DayMenu[] = [
   }
 ];
 
+// Week of January 19, 2026 (Upcoming Week)
+const week3Data: DayMenu[] = [
+  {
+    day: "Day 1",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Shoyu chicken bowl with jasmine rice, pickled daikon & sesame greens", glutenFree: true }
+        ]
+      },
+      {
+        type: "Snack",
+        items: [{ name: "Charred shishito peppers with sea salt", vegetarian: true, glutenFree: true }]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Harissa-spiced lamb meatballs with tomato fennel ragout", glutenFree: true },
+          { name: "Citrus herb salad", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Rose water rice pudding", vegetarian: true, glutenFree: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 2",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Caprese panini with basil aioli", vegetarian: true },
+          { name: "Roasted beet & orange salad", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Saffron chicken paella with chorizo", glutenFree: true },
+          { name: "Marinated Spanish gildas", glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Burnt Basque cheesecake", vegetarian: true, glutenFree: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 3",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Kale chicken Caesar wrap with herb croutons" },
+          { name: "Roasted garlic hummus", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Duck confit with rosemary potatoes", glutenFree: true },
+          { name: "Mixed greens with lemon vinaigrette", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Colossal chocolate chip cookies", vegetarian: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 4",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Falafel pita with tahini slaw", vegetarian: true },
+          { name: "Tabbouleh salad", vegetarian: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Almond saffron albondigas", glutenFree: true },
+          { name: "Roasted smashed potatoes", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dessert",
+        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
+      }
+    ]
+  },
+  {
+    day: "Day 5",
+    meals: [
+      {
+        type: "Lunch",
+        items: [
+          { name: "Grilled cheese on fresh sourdough", vegetarian: true },
+          { name: "Roasted tomato soup", vegetarian: true, glutenFree: true }
+        ]
+      },
+      {
+        type: "Dinner",
+        items: [
+          { name: "Beef bulgogi bowl with chili crunch & scallions", glutenFree: true }
+        ]
+      }
+    ]
+  }
+];
+
 const weeks = [
   { id: 0, label: "January 5, 2026", data: week1Data },
   { id: 1, label: "January 12, 2026", data: week2Data },
+  { id: 2, label: "January 19, 2026", data: week3Data },
 ];
 
 const DietaryIcon = ({ vegetarian, glutenFree }: { vegetarian?: boolean; glutenFree?: boolean }) => {
@@ -333,12 +451,6 @@ const Menu = () => {
               </Button>
             </div>
 
-            {/* Next week tease */}
-            {weekIndex === weeks.length - 1 && (
-              <p className="font-body text-sm text-muted-foreground/60 mt-4 italic">
-                January 19 menu coming soon... ✦
-              </p>
-            )}
           </div>
 
           {/* Menu by day */}
