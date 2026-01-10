@@ -6,7 +6,6 @@ export const ReviewsSection = () => {
     <section className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="text-foreground text-2xl mb-4 block">✧</span>
           <h2 className="font-display text-3xl md:text-4xl tracking-[0.2em] text-mystical mb-4">
             WHAT THEY'RE SAYING
           </h2>

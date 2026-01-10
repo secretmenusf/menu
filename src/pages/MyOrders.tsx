@@ -68,7 +68,6 @@ const MyOrders = () => {
         <div className="container mx-auto px-6 max-w-3xl">
           {/* Header */}
           <div className="text-center mb-12">
-            <span className="text-foreground text-3xl mb-4 block">✧</span>
             <h1 className="font-display text-3xl md:text-4xl tracking-[0.2em] text-mystical mb-2">
               YOUR ORDERS
             </h1>

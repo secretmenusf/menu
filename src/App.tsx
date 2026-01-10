@@ -57,7 +57,7 @@ const queryClient = new QueryClient();
 const PageLoader = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
     <div className="text-center">
-      <div className="text-4xl text-muted-foreground mb-4 animate-pulse">✧</div>
+      <div className="w-8 h-8 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin mx-auto mb-4" />
       <p className="font-display text-xs tracking-[0.3em] text-muted-foreground">LOADING</p>
     </div>
   </div>

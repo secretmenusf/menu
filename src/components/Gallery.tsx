@@ -164,7 +164,6 @@ const Gallery = () => {
       <section ref={sectionRef} className="py-20 bg-background" data-testid="gallery">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <span className="text-foreground text-2xl mb-4 block">✦</span>
             <h2 className="font-display text-3xl tracking-[0.2em] text-mystical">
               THE GALLERY
             </h2>

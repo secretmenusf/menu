@@ -222,7 +222,6 @@ const Order = () => {
         <div className="container mx-auto px-6 max-w-5xl">
           {/* Header */}
           <div className="text-center mb-16">
-            <span className="text-foreground text-3xl mb-4 block">✦</span>
             <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
               PLACE YOUR ORDER
             </h1>
