@@ -174,7 +174,8 @@ export function OrderingChat() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-orange-500/30 flex items-center justify-center text-white hover:scale-110 transition-all duration-200"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-orange-500/30 flex items-center justify-center text-white hover:scale-110 transition-all duration-200"
+          style={{ borderRadius: '50%' }}
         >
           <MessageCircle className="w-6 h-6" />
         </button>

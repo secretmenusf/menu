@@ -37,11 +37,11 @@ export interface StreamChunk {
   }[];
 }
 
-// Gateway URLs to try in order
+// Gateway URLs to try in order (production first)
 const GATEWAY_URLS = [
+  'https://gateway.hanzo.ai',
   'http://localhost:3001',
   'http://localhost:9550',
-  'https://gateway.hanzo.ai',
 ];
 
 class HanzoGatewayService {
