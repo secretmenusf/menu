@@ -239,7 +239,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
           
           {/* Floating chat icon - always visible */}
           <button
-            className="fixed bottom-6 right-6 z-[70] w-11 h-11 bg-foreground text-background rounded-md flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
+            className="fixed bottom-6 right-6 z-[70] w-11 h-11 bg-foreground text-background rounded-full flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
             onClick={() => setShowHint(!showHint)}
           >
             {showHint ? <X size={18} /> : <MessageCircle size={18} />}
