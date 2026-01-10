@@ -4,8 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Base path for GitHub Pages (use '/' for custom domain or '/repo-name/' for project pages)
-  base: process.env.GITHUB_ACTIONS ? '/sfsecretmenu/' : '/',
+  // Base path - use '/' for custom domain
+  base: '/',
   server: {
     host: "::",
     port: 8080,
