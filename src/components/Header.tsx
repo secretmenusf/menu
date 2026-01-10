@@ -121,7 +121,7 @@ const Header = () => {
               const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
               document.dispatchEvent(event);
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-muted-foreground hover:text-foreground transition-colors border border-border/50 rounded-md hover:bg-accent"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-muted-foreground hover:text-foreground transition-colors border border-border/50 rounded-full hover:bg-accent"
             title="Quick search (⌘K)"
           >
             <Search size={14} />
@@ -134,7 +134,7 @@ const Header = () => {
         <div className="md:hidden flex items-center gap-2">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-md">
+              <Button variant="ghost" size="icon" className="rounded-full">
                 <Menu size={20} />
               </Button>
             </SheetTrigger>
