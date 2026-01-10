@@ -4,7 +4,6 @@ import Gallery from '@/components/Gallery';
 import ReviewsSection from '@/components/reviews/ReviewsSection';
 import MenuSection from '@/components/MenuSection';
 import AboutSection from '@/components/AboutSection';
-import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 
 const Home = () => {
@@ -18,7 +17,6 @@ const Home = () => {
         <ReviewsSection />
         <MenuSection />
         <AboutSection />
-        <ContactSection />
       </main>
 
       <Footer />

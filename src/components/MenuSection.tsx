@@ -146,9 +146,10 @@ const MenuSection = () => {
 
           <div className="grid md:grid-cols-3 gap-4">
             {subscriptionPlans.map((plan) => (
-              <div
+              <Link
                 key={plan.id}
-                className={`relative p-5 border rounded-lg transition-all duration-300 hover:scale-[1.02] ${
+                to={`/pricing?plan=${plan.id}`}
+                className={`relative p-5 border rounded-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer ${
                   plan.popular
                     ? 'border-foreground/50 bg-card/50'
                     : 'border-border/30 bg-card/30 hover:border-border/50'
@@ -173,7 +174,7 @@ const MenuSection = () => {
                     {plan.mealsPerWeek} meals/week
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
