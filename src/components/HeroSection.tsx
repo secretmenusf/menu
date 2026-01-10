@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import SeedOfLife3D from './SeedOfLife3D';
 
 const HeroSection = () => {
@@ -7,30 +9,41 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(0_0%_1%)_80%)]" />
 
       <div className="relative z-10 text-center px-6 animate-reveal">
-        <p className="font-body text-lg tracking-[0.5em] text-muted-foreground mb-4 uppercase">
-          By Invitation Only
+        <p className="font-body text-sm tracking-[0.4em] text-muted-foreground mb-6 uppercase">
+          San Francisco's Private Kitchen
         </p>
 
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] text-mystical mb-8">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl tracking-[0.15em] text-mystical mb-4">
           SECRET
           <span className="block text-muted-foreground mt-2">MENU</span>
         </h1>
 
-        {/* Prominent Seed of Life */}
-        <div className="flex justify-center mb-8">
-          <SeedOfLife3D size={280} />
+        {/* Seed of Life */}
+        <div className="flex justify-center mb-6">
+          <SeedOfLife3D size={240} />
         </div>
 
-        <p className="font-body text-xl md:text-2xl text-muted-foreground italic max-w-xl mx-auto mb-12">
-          "In food, as in all sacred arts, the invisible becomes visible"
+        <p className="font-body text-lg md:text-xl text-muted-foreground max-w-lg mx-auto mb-4">
+          Chef-crafted organic meals delivered to your door.
+          <br />
+          <span className="text-foreground">Nourishing body, mind, and soul.</span>
         </p>
 
-        <div className="flex justify-center">
+        <p className="font-body text-sm text-muted-foreground/70 mb-10">
+          Weekly menus • Flexible subscriptions • Bay Area delivery
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Link to="/entry">
+            <Button size="lg" className="px-10 font-display tracking-wider">
+              START YOUR JOURNEY
+            </Button>
+          </Link>
           <button
             onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group relative font-display text-xs tracking-[0.3em] text-foreground border border-border px-10 py-4 rounded-full hover:border-foreground hover:bg-foreground/10 transition-all duration-500"
+            className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground px-8 py-3 transition-colors"
           >
-            <span className="relative z-10">ENTER THE SANCTUM</span>
+            VIEW THIS WEEK'S MENU
           </button>
         </div>
       </div>

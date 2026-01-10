@@ -184,7 +184,7 @@ const Gallery = () => {
                 data-visible={visibleImages[index] ? 'true' : 'false'}
               >
                 {/* Subtle backglow for PNG transparency */}
-                <div className="absolute inset-0 -m-2 bg-foreground/5 blur-xl rounded-2xl opacity-60 group-hover:opacity-100 group-hover:bg-foreground/10 transition-all duration-500" />
+                <div className="absolute inset-0 -m-1 bg-foreground/3 blur-lg rounded-2xl opacity-40 group-hover:opacity-60 group-hover:bg-foreground/5 transition-all duration-500" />
                 
                 {/* Image container */}
                 <div className="relative w-full h-full bg-card/30 rounded-xl overflow-hidden">
@@ -242,7 +242,7 @@ const Gallery = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Backglow effect for fullscreen */}
-            <div className="absolute inset-0 -m-8 bg-foreground/10 blur-3xl rounded-3xl" />
+            <div className="absolute inset-0 -m-4 bg-foreground/5 blur-2xl rounded-3xl" />
             
             <img
               src={shuffledItems[selectedIndex].src}

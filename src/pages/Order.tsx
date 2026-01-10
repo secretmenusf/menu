@@ -8,17 +8,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { weeklyMenu, WHATSAPP_NUMBER } from '@/lib/menuData';
+import { WHATSAPP_NUMBER } from '@/lib/menuData';
 import { PAYMENT_CONFIG } from '@/lib/wagmi';
 import { subscriptionPlans, type SubscriptionPlan } from '@/data/plans';
-import { format, addDays } from 'date-fns';
-import { CalendarIcon, Plus, Minus, MessageCircle, AlertCircle, Check } from 'lucide-react';
+import { allMenus, dietaryInfo, type WeekMenu, type DayMenu, type MenuItem } from '@/data/menus';
+import { format } from 'date-fns';
+import { Plus, Minus, MessageCircle, AlertCircle, Check, Shuffle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
 interface MealSelection {
+  weekId: string;
   dayId: string;
   mealType: 'lunch' | 'dinner';
   mealName: string;
@@ -42,25 +42,46 @@ const upsellItems = [
   { id: 'hummus-beet', name: 'Beetroot Hummus', description: 'Pint size', price: 35, variant: 'beetroot' },
 ];
 
+const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
+  const info = dietaryInfo[tag];
+  return (
+    <span
+      className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-display tracking-wider border border-border/50 rounded-full text-muted-foreground"
+      title={info.label}
+    >
+      {info.icon}
+    </span>
+  );
+};
+
 const Order = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { isConnected } = useAccount();
   const { toast } = useToast();
 
+  // Get week from URL params or default to first available
+  const initialWeekId = searchParams.get('week');
+  const initialWeekIndex = initialWeekId
+    ? allMenus.findIndex(m => m.id === initialWeekId)
+    : 0;
+
   // Get plan from URL params or default to standard
   const initialPlanId = searchParams.get('plan') || 'standard';
+
+  const [selectedWeekIndex, setSelectedWeekIndex] = useState(Math.max(0, initialWeekIndex));
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan>(
     subscriptionPlans.find(p => p.id === initialPlanId) || subscriptionPlans[1]
   );
 
   const [selections, setSelections] = useState<MealSelection[]>([]);
   const [upsells, setUpsells] = useState<UpsellSelection[]>([]);
-  const [deliveryDate, setDeliveryDate] = useState<Date | undefined>();
   const [deliveryTime, setDeliveryTime] = useState('18:00');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryNotes, setDeliveryNotes] = useState('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  const currentMenu = allMenus[selectedWeekIndex];
 
   const updateUpsell = (id: string, name: string, price: number, delta: number, variant?: string) => {
     setUpsells(prev => {
@@ -86,6 +107,7 @@ const Order = () => {
   };
 
   const updateSelection = (
+    weekId: string,
     dayId: string,
     mealType: 'lunch' | 'dinner',
     mealName: string,
@@ -94,7 +116,7 @@ const Order = () => {
   ) => {
     setSelections(prev => {
       const existingIndex = prev.findIndex(
-        s => s.dayId === dayId && s.mealType === mealType && s.mealName === mealName && s.tier === tier
+        s => s.weekId === weekId && s.dayId === dayId && s.mealType === mealType && s.mealName === mealName && s.tier === tier
       );
 
       if (existingIndex >= 0) {
@@ -107,17 +129,58 @@ const Order = () => {
         }
         return newSelections;
       } else if (delta > 0) {
-        return [...prev, { dayId, mealType, mealName, tier, quantity: delta }];
+        return [...prev, { weekId, dayId, mealType, mealName, tier, quantity: delta }];
       }
       return prev;
     });
   };
 
-  const getQuantity = (dayId: string, mealType: 'lunch' | 'dinner', mealName: string, tier: 'regular' | 'premium') => {
+  const getQuantity = (weekId: string, dayId: string, mealType: 'lunch' | 'dinner', mealName: string, tier: 'regular' | 'premium') => {
     const selection = selections.find(
-      s => s.dayId === dayId && s.mealType === mealType && s.mealName === mealName && s.tier === tier
+      s => s.weekId === weekId && s.dayId === dayId && s.mealType === mealType && s.mealName === mealName && s.tier === tier
     );
     return selection?.quantity || 0;
+  };
+
+  // Random fill function
+  const randomFill = () => {
+    const mealsNeeded = selectedPlan.mealsPerWeek;
+    const newSelections: MealSelection[] = [];
+
+    // Get all available meals for the current week
+    const availableMeals: { day: DayMenu; meal: MenuItem; type: 'lunch' | 'dinner' }[] = [];
+    currentMenu.days.forEach(day => {
+      availableMeals.push({ day, meal: day.lunch, type: 'lunch' });
+      day.dinner.forEach(dinnerItem => {
+        availableMeals.push({ day, meal: dinnerItem, type: 'dinner' });
+      });
+    });
+
+    // Shuffle and pick random meals
+    const shuffled = [...availableMeals].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, Math.min(mealsNeeded, shuffled.length));
+
+    selected.forEach(({ day, meal, type }) => {
+      newSelections.push({
+        weekId: currentMenu.id,
+        dayId: day.day,
+        mealType: type,
+        mealName: meal.name,
+        tier: 'regular',
+        quantity: 1
+      });
+    });
+
+    setSelections(newSelections);
+    toast({
+      title: "Random selection made",
+      description: `Selected ${selected.length} meals for ${currentMenu.theme}`,
+    });
+  };
+
+  const clearSelections = () => {
+    setSelections([]);
+    setUpsells([]);
   };
 
   const { regularMeals, premiumMeals, upsellTotal, totalUsd } = useMemo(() => {
@@ -140,39 +203,44 @@ const Order = () => {
   const amountRemaining = Math.max(0, selectedPlan.price - totalUsd);
   const progressPercent = Math.min(100, (totalUsd / selectedPlan.price) * 100);
 
+  const formatDateRange = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return `${format(startDate, 'MMM d')} - ${format(endDate, 'MMM d, yyyy')}`;
+  };
+
   const buildWhatsAppMessage = () => {
-    const lines = ['🍽️ *SECRET MENU ORDER*\n'];
-    lines.push(`*Plan:* ${selectedPlan.name} ($${selectedPlan.price}/mo)\n`);
+    const lines = ['*SECRET MENU ORDER*\n'];
+    lines.push(`*Plan:* ${selectedPlan.name} ($${selectedPlan.price}/mo)`);
+    lines.push(`*Week:* ${currentMenu.theme} (${formatDateRange(currentMenu.startDate, currentMenu.endDate)})\n`);
 
     if (selections.length > 0) {
       lines.push('*MEALS:*');
       selections.forEach(s => {
-        lines.push(`• Day ${s.dayId} ${s.mealType}: ${s.mealName} (${s.tier}) x${s.quantity}`);
+        lines.push(`• ${s.dayId} ${s.mealType}: ${s.mealName} (${s.tier}) x${s.quantity}`);
       });
     }
-    
+
     if (upsells.length > 0) {
       lines.push('\n*EXTRAS:*');
       upsells.forEach(u => {
         lines.push(`• ${u.name} x${u.quantity} - $${u.price * u.quantity}`);
       });
     }
-    
-    lines.push(`\n💰 *Total: $${totalUsd}*`);
+
+    lines.push(`\n*Total: $${totalUsd}*`);
     if (regularMeals > 0) lines.push(`Regular meals: ${regularMeals} × $${PAYMENT_CONFIG.regularMealPrice}`);
     if (premiumMeals > 0) lines.push(`Premium meals: ${premiumMeals} × $${PAYMENT_CONFIG.premiumMealPrice}`);
     if (upsellTotal > 0) lines.push(`Extras: $${upsellTotal}`);
-    
-    if (deliveryDate) {
-      lines.push(`\n📅 *Delivery:* ${format(deliveryDate, 'EEEE, MMMM d, yyyy')} at ${deliveryTime}`);
-    }
+
+    lines.push(`\n*Preferred Time:* ${deliveryTime}`);
     if (deliveryAddress) {
-      lines.push(`📍 *Address:* ${deliveryAddress}`);
+      lines.push(`*Address:* ${deliveryAddress}`);
     }
     if (deliveryNotes) {
-      lines.push(`📝 *Notes:* ${deliveryNotes}`);
+      lines.push(`*Notes:* ${deliveryNotes}`);
     }
-    
+
     return encodeURIComponent(lines.join('\n'));
   };
 
@@ -181,15 +249,6 @@ const Order = () => {
       toast({
         title: "Minimum order not met",
         description: `Please add $${amountRemaining} more to meet the ${selectedPlan.name} plan minimum of $${selectedPlan.price}`,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!deliveryDate) {
-      toast({
-        title: "Select delivery date",
-        description: "Please choose when you'd like your meals delivered",
         variant: "destructive",
       });
       return;
@@ -222,65 +281,51 @@ const Order = () => {
     window.open(whatsappUrl, '_blank');
   };
 
-  // Minimum date is tomorrow
-  const minDate = addDays(new Date(), 1);
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-6 max-w-5xl">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
-              PLACE YOUR ORDER
+              BUILD YOUR ORDER
             </h1>
             <p className="font-body text-lg text-muted-foreground">
-              Select your plan, then choose your meals
+              Select your plan, pick a week, choose your meals
             </p>
           </div>
 
           {/* Plan Selector */}
-          <div className="mb-12">
-            <p className="font-display text-xs tracking-[0.3em] text-muted-foreground text-center mb-6">
-              SELECT YOUR PLAN
+          <div className="mb-8">
+            <p className="font-display text-xs tracking-[0.3em] text-muted-foreground text-center mb-4">
+              1. SELECT YOUR PLAN
             </p>
-            <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-3 max-w-2xl mx-auto">
               {subscriptionPlans.map((plan) => (
                 <button
                   key={plan.id}
                   onClick={() => setSelectedPlan(plan)}
-                  className={`relative p-5 border rounded-lg transition-all duration-300 ${
+                  className={cn(
+                    "relative p-4 border rounded-2xl transition-all duration-300",
                     selectedPlan.id === plan.id
-                      ? 'border-foreground bg-foreground/10 scale-[1.02]'
-                      : plan.popular
-                      ? 'border-foreground/30 bg-card/50 hover:border-foreground/50'
+                      ? 'border-foreground bg-foreground/5 scale-[1.02]'
                       : 'border-border/30 bg-card/30 hover:border-border/50'
-                  }`}
-                >
-                  {plan.popular && selectedPlan.id !== plan.id && (
-                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
-                      <span className="px-3 py-0.5 text-[9px] font-display tracking-[0.2em] bg-foreground text-background rounded-full">
-                        POPULAR
-                      </span>
-                    </div>
                   )}
+                >
                   {selectedPlan.id === plan.id && (
-                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
-                      <span className="px-3 py-0.5 text-[9px] font-display tracking-[0.2em] bg-foreground text-background rounded-full flex items-center gap-1">
-                        <Check size={10} />
-                        SELECTED
-                      </span>
+                    <div className="absolute -top-2 right-3">
+                      <Check size={16} className="text-foreground" />
                     </div>
                   )}
                   <div className="text-center">
-                    <h4 className="font-display text-sm tracking-[0.15em] text-foreground mb-1">
+                    <h4 className="font-display text-xs tracking-[0.15em] text-foreground mb-1">
                       {plan.name.toUpperCase()}
                     </h4>
-                    <p className="font-display text-2xl text-mystical mb-1">
+                    <p className="font-display text-xl text-mystical">
                       ${plan.price}
-                      <span className="text-sm text-muted-foreground">/mo</span>
+                      <span className="text-xs text-muted-foreground">/mo</span>
                     </p>
                     <p className="font-body text-xs text-muted-foreground/60">
                       {plan.mealsPerWeek} meals/week
@@ -291,8 +336,59 @@ const Order = () => {
             </div>
           </div>
 
+          {/* Week Selector */}
+          <div className="mb-8">
+            <p className="font-display text-xs tracking-[0.3em] text-muted-foreground text-center mb-4">
+              2. SELECT YOUR WEEK
+            </p>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <button
+                onClick={() => setSelectedWeekIndex(Math.max(0, selectedWeekIndex - 1))}
+                disabled={selectedWeekIndex === 0}
+                className="p-2 rounded-full border border-border/50 hover:bg-card disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              <div className="text-center min-w-[200px]">
+                <p className="font-display text-lg tracking-wider text-foreground">
+                  {currentMenu.theme?.toUpperCase()}
+                </p>
+                <p className="font-body text-sm text-muted-foreground">
+                  {formatDateRange(currentMenu.startDate, currentMenu.endDate)}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setSelectedWeekIndex(Math.min(allMenus.length - 1, selectedWeekIndex + 1))}
+                disabled={selectedWeekIndex === allMenus.length - 1}
+                className="p-2 rounded-full border border-border/50 hover:bg-card disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+
+            {/* Quick week buttons */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {allMenus.slice(0, 6).map((week, idx) => (
+                <button
+                  key={week.id}
+                  onClick={() => setSelectedWeekIndex(idx)}
+                  className={cn(
+                    "px-3 py-1 rounded-full border text-xs font-display tracking-wider transition-all",
+                    idx === selectedWeekIndex
+                      ? 'bg-foreground text-background border-foreground'
+                      : 'border-border/50 hover:border-foreground/50 text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {format(new Date(week.startDate), 'MMM d')}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Progress toward minimum */}
-          <div className="max-w-xl mx-auto mb-12">
+          <div className="max-w-xl mx-auto mb-8">
             <div className="flex justify-between text-sm mb-2">
               <span className="font-display text-xs tracking-wider text-muted-foreground">
                 ORDER PROGRESS
@@ -303,9 +399,10 @@ const Order = () => {
             </div>
             <div className="h-2 bg-secondary rounded-full overflow-hidden">
               <div
-                className={`h-full transition-all duration-500 rounded-full ${
+                className={cn(
+                  "h-full transition-all duration-500 rounded-full",
                   isMinimumMet ? 'bg-green-500' : 'bg-foreground/50'
-                }`}
+                )}
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -322,24 +419,45 @@ const Order = () => {
             )}
           </div>
 
+          {/* Quick Actions */}
+          <div className="flex justify-center gap-3 mb-8">
+            <Button
+              variant="outline"
+              onClick={randomFill}
+              className="font-display text-xs tracking-wider"
+            >
+              <Shuffle size={14} className="mr-2" />
+              RANDOM FILL ({selectedPlan.mealsPerWeek} MEALS)
+            </Button>
+            {selections.length > 0 && (
+              <Button
+                variant="ghost"
+                onClick={clearSelections}
+                className="font-display text-xs tracking-wider text-muted-foreground"
+              >
+                CLEAR ALL
+              </Button>
+            )}
+          </div>
+
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Menu Selection */}
             <div className="lg:col-span-2 space-y-6">
-              <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">SELECT MEALS</h2>
-              
-              {weeklyMenu.map((day) => (
-                <div key={day.day} className="border border-border/30 rounded-lg p-6 bg-card/30">
+              <h2 className="font-display text-sm tracking-[0.15em] text-muted-foreground">3. SELECT MEALS</h2>
+
+              {currentMenu.days.map((day) => (
+                <div key={day.day} className="border border-border/30 rounded-2xl p-6 bg-card/30">
                   <div className="flex items-center gap-4 mb-6">
-                    <span className="font-display text-xl tracking-[0.2em] text-mystical">DAY {day.day}</span>
+                    <span className="font-display text-lg tracking-[0.2em] text-mystical">{day.day}</span>
                     <div className="flex-1 h-px bg-border/50" />
                   </div>
 
                   {/* Lunch */}
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-3">LUNCH</h4>
                     <MealRow
-                      mealName={day.lunch.name}
-                      description={day.lunch.description}
+                      item={day.lunch}
+                      weekId={currentMenu.id}
                       dayId={day.day}
                       mealType="lunch"
                       getQuantity={getQuantity}
@@ -353,8 +471,8 @@ const Order = () => {
                     {day.dinner.map((item, idx) => (
                       <MealRow
                         key={idx}
-                        mealName={item.name}
-                        description={item.description}
+                        item={item}
+                        weekId={currentMenu.id}
                         dayId={day.day}
                         mealType="dinner"
                         getQuantity={getQuantity}
@@ -362,16 +480,31 @@ const Order = () => {
                       />
                     ))}
                   </div>
+
+                  {/* Dessert */}
+                  {day.dessert && (
+                    <div className="mt-4 pt-4 border-t border-border/20">
+                      <h4 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-3">DESSERT</h4>
+                      <MealRow
+                        item={day.dessert}
+                        weekId={currentMenu.id}
+                        dayId={day.day}
+                        mealType="dinner"
+                        getQuantity={getQuantity}
+                        updateSelection={updateSelection}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
 
               {/* Extras / Upsells Section */}
-              <div className="border border-border/30 rounded-lg p-6 bg-card/30">
+              <div className="border border-border/30 rounded-2xl p-6 bg-card/30">
                 <div className="flex items-center gap-4 mb-6">
-                  <span className="font-display text-xl tracking-[0.2em] text-mystical">EXTRAS</span>
+                  <span className="font-display text-lg tracking-[0.2em] text-mystical">EXTRAS</span>
                   <div className="flex-1 h-px bg-border/50" />
                 </div>
-                
+
                 <div className="space-y-4">
                   {upsellItems.map((item) => (
                     <div key={item.id} className="py-3 border-b border-border/20 last:border-0">
@@ -403,17 +536,13 @@ const Order = () => {
                     </div>
                   ))}
                 </div>
-
-                <p className="font-body text-sm text-muted-foreground mt-6 italic">
-                  Tea, coffee, and other beverages available upon request.
-                </p>
               </div>
 
               {/* WhatsApp Note */}
               <div className="text-center py-6">
                 <p className="font-body text-sm text-muted-foreground">
-                  Questions or secret menu items not listed?{' '}
-                  <a 
+                  Questions or custom requests?{' '}
+                  <a
                     href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -428,41 +557,21 @@ const Order = () => {
 
             {/* Sidebar - Delivery & Summary */}
             <div className="space-y-6">
-              {/* Delivery Scheduling */}
-              <div className="border border-border/30 rounded-lg p-6 bg-card/30 sticky top-24">
+              <div className="border border-border/30 rounded-2xl p-6 bg-card/30 sticky top-24">
                 <h3 className="font-display text-sm tracking-[0.15em] text-foreground mb-4">DELIVERY DETAILS</h3>
-                
-                {/* Date Picker */}
-                <div className="space-y-2 mb-4">
-                  <Label className="font-display text-xs tracking-wider">DATE</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !deliveryDate && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {deliveryDate ? format(deliveryDate, "PPP") : "Select date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={deliveryDate}
-                        onSelect={setDeliveryDate}
-                        disabled={(date) => date < minDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+
+                {/* Week info */}
+                <div className="mb-4 p-3 bg-secondary/30 rounded-xl">
+                  <p className="font-display text-xs tracking-wider text-muted-foreground mb-1">DELIVERY WEEK</p>
+                  <p className="font-body text-sm text-foreground">{currentMenu.theme}</p>
+                  <p className="font-body text-xs text-muted-foreground">
+                    {formatDateRange(currentMenu.startDate, currentMenu.endDate)}
+                  </p>
                 </div>
 
                 {/* Time */}
                 <div className="space-y-2 mb-4">
-                  <Label className="font-display text-xs tracking-wider">TIME</Label>
+                  <Label className="font-display text-xs tracking-wider">PREFERRED TIME</Label>
                   <Input
                     type="time"
                     value={deliveryTime}
@@ -478,7 +587,7 @@ const Order = () => {
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="Enter delivery address"
-                    className="bg-transparent resize-none"
+                    className="bg-transparent resize-none rounded-xl"
                     rows={2}
                   />
                 </div>
@@ -490,7 +599,7 @@ const Order = () => {
                     value={deliveryNotes}
                     onChange={(e) => setDeliveryNotes(e.target.value)}
                     placeholder="Gate code, special instructions..."
-                    className="bg-transparent resize-none"
+                    className="bg-transparent resize-none rounded-xl"
                     rows={2}
                   />
                 </div>
@@ -560,7 +669,6 @@ const Order = () => {
         isOpen={showPaymentModal}
         onClose={() => {
           setShowPaymentModal(false);
-          // After payment, send WhatsApp confirmation
           sendWhatsAppConfirmation();
         }}
         regularMeals={regularMeals}
@@ -573,35 +681,44 @@ const Order = () => {
 
 // Meal row component with quantity selectors for regular and premium
 interface MealRowProps {
-  mealName: string;
-  description: string;
+  item: MenuItem;
+  weekId: string;
   dayId: string;
   mealType: 'lunch' | 'dinner';
-  getQuantity: (dayId: string, mealType: 'lunch' | 'dinner', mealName: string, tier: 'regular' | 'premium') => number;
-  updateSelection: (dayId: string, mealType: 'lunch' | 'dinner', mealName: string, tier: 'regular' | 'premium', delta: number) => void;
+  getQuantity: (weekId: string, dayId: string, mealType: 'lunch' | 'dinner', mealName: string, tier: 'regular' | 'premium') => number;
+  updateSelection: (weekId: string, dayId: string, mealType: 'lunch' | 'dinner', mealName: string, tier: 'regular' | 'premium', delta: number) => void;
 }
 
-const MealRow = ({ mealName, description, dayId, mealType, getQuantity, updateSelection }: MealRowProps) => {
-  const regularQty = getQuantity(dayId, mealType, mealName, 'regular');
-  const premiumQty = getQuantity(dayId, mealType, mealName, 'premium');
+const MealRow = ({ item, weekId, dayId, mealType, getQuantity, updateSelection }: MealRowProps) => {
+  const regularQty = getQuantity(weekId, dayId, mealType, item.name, 'regular');
+  const premiumQty = getQuantity(weekId, dayId, mealType, item.name, 'premium');
 
   return (
     <div className="py-3 border-b border-border/20 last:border-0">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex-1">
-          <p className="font-body text-foreground">{mealName}</p>
-          {description && (
-            <p className="font-body text-sm text-muted-foreground italic">{description}</p>
+          <div className="flex items-center gap-2">
+            <p className="font-body text-foreground">{item.name}</p>
+            {item.tags && item.tags.length > 0 && (
+              <div className="flex gap-1">
+                {item.tags.map(tag => (
+                  <DietaryTag key={tag} tag={tag} />
+                ))}
+              </div>
+            )}
+          </div>
+          {item.description && (
+            <p className="font-body text-sm text-muted-foreground italic">{item.description}</p>
           )}
         </div>
-        
+
         <div className="flex gap-4">
           {/* Regular */}
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground font-display tracking-wider">$50</span>
             <div className="flex items-center gap-1 bg-secondary/50 rounded-full px-1">
               <button
-                onClick={() => updateSelection(dayId, mealType, mealName, 'regular', -1)}
+                onClick={() => updateSelection(weekId, dayId, mealType, item.name, 'regular', -1)}
                 className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                 disabled={regularQty === 0}
               >
@@ -609,7 +726,7 @@ const MealRow = ({ mealName, description, dayId, mealType, getQuantity, updateSe
               </button>
               <span className="w-6 text-center text-sm font-display">{regularQty}</span>
               <button
-                onClick={() => updateSelection(dayId, mealType, mealName, 'regular', 1)}
+                onClick={() => updateSelection(weekId, dayId, mealType, item.name, 'regular', 1)}
                 className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Plus size={14} />
@@ -622,7 +739,7 @@ const MealRow = ({ mealName, description, dayId, mealType, getQuantity, updateSe
             <span className="text-xs text-muted-foreground font-display tracking-wider">$80</span>
             <div className="flex items-center gap-1 bg-accent/50 rounded-full px-1">
               <button
-                onClick={() => updateSelection(dayId, mealType, mealName, 'premium', -1)}
+                onClick={() => updateSelection(weekId, dayId, mealType, item.name, 'premium', -1)}
                 className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                 disabled={premiumQty === 0}
               >
@@ -630,7 +747,7 @@ const MealRow = ({ mealName, description, dayId, mealType, getQuantity, updateSe
               </button>
               <span className="w-6 text-center text-sm font-display">{premiumQty}</span>
               <button
-                onClick={() => updateSelection(dayId, mealType, mealName, 'premium', 1)}
+                onClick={() => updateSelection(weekId, dayId, mealType, item.name, 'premium', 1)}
                 className="w-7 h-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Plus size={14} />
