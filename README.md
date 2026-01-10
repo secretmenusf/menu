@@ -1,73 +1,82 @@
-# Welcome to your Lovable project
+# SF Secret Menu
 
-## Project info
+Chef-crafted meals delivered weekly to your door. San Francisco Bay Area.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Live Site
 
-## How can I edit this code?
+**Production**: https://sfsecretmenu.github.io/sfsecretmenu/
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Database**: Supabase (Postgres + Auth + Realtime)
+- **Payments**: Crypto (wagmi/viem) + Traditional (Stripe-ready)
+- **3D**: Three.js + React Three Fiber
+- **Deployment**: GitHub Pages + GitHub Actions CI/CD
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Features
 
-Changes made via Lovable will be committed automatically to this repo.
+- Weekly rotating chef menus
+- Subscription meal plans (Essential, Standard, Premium)
+- Gift cards and gift meal plans
+- Referral program (1 free meal per friend signup)
+- Order tracking with real-time updates
+- Admin dashboard for order/customer/menu management
+- Responsive design (mobile, tablet, desktop)
+- Command palette (Cmd+K) for quick navigation
 
-**Use your preferred IDE**
+## Development
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Install dependencies
+npm install
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start dev server
 npm run dev
+
+# Build for production
+npm run build
+
+# Run E2E tests
+npm run test:e2e
 ```
 
-**Edit a file directly in GitHub**
+## Environment Variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Copy `.env.example` to `.env` and fill in your Supabase credentials:
 
-**Use GitHub Codespaces**
+```
+VITE_SUPABASE_PROJECT_ID="your-project-id"
+VITE_SUPABASE_URL="https://your-project-id.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="your-anon-public-key"
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Deployment
 
-## What technologies are used for this project?
+Push to `main` branch triggers:
+1. Lint + Build + E2E tests
+2. Deploy to GitHub Pages (if tests pass)
 
-This project is built with:
+GitHub Secrets required:
+- `VITE_SUPABASE_PROJECT_ID`
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Project Structure
 
-## How can I deploy this project?
+```
+src/
+├── components/     # Reusable UI components
+├── contexts/       # React contexts (Auth, Order)
+├── data/           # Static data (plans, reviews, menus)
+├── hooks/          # Custom React hooks
+├── integrations/   # Supabase client + types
+├── lib/            # Utilities (wagmi config, etc.)
+└── pages/          # Route components
+    └── admin/      # Admin dashboard pages
+```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## License
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Private - SF Secret Menu
