@@ -390,7 +390,7 @@ const Order = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
-              BUILD YOUR ORDER
+              BUILD YOUR MENU
             </h1>
             <p className="font-body text-lg text-muted-foreground">
               Select your plan, pick a week, choose your meals

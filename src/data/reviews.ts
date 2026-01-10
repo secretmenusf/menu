@@ -8,6 +8,8 @@ export interface Review {
   platform?: 'twitter' | 'instagram' | 'facebook' | 'linkedin';
   socialHandle?: string;
   socialUrl?: string;
+  mealsOrdered?: string[];
+  imageUrl?: string;
 }
 
 export const reviews: Review[] = [
@@ -20,6 +22,7 @@ export const reviews: Review[] = [
     platform: 'twitter',
     socialHandle: '@sarahchenSF',
     socialUrl: 'https://twitter.com/sarahchenSF',
+    mealsOrdered: ['Duck Confit', 'Persian Rice', 'Basque Cheesecake'],
   },
   {
     id: '2',
@@ -30,6 +33,7 @@ export const reviews: Review[] = [
     platform: 'instagram',
     socialHandle: '@marcuseats',
     socialUrl: 'https://instagram.com/marcuseats',
+    mealsOrdered: ['Spanish Chicken Paella', 'Spanish Gildas', 'Saffron Albondigas'],
   },
   {
     id: '3',
@@ -37,6 +41,7 @@ export const reviews: Review[] = [
     rating: 5,
     text: 'Joined the secret menu last month and I\'m obsessed. The weekly variety keeps things exciting, and the quality is consistently outstanding.',
     date: '2025-12-28',
+    mealsOrdered: ['Mixed Greens', 'Kale Chicken Wrap', 'Rice Pudding'],
   },
   {
     id: '4',
@@ -47,6 +52,7 @@ export const reviews: Review[] = [
     platform: 'linkedin',
     socialHandle: 'David Park',
     socialUrl: 'https://linkedin.com/in/davidpark',
+    mealsOrdered: ['Roast Beef', 'Grilled Cheese', 'Mixed Beet Salad'],
   },
   {
     id: '5',
@@ -57,6 +63,7 @@ export const reviews: Review[] = [
     platform: 'twitter',
     socialHandle: '@oliviat_sf',
     socialUrl: 'https://twitter.com/oliviat_sf',
+    mealsOrdered: ['Basque Cheesecake', 'Caprese Panini', 'Fennel Bulgur Salad'],
   },
   {
     id: '6',
@@ -67,5 +74,6 @@ export const reviews: Review[] = [
     platform: 'facebook',
     socialHandle: 'James Liu',
     socialUrl: 'https://facebook.com/jamesliu',
+    mealsOrdered: ['Beef Bulgogi Bowl', 'Padrón Peppers', 'Colossal Cookies'],
   },
 ];
