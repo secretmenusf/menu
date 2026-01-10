@@ -1,3 +1,5 @@
+import chefPortrait from '@/assets/chef-antje.jpg';
+
 const AboutSection = () => {
   return (
     <section id="about" className="relative py-32 bg-card sacred-geometry">
@@ -7,26 +9,22 @@ const AboutSection = () => {
       <div className="container mx-auto px-6 max-w-5xl">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           {/* Portrait area */}
-          <div className="relative">
-            <div className="aspect-[3/4] bg-background border border-border relative overflow-hidden">
-              {/* Stylized portrait placeholder with mystical frame */}
-              <div className="absolute inset-4 border border-border" />
-              <div className="absolute inset-8 border border-muted" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl text-muted-foreground mb-4">◯</div>
-                  <p className="font-display text-sm tracking-[0.3em] text-muted-foreground">CHEF</p>
-                </div>
+          <div className="relative flex justify-center">
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-foreground/10 blur-2xl rounded-full" />
+              {/* Image container */}
+              <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-border">
+                <img
+                  src={chefPortrait}
+                  alt="Chef Antje"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              {/* Corner ornaments */}
-              <div className="absolute top-2 left-2 w-8 h-8 border-t border-l border-muted-foreground/30" />
-              <div className="absolute top-2 right-2 w-8 h-8 border-t border-r border-muted-foreground/30" />
-              <div className="absolute bottom-2 left-2 w-8 h-8 border-b border-l border-muted-foreground/30" />
-              <div className="absolute bottom-2 right-2 w-8 h-8 border-b border-r border-muted-foreground/30" />
             </div>
 
             {/* Name plaque */}
-            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-card border border-border px-8 py-3">
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border px-8 py-3 rounded-full">
               <p className="font-display text-sm tracking-[0.3em] text-foreground">Antje</p>
             </div>
           </div>
@@ -34,8 +32,7 @@ const AboutSection = () => {
           {/* Bio content */}
           <div className="space-y-8">
             <div>
-              <span className="text-foreground text-2xl">❂</span>
-              <h2 className="font-display text-3xl md:text-4xl tracking-[0.15em] text-mystical mt-4 mb-2">
+              <h2 className="font-display text-3xl md:text-4xl tracking-[0.15em] text-mystical mb-2">
                 Antje
                 <span className="block text-muted-foreground text-2xl mt-1">Culinary Alchemist</span>
               </h2>
