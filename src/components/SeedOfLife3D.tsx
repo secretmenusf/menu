@@ -28,11 +28,11 @@ const SeedOfLifeGeometry = () => {
       groupRef.current.scale.setScalar(breathe);
     }
 
-    // Strong golden glow pulse using golden ratio harmonics
+    // Golden glow pulse using golden ratio harmonics - slightly softer
     if (materialRef.current) {
       const pulse1 = Math.sin(t * (1 / PHI) * 0.4);
       const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.6);
-      const combined = 1.8 + (pulse1 * 0.5 + pulse2 * 0.3);
+      const combined = 1.2 + (pulse1 * 0.3 + pulse2 * 0.2);
       materialRef.current.emissiveIntensity = combined;
     }
   });
@@ -46,14 +46,14 @@ const SeedOfLifeGeometry = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Golden glowing material with warm emission
+  // Golden glowing material with warm emission - softer
   const goldenMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
       color: '#ffd700',
-      emissive: '#ffb347',
-      emissiveIntensity: 2.0,
-      metalness: 0.3,
-      roughness: 0.0,
+      emissive: '#e6a820',
+      emissiveIntensity: 1.4,
+      metalness: 0.25,
+      roughness: 0.05,
       toneMapped: false,
     });
     return mat;
@@ -97,9 +97,9 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
       <div
         className="absolute animate-pulse-glow"
         style={{
-          inset: '-30%',
-          filter: 'blur(40px)',
-          opacity: 0.7,
+          inset: '-25%',
+          filter: 'blur(35px)',
+          opacity: 0.5,
         }}
       >
         <Canvas
@@ -118,9 +118,9 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
       <div
         className="absolute"
         style={{
-          inset: '-15%',
-          filter: 'blur(15px)',
-          opacity: 0.5,
+          inset: '-12%',
+          filter: 'blur(12px)',
+          opacity: 0.35,
         }}
       >
         <Canvas
