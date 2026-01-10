@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import Header from '@/components/Header';
@@ -13,9 +13,12 @@ import { PAYMENT_CONFIG } from '@/lib/wagmi';
 import { subscriptionPlans, type SubscriptionPlan } from '@/data/plans';
 import { allMenus, dietaryInfo, type WeekMenu, type DayMenu, type MenuItem } from '@/data/menus';
 import { format } from 'date-fns';
-import { Plus, Minus, MessageCircle, AlertCircle, Check, Shuffle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Minus, MessageCircle, AlertCircle, Check, Shuffle, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+
+// Extra meal price (beyond plan max)
+const EXTRA_MEAL_PRICE = 50;
 
 interface MealSelection {
   weekId: string;
@@ -83,6 +86,72 @@ const Order = () => {
 
   const currentMenu = allMenus[selectedWeekIndex];
 
+  // Generate random selections for a given week and meal count
+  const generateRandomSelections = useCallback((menu: WeekMenu, mealCount: number): MealSelection[] => {
+    const newSelections: MealSelection[] = [];
+    const availableMeals: { day: DayMenu; meal: MenuItem; type: 'lunch' | 'dinner' }[] = [];
+
+    menu.days.forEach(day => {
+      availableMeals.push({ day, meal: day.lunch, type: 'lunch' });
+      day.dinner.forEach(dinnerItem => {
+        availableMeals.push({ day, meal: dinnerItem, type: 'dinner' });
+      });
+    });
+
+    const shuffled = [...availableMeals].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, Math.min(mealCount, shuffled.length));
+
+    selected.forEach(({ day, meal, type }) => {
+      newSelections.push({
+        weekId: menu.id,
+        dayId: day.day,
+        mealType: type,
+        mealName: meal.name,
+        tier: 'regular',
+        quantity: 1
+      });
+    });
+
+    return newSelections;
+  }, []);
+
+  // Auto-fill when week changes
+  const handleWeekChange = useCallback((newIndex: number) => {
+    setSelectedWeekIndex(newIndex);
+    const newMenu = allMenus[newIndex];
+    const newSelections = generateRandomSelections(newMenu, selectedPlan.mealsPerWeek);
+    setSelections(newSelections);
+    toast({
+      title: `${newMenu.theme}`,
+      description: `Auto-selected ${newSelections.length} meals for you`,
+    });
+  }, [selectedPlan.mealsPerWeek, generateRandomSelections, toast]);
+
+  // Auto-upgrade plan based on meal count
+  const autoUpgradePlan = useCallback((totalMeals: number) => {
+    // Find the appropriate plan for the meal count
+    const sortedPlans = [...subscriptionPlans].sort((a, b) => a.mealsPerWeek - b.mealsPerWeek);
+
+    for (const plan of sortedPlans) {
+      if (totalMeals <= plan.mealsPerWeek) {
+        if (plan.id !== selectedPlan.id) {
+          setSelectedPlan(plan);
+          toast({
+            title: `Upgraded to ${plan.name}`,
+            description: `Your selections fit the ${plan.name} plan (${plan.mealsPerWeek} meals/week)`,
+          });
+        }
+        return;
+      }
+    }
+
+    // If exceeds all plans, stay on Premium (extras will be charged separately)
+    const maxPlan = sortedPlans[sortedPlans.length - 1];
+    if (selectedPlan.id !== maxPlan.id) {
+      setSelectedPlan(maxPlan);
+    }
+  }, [selectedPlan.id, toast]);
+
   const updateUpsell = (id: string, name: string, price: number, delta: number, variant?: string) => {
     setUpsells(prev => {
       const existingIndex = prev.findIndex(u => u.id === id);
@@ -119,19 +188,28 @@ const Order = () => {
         s => s.weekId === weekId && s.dayId === dayId && s.mealType === mealType && s.mealName === mealName && s.tier === tier
       );
 
+      let newSelections: MealSelection[];
       if (existingIndex >= 0) {
-        const newSelections = [...prev];
+        newSelections = [...prev];
         const newQty = newSelections[existingIndex].quantity + delta;
         if (newQty <= 0) {
           newSelections.splice(existingIndex, 1);
         } else {
           newSelections[existingIndex] = { ...newSelections[existingIndex], quantity: newQty };
         }
-        return newSelections;
       } else if (delta > 0) {
-        return [...prev, { weekId, dayId, mealType, mealName, tier, quantity: delta }];
+        newSelections = [...prev, { weekId, dayId, mealType, mealName, tier, quantity: delta }];
+      } else {
+        return prev;
       }
-      return prev;
+
+      // Calculate new total meals and auto-upgrade plan if needed
+      const newTotalMeals = newSelections.reduce((sum, s) => sum + s.quantity, 0);
+      if (delta > 0) {
+        autoUpgradePlan(newTotalMeals);
+      }
+
+      return newSelections;
     });
   };
 
@@ -183,25 +261,47 @@ const Order = () => {
     setUpsells([]);
   };
 
-  const { regularMeals, premiumMeals, upsellTotal, totalUsd } = useMemo(() => {
+  // Auto-fill on initial load
+  useEffect(() => {
+    if (selections.length === 0) {
+      const initialSelections = generateRandomSelections(currentMenu, selectedPlan.mealsPerWeek);
+      setSelections(initialSelections);
+    }
+  }, []); // Only on mount
+
+  const { regularMeals, premiumMeals, totalMeals, extraMeals, upsellTotal, mealsCost, extrasCost, totalUsd } = useMemo(() => {
     let regular = 0;
     let premium = 0;
     selections.forEach(s => {
       if (s.tier === 'regular') regular += s.quantity;
       else premium += s.quantity;
     });
+    const total = regular + premium;
     const upsellSum = upsells.reduce((sum, u) => sum + (u.price * u.quantity), 0);
+
+    // Calculate extras beyond max plan
+    const maxPlan = subscriptionPlans[subscriptionPlans.length - 1]; // Premium
+    const extrasCount = Math.max(0, total - maxPlan.mealsPerWeek);
+    const extrasCostValue = extrasCount * EXTRA_MEAL_PRICE;
+
+    // Meals cost is plan price + extras
+    const mealsBase = regular * PAYMENT_CONFIG.regularMealPrice + premium * PAYMENT_CONFIG.premiumMealPrice;
+
     return {
       regularMeals: regular,
       premiumMeals: premium,
+      totalMeals: total,
+      extraMeals: extrasCount,
       upsellTotal: upsellSum,
-      totalUsd: regular * PAYMENT_CONFIG.regularMealPrice + premium * PAYMENT_CONFIG.premiumMealPrice + upsellSum
+      mealsCost: mealsBase,
+      extrasCost: extrasCostValue,
+      totalUsd: selectedPlan.price + extrasCostValue + upsellSum
     };
-  }, [selections, upsells]);
+  }, [selections, upsells, selectedPlan.price]);
 
-  const isMinimumMet = totalUsd >= selectedPlan.price;
-  const amountRemaining = Math.max(0, selectedPlan.price - totalUsd);
-  const progressPercent = Math.min(100, (totalUsd / selectedPlan.price) * 100);
+  const isMinimumMet = totalMeals >= selectedPlan.mealsPerWeek;
+  const mealsRemaining = Math.max(0, selectedPlan.mealsPerWeek - totalMeals);
+  const progressPercent = Math.min(100, (totalMeals / selectedPlan.mealsPerWeek) * 100);
 
   const formatDateRange = (start: string, end: string) => {
     const startDate = new Date(start);
@@ -247,8 +347,8 @@ const Order = () => {
   const handleCheckout = () => {
     if (!isMinimumMet) {
       toast({
-        title: "Minimum order not met",
-        description: `Please add $${amountRemaining} more to meet the ${selectedPlan.name} plan minimum of $${selectedPlan.price}`,
+        title: "Select more meals",
+        description: `Add ${mealsRemaining} more meal${mealsRemaining > 1 ? 's' : ''} to complete your ${selectedPlan.name} plan`,
         variant: "destructive",
       });
       return;
@@ -343,7 +443,7 @@ const Order = () => {
             </p>
             <div className="flex items-center justify-center gap-3 mb-4">
               <button
-                onClick={() => setSelectedWeekIndex(Math.max(0, selectedWeekIndex - 1))}
+                onClick={() => handleWeekChange(Math.max(0, selectedWeekIndex - 1))}
                 disabled={selectedWeekIndex === 0}
                 className="p-2 rounded-full border border-border/50 hover:bg-card disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
@@ -360,7 +460,7 @@ const Order = () => {
               </div>
 
               <button
-                onClick={() => setSelectedWeekIndex(Math.min(allMenus.length - 1, selectedWeekIndex + 1))}
+                onClick={() => handleWeekChange(Math.min(allMenus.length - 1, selectedWeekIndex + 1))}
                 disabled={selectedWeekIndex === allMenus.length - 1}
                 className="p-2 rounded-full border border-border/50 hover:bg-card disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
@@ -373,7 +473,7 @@ const Order = () => {
               {allMenus.slice(0, 6).map((week, idx) => (
                 <button
                   key={week.id}
-                  onClick={() => setSelectedWeekIndex(idx)}
+                  onClick={() => handleWeekChange(idx)}
                   className={cn(
                     "px-3 py-1 rounded-full border text-xs font-display tracking-wider transition-all",
                     idx === selectedWeekIndex
@@ -391,30 +491,37 @@ const Order = () => {
           <div className="max-w-xl mx-auto mb-8">
             <div className="flex justify-between text-sm mb-2">
               <span className="font-display text-xs tracking-wider text-muted-foreground">
-                ORDER PROGRESS
+                MEALS SELECTED
               </span>
               <span className="font-display text-xs tracking-wider">
-                ${totalUsd} / ${selectedPlan.price}
+                {totalMeals} / {selectedPlan.mealsPerWeek} meals
+                {extraMeals > 0 && <span className="text-muted-foreground ml-1">(+{extraMeals} extra)</span>}
               </span>
             </div>
             <div className="h-2 bg-secondary rounded-full overflow-hidden">
               <div
                 className={cn(
                   "h-full transition-all duration-500 rounded-full",
-                  isMinimumMet ? 'bg-green-500' : 'bg-foreground/50'
+                  extraMeals > 0 ? 'bg-amber-500' : isMinimumMet ? 'bg-green-500' : 'bg-foreground/50'
                 )}
-                style={{ width: `${progressPercent}%` }}
+                style={{ width: `${Math.min(100, progressPercent)}%` }}
               />
             </div>
-            {!isMinimumMet && totalUsd > 0 && (
+            {!isMinimumMet && (
               <p className="text-center mt-2 text-sm text-muted-foreground">
-                Add <span className="text-foreground font-semibold">${amountRemaining}</span> more to meet {selectedPlan.name} minimum
+                Select <span className="text-foreground font-semibold">{mealsRemaining}</span> more meal{mealsRemaining > 1 ? 's' : ''} for {selectedPlan.name}
               </p>
             )}
-            {isMinimumMet && (
+            {isMinimumMet && extraMeals === 0 && (
               <p className="text-center mt-2 text-sm text-green-500 flex items-center justify-center gap-1">
                 <Check size={14} />
-                {selectedPlan.name} minimum met!
+                {selectedPlan.name} complete!
+              </p>
+            )}
+            {extraMeals > 0 && (
+              <p className="text-center mt-2 text-sm text-amber-500 flex items-center justify-center gap-1">
+                <Sparkles size={14} />
+                {extraMeals} extra meal{extraMeals > 1 ? 's' : ''} (+${extrasCost})
               </p>
             )}
           </div>
@@ -606,21 +713,19 @@ const Order = () => {
 
                 {/* Order Summary */}
                 <div className="border-t border-border/50 pt-4 mb-4 space-y-2">
-                  {regularMeals > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span>{regularMeals} regular × ${PAYMENT_CONFIG.regularMealPrice}</span>
-                      <span>${regularMeals * PAYMENT_CONFIG.regularMealPrice}</span>
-                    </div>
-                  )}
-                  {premiumMeals > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span>{premiumMeals} premium × ${PAYMENT_CONFIG.premiumMealPrice}</span>
-                      <span>${premiumMeals * PAYMENT_CONFIG.premiumMealPrice}</span>
+                  <div className="flex justify-between text-sm">
+                    <span>{selectedPlan.name} Plan ({totalMeals} meals)</span>
+                    <span>${selectedPlan.price}</span>
+                  </div>
+                  {extraMeals > 0 && (
+                    <div className="flex justify-between text-sm text-amber-500">
+                      <span>{extraMeals} extra meal{extraMeals > 1 ? 's' : ''} × ${EXTRA_MEAL_PRICE}</span>
+                      <span>+${extrasCost}</span>
                     </div>
                   )}
                   {upsellTotal > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span>Extras</span>
+                      <span>Add-ons</span>
                       <span>${upsellTotal}</span>
                     </div>
                   )}
@@ -630,20 +735,20 @@ const Order = () => {
                   </div>
                 </div>
 
-                {!isMinimumMet && totalUsd > 0 && (
+                {!isMinimumMet && (
                   <div className="flex items-center gap-2 text-destructive text-xs mb-4">
                     <AlertCircle size={14} />
-                    <span>Add ${amountRemaining} more for {selectedPlan.name}</span>
+                    <span>Select {mealsRemaining} more meal{mealsRemaining > 1 ? 's' : ''}</span>
                   </div>
                 )}
 
                 {/* Checkout Button */}
                 <Button
                   onClick={handleCheckout}
-                  disabled={!isMinimumMet || (selections.length === 0 && upsells.length === 0)}
+                  disabled={!isMinimumMet || selections.length === 0}
                   className="w-full font-display tracking-wider mb-3"
                 >
-                  {isMinimumMet ? `CHECKOUT $${totalUsd}` : `ADD $${amountRemaining} MORE`}
+                  {isMinimumMet ? `CHECKOUT $${totalUsd}` : `SELECT ${mealsRemaining} MORE`}
                 </Button>
 
                 {/* WhatsApp confirmation */}
