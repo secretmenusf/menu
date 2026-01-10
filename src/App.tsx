@@ -52,6 +52,7 @@ const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import CommandPalette from '@/components/CommandPalette';
 import Analytics from '@/components/Analytics';
+import { OrderingChat } from '@/components/chat/OrderingChat';
 
 const queryClient = new QueryClient();
 
@@ -149,6 +150,7 @@ const App = () => (
             <BrowserRouter>
               <Analytics />
               <CommandPalette />
+              <OrderingChat />
               <AppRoutes />
             </BrowserRouter>
           </TooltipProvider>
