@@ -26,3 +26,8 @@ visual-check
 *.sln
 *.sw?
 .playwright-mcp/
+
+# Environment files
+.env
+.env.local
+.env.*.local
