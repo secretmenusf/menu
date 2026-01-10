@@ -74,14 +74,14 @@ export function UserMenu() {
           <Button
             variant="ghost"
             size="sm"
-            className="font-display text-xs tracking-[0.15em] text-muted-foreground hover:text-foreground"
+            className="font-display text-xs tracking-[0.15em] text-muted-foreground hover:text-foreground rounded-md"
             onClick={openLogin}
           >
             SIGN IN
           </Button>
           <Button
             size="sm"
-            className="font-display text-xs tracking-[0.15em] rounded-full"
+            className="font-display text-xs tracking-[0.15em] rounded-md"
             onClick={openSignUp}
           >
             JOIN

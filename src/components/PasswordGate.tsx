@@ -24,8 +24,35 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
   const [hintIndex, setHintIndex] = useState(0);
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [autoRevealCountdown, setAutoRevealCountdown] = useState<number | null>(null);
+  const [isAutoTyping, setIsAutoTyping] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const autoRevealTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Auto-type password character by character
+  const startAutoType = () => {
+    if (isAutoTyping) return;
+    setIsAutoTyping(true);
+    setPassword('');
+    inputRef.current?.focus();
+
+    const secret = 'ilovesecrets';
+    let index = 0;
+
+    const typeChar = () => {
+      if (index < secret.length) {
+        setPassword(secret.slice(0, index + 1));
+        index++;
+        setTimeout(typeChar, 80 + Math.random() * 60); // Random delay for natural feel
+      } else {
+        // Pause then auto-submit
+        setTimeout(() => {
+          onSuccess();
+        }, 500);
+      }
+    };
+
+    setTimeout(typeChar, 200);
+  };
 
   useEffect(() => {
     // Phase 1: Complete black for 1 second
@@ -173,16 +200,35 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
                   >
                     <X size={16} />
                   </button>
-                  <p className="font-body text-sm text-foreground/80 pr-4">
-                    {hints[hintIndex]}
-                  </p>
-                  {hintIndex < hints.length - 1 && (
-                    <button 
+                  {hintIndex === hints.length - 1 ? (
+                    <button
+                      onClick={startAutoType}
+                      disabled={isAutoTyping}
+                      className="font-body text-sm text-foreground/80 pr-4 hover:text-primary transition-colors cursor-pointer text-left disabled:opacity-50"
+                    >
+                      {hints[hintIndex]}
+                    </button>
+                  ) : (
+                    <p className="font-body text-sm text-foreground/80 pr-4">
+                      {hints[hintIndex]}
+                    </p>
+                  )}
+                  {hintIndex < hints.length - 1 ? (
+                    <button
                       onClick={nextHint}
                       className="mt-3 font-display text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors"
                     >
                       need more help?
                     </button>
+                  ) : (
+                    <a
+                      href="https://wa.me/14155551234?text=Hi%20Secret%20Menu!"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 block font-display text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors border-t border-border/30 pt-3"
+                    >
+                      chat with us →
+                    </a>
                   )}
                 </div>
                 {/* Bubble tail pointing to icon */}
@@ -192,11 +238,11 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
           )}
           
           {/* Floating chat icon - always visible */}
-          <button 
-            className="fixed bottom-6 right-6 z-[70] w-12 h-12 bg-foreground text-background rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+          <button
+            className="fixed bottom-6 right-6 z-[70] w-11 h-11 bg-foreground text-background rounded-md flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
             onClick={() => setShowHint(!showHint)}
           >
-            {showHint ? <X size={20} /> : <MessageCircle size={20} />}
+            {showHint ? <X size={18} /> : <MessageCircle size={18} />}
           </button>
         </>
       )}
