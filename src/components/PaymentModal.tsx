@@ -101,6 +101,7 @@ const PaymentModal = ({ isOpen, onClose, regularMeals, premiumMeals, totalUsd }:
           abi: ERC20_ABI,
           functionName: 'transfer',
           args: [PAYMENT_CONFIG.recipientAddress, amount],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any);
       }
     } catch (error) {

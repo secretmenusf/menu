@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 function PreferencesContent() {
   const navigate = useNavigate();
 
-  const handleSave = async (preferences: any) => {
+  const handleSave = async (preferences: Record<string, unknown>) => {
     // In a real app, save to database
     // For now, just store in localStorage
     localStorage.setItem('user_preferences', JSON.stringify(preferences));
