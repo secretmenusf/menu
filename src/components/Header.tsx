@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import SeedOfLife3D from './SeedOfLife3D';
 import ConnectWallet from './ConnectWallet';
+import { UserMenu } from './auth/UserMenu';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -102,12 +103,12 @@ const Header = () => {
             ORDER
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
           </button>
-          <ConnectWallet />
+          <UserMenu />
         </div>
 
-        {/* Mobile wallet button */}
+        {/* Mobile user menu */}
         <div className="md:hidden">
-          <ConnectWallet />
+          <UserMenu />
         </div>
       </nav>
     </header>

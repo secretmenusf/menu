@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      addresses: {
+        Row: {
+          id: string
+          user_id: string
+          label: string
+          street_address: string
+          apt_suite: string | null
+          city: string
+          state: string
+          zip_code: string
+          delivery_instructions: string | null
+          is_default: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          label: string
+          street_address: string
+          apt_suite?: string | null
+          city: string
+          state: string
+          zip_code: string
+          delivery_instructions?: string | null
+          is_default?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          label?: string
+          street_address?: string
+          apt_suite?: string | null
+          city?: string
+          state?: string
+          zip_code?: string
+          delivery_instructions?: string | null
+          is_default?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       menu_items: {
         Row: {
           created_at: string

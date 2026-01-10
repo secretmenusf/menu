@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { allMenus, dietaryInfo, pricingInfo, type MenuItem as MenuItemType, type WeekMenu } from '@/data/menus';
+import { subscriptionPlans } from '@/data/plans';
 import { Button } from '@/components/ui/button';
 
 const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
@@ -135,18 +136,59 @@ const MenuSection = () => {
           </p>
         </div>
 
-        {/* Pricing info */}
-        <div className="text-center mb-12 p-6 border border-border/30 rounded-lg bg-card/30">
-          <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-2">STARTING AT</p>
-          <p className="font-display text-3xl text-foreground mb-4">$395<span className="text-lg text-muted-foreground">/month</span></p>
-          <p className="font-body text-sm text-muted-foreground/80 mb-4">
+        {/* Membership tiers preview */}
+        <div className="mb-12">
+          <div className="text-center mb-8">
+            <p className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">
+              MEMBERSHIP TIERS
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {subscriptionPlans.map((plan) => (
+              <div
+                key={plan.id}
+                className={`relative p-5 border rounded-lg transition-all duration-300 hover:scale-[1.02] ${
+                  plan.popular
+                    ? 'border-foreground/50 bg-card/50'
+                    : 'border-border/30 bg-card/30 hover:border-border/50'
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
+                    <span className="px-3 py-0.5 text-[9px] font-display tracking-[0.2em] bg-foreground text-background rounded-full">
+                      POPULAR
+                    </span>
+                  </div>
+                )}
+                <div className="text-center">
+                  <h4 className="font-display text-sm tracking-[0.15em] text-foreground mb-1">
+                    {plan.name.toUpperCase()}
+                  </h4>
+                  <p className="font-display text-2xl text-mystical mb-1">
+                    ${plan.price}
+                    <span className="text-sm text-muted-foreground">/mo</span>
+                  </p>
+                  <p className="font-body text-xs text-muted-foreground/60">
+                    {plan.mealsPerWeek} meals/week
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-6">
+            <Link to="/pricing">
+              <Button variant="outline" className="rounded-full px-6 font-display tracking-wider text-xs">
+                VIEW ALL PLANS
+                <ArrowRight size={14} className="ml-2" />
+              </Button>
+            </Link>
+          </div>
+
+          <p className="font-body text-sm text-muted-foreground/80 text-center mt-4">
             {pricingInfo.note}
           </p>
-          <Link to={`/entry?week=${currentMenu.id}`}>
-            <Button className="rounded-full px-8 font-display tracking-wider">
-              ORDER THIS WEEK
-            </Button>
-          </Link>
         </div>
 
         {/* Dietary legend */}
