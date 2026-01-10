@@ -28,12 +28,24 @@ const SeedOfLifeGeometry = () => {
       groupRef.current.scale.setScalar(breathe);
     }
 
-    // Golden glow pulse using golden ratio harmonics - slightly softer
+    // Rainbow glow pulse - cycles through all colors
     if (materialRef.current) {
       const pulse1 = Math.sin(t * (1 / PHI) * 0.4);
       const pulse2 = Math.sin(t * (1 / (PHI * PHI)) * 0.6);
-      const combined = 1.2 + (pulse1 * 0.3 + pulse2 * 0.2);
+      const combined = 1.4 + (pulse1 * 0.4 + pulse2 * 0.3);
       materialRef.current.emissiveIntensity = combined;
+
+      // Slow rainbow cycle through all hues
+      const hue = (t * 0.03) % 1; // Full spectrum cycle
+      const saturation = 0.5 + Math.sin(t * 0.5) * 0.2; // Richer saturation
+      const color = new THREE.Color();
+      color.setHSL(hue, saturation, 0.7);
+      materialRef.current.emissive = color;
+
+      // Also shift base color slightly for more vibrance
+      const baseColor = new THREE.Color();
+      baseColor.setHSL(hue, 0.15, 0.95);
+      materialRef.current.color = baseColor;
     }
   });
 
@@ -46,14 +58,14 @@ const SeedOfLifeGeometry = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Golden glowing material with warm emission - softer
-  const goldenMaterial = useMemo(() => {
+  // White/silver glowing material with ethereal emission
+  const silverMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
-      color: '#ffd700',
-      emissive: '#e6a820',
+      color: '#ffffff',
+      emissive: '#d0d8ff',
       emissiveIntensity: 1.4,
-      metalness: 0.25,
-      roughness: 0.05,
+      metalness: 0.4,
+      roughness: 0.02,
       toneMapped: false,
     });
     return mat;
@@ -61,22 +73,22 @@ const SeedOfLifeGeometry = () => {
 
   // Store ref for animation
   useEffect(() => {
-    materialRef.current = goldenMaterial;
-  }, [goldenMaterial]);
+    materialRef.current = silverMaterial;
+  }, [silverMaterial]);
 
   return (
     <group ref={groupRef}>
       {/* Center torus */}
       <mesh>
         <torusGeometry args={[r, tubeRadius, 32, 100]} />
-        <primitive object={goldenMaterial} attach="material" />
+        <primitive object={silverMaterial} attach="material" />
       </mesh>
 
       {/* 6 outer tori */}
       {positions.map((pos, i) => (
         <mesh key={i} position={pos}>
           <torusGeometry args={[r, tubeRadius, 32, 100]} />
-          <primitive object={goldenMaterial} attach="material" />
+          <primitive object={silverMaterial} attach="material" />
         </mesh>
       ))}
     </group>
