@@ -13,13 +13,14 @@ import { getPlanById } from '@/data/plans';
 const Signup = () => {
   const [searchParams] = useSearchParams();
   const planId = searchParams.get('plan');
+  const refCode = searchParams.get('ref');
   const selectedPlan = planId ? getPlanById(planId) : null;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [referralCode, setReferralCode] = useState('');
+  const [referralCode, setReferralCode] = useState(refCode || '');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const { signUp } = useAuth();
@@ -108,6 +109,16 @@ const Signup = () => {
               Begin your journey into culinary alchemy
             </p>
           </div>
+
+          {/* Referral Banner */}
+          {refCode && (
+            <div className="mb-4 p-4 border border-green-500/30 rounded-2xl bg-green-500/10 text-center">
+              <Gift className="mx-auto h-6 w-6 text-green-500 mb-2" />
+              <p className="font-display text-sm tracking-[0.15em] text-green-500 mb-1">$25 OFF YOUR FIRST ORDER</p>
+              <p className="font-body text-xs text-green-400/80 mb-2">Code <span className="font-mono">{refCode}</span> applied</p>
+              <p className="font-body text-[10px] text-muted-foreground">Plus: invite friends and earn free meals forever</p>
+            </div>
+          )}
 
           {/* Selected Plan */}
           {selectedPlan && (

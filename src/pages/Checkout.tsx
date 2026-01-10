@@ -91,7 +91,7 @@ ${user?.email ? `👤 *Account:* ${user.email}` : ''}`;
               Your order awaits creation
             </p>
             <Button onClick={() => navigate('/order')} className="font-display tracking-wider">
-              BUILD YOUR ORDER
+              BUILD YOUR MENU
             </Button>
           </div>
         </main>

@@ -25,6 +25,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Refund = lazy(() => import("./pages/Refund"));
 const FAQ = lazy(() => import("./pages/FAQ"));
+const Reviews = lazy(() => import("./pages/Reviews"));
 const GiftCards = lazy(() => import("./pages/GiftCards"));
 const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
 const Login = lazy(() => import("./pages/Login"));
@@ -50,6 +51,7 @@ const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 // Admin Layout
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import CommandPalette from '@/components/CommandPalette';
+import Analytics from '@/components/Analytics';
 
 const queryClient = new QueryClient();
 
@@ -98,6 +100,7 @@ const AppRoutes = () => (
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/support" element={<Support />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/reviews" element={<Reviews />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/refund" element={<Refund />} />
@@ -144,6 +147,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <Analytics />
               <CommandPalette />
               <AppRoutes />
             </BrowserRouter>
