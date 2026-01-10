@@ -161,7 +161,7 @@ const Gallery = () => {
   return (
     <>
       {/* Gallery Grid */}
-      <section ref={sectionRef} className="py-20 bg-background" data-testid="gallery">
+      <section id="gallery" ref={sectionRef} className="py-20 bg-background" data-testid="gallery">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="font-display text-3xl tracking-[0.2em] text-mystical">
