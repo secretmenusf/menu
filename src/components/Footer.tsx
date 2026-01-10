@@ -78,6 +78,11 @@ const Footer = () => {
                   Order
                 </Link>
               </li>
+              <li>
+                <Link to="/gift-cards" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Gift Cards
+                </Link>
+              </li>
             </ul>
           </div>
 

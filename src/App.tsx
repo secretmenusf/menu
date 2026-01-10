@@ -25,6 +25,8 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Refund = lazy(() => import("./pages/Refund"));
 const FAQ = lazy(() => import("./pages/FAQ"));
+const GiftCards = lazy(() => import("./pages/GiftCards"));
+const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -36,6 +38,7 @@ const MyOrders = lazy(() => import("./pages/MyOrders"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const Orders = lazy(() => import("./pages/Orders"));
 const OrderDetails = lazy(() => import("./pages/OrderDetails"));
+const Referrals = lazy(() => import("./pages/Referrals"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminOrders = lazy(() => import("./pages/admin/Orders"));
 const AdminCustomers = lazy(() => import("./pages/admin/Customers"));
@@ -46,6 +49,7 @@ const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 
 // Admin Layout
 import { AdminLayout } from '@/components/admin/AdminLayout';
+import CommandPalette from '@/components/CommandPalette';
 
 const queryClient = new QueryClient();
 
@@ -100,6 +104,8 @@ const AppRoutes = () => (
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/gift-cards" element={<GiftCards />} />
+      <Route path="/gift-meal-plan" element={<GiftMealPlan />} />
 
       {/* Protected user routes */}
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
@@ -110,6 +116,7 @@ const AppRoutes = () => (
       <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
       <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
       <Route path="/orders/:orderId" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
+      <Route path="/referrals" element={<ProtectedRoute><Referrals /></ProtectedRoute>} />
 
       {/* Admin routes */}
       <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
@@ -137,6 +144,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <CommandPalette />
               <AppRoutes />
             </BrowserRouter>
           </TooltipProvider>

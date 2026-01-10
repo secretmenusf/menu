@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Leaf, WheatOff, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ShareButton } from '@/components/social/ShareButton';
 
 interface MenuItem {
   name: string;
@@ -494,6 +495,14 @@ const Menu = () => {
           {/* Footer note */}
           <div className="text-center mt-20">
             <div className="h-px bg-border mb-8" />
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <ShareButton
+                title={`SF Secret Menu - Week of ${currentWeek.label}`}
+                text="Check out this week's chef-crafted menu from SF Secret Menu"
+                variant="outline"
+                size="sm"
+              />
+            </div>
             <p className="font-body text-sm text-muted-foreground/60 tracking-wide">
               Menu subject to seasonal availability
             </p>

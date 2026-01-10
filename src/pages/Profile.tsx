@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Settings, ChevronRight } from 'lucide-react';
+import { Settings, ChevronRight, Gift } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { ProfileHeader } from '@/components/profile/ProfileHeader';
@@ -18,6 +18,7 @@ function ProfileContent() {
     { label: 'ADDRESSES', path: '/addresses', description: 'Manage delivery addresses' },
     { label: 'ORDER HISTORY', path: '/orders', description: 'View past orders and receipts' },
     { label: 'SUBSCRIPTION', path: '/subscription', description: 'Manage your weekly subscription' },
+    { label: 'REFER & EARN', path: '/referrals', description: 'Invite friends, earn free meals', highlight: true },
     { label: 'PREFERENCES', path: '/profile/preferences', description: 'Dietary preferences and notifications' },
     { label: 'ACCOUNT SETTINGS', path: '/profile/settings', description: 'Email, password, and security' },
   ];
@@ -76,17 +77,30 @@ function ProfileContent() {
                   <button
                     key={item.path}
                     onClick={() => navigate(item.path)}
-                    className="w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors text-left"
+                    className={`w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors text-left ${
+                      item.highlight ? 'bg-primary/5 hover:bg-primary/10' : ''
+                    }`}
                   >
-                    <div>
-                      <div className="font-display text-xs tracking-[0.15em] text-foreground">
-                        {item.label}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {item.description}
+                    <div className="flex items-center gap-3">
+                      {item.highlight && (
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <Gift className="h-4 w-4 text-primary" />
+                        </div>
+                      )}
+                      <div>
+                        <div className={`font-display text-xs tracking-[0.15em] ${
+                          item.highlight ? 'text-primary' : 'text-foreground'
+                        }`}>
+                          {item.label}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {item.description}
+                        </div>
                       </div>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    <ChevronRight className={`h-4 w-4 ${
+                      item.highlight ? 'text-primary' : 'text-muted-foreground'
+                    }`} />
                   </button>
                 ))}
               </div>

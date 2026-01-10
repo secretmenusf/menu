@@ -8,6 +8,7 @@ import {
   LogOut,
   CreditCard,
   ChevronDown,
+  Gift,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from './AuthModal';
@@ -164,6 +165,14 @@ export function UserMenu() {
         >
           <CreditCard className="mr-2 h-4 w-4" />
           <span className="font-display text-xs tracking-[0.1em]">SUBSCRIPTION</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={() => navigate('/referrals')}
+          className="cursor-pointer focus:bg-accent"
+        >
+          <Gift className="mr-2 h-4 w-4" />
+          <span className="font-display text-xs tracking-[0.1em]">REFER & EARN</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator className="bg-border" />

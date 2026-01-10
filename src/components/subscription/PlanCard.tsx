@@ -67,18 +67,19 @@ const PlanCard = ({ plan }: PlanCardProps) => {
       </ul>
 
       {/* CTA */}
-      <Link to={`/signup?plan=${plan.id}`} className="block">
-        <Button
-          className={`w-full rounded-full font-display tracking-wider ${
-            isPopular
-              ? 'bg-foreground text-background hover:bg-foreground/90'
-              : 'bg-transparent border border-border hover:bg-card hover:border-foreground/50'
-          }`}
-          variant={isPopular ? 'default' : 'outline'}
-        >
+      <Button
+        asChild
+        className={`w-full rounded-full font-display tracking-wider ${
+          isPopular
+            ? 'bg-foreground text-background hover:bg-foreground/90'
+            : 'bg-transparent border border-border hover:bg-card hover:border-foreground/50'
+        }`}
+        variant={isPopular ? 'default' : 'outline'}
+      >
+        <Link to={`/signup?plan=${plan.id}`}>
           SELECT {plan.name.toUpperCase()}
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PlanCard from '@/components/subscription/PlanCard';
 import { subscriptionPlans, planBenefits } from '@/data/plans';
+import { ShareButton } from '@/components/social/ShareButton';
 
 const Pricing = () => {
   return (
@@ -27,10 +28,16 @@ const Pricing = () => {
           <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-6">
             MEMBERSHIP TIERS
           </h1>
-          <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
             Join the inner circle. Experience curated culinary excellence
             delivered to your door.
           </p>
+          <ShareButton
+            title="SF Secret Menu - Membership Plans"
+            text="Check out the membership tiers for SF Secret Menu - chef-crafted meals delivered weekly"
+            variant="outline"
+            size="sm"
+          />
         </div>
 
         {/* Plans grid */}

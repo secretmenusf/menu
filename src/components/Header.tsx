@@ -10,6 +10,7 @@ import {
 import SeedOfLife3D from './SeedOfLife3D';
 import ConnectWallet from './ConnectWallet';
 import { UserMenu } from './auth/UserMenu';
+import { Search } from 'lucide-react';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -78,11 +79,17 @@ const Header = () => {
             >
               CHEF
             </DropdownMenuItem>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={goToOrder}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
               ORDER
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigate('/gift-cards')}
+              className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+            >
+              GIFT
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -102,6 +109,24 @@ const Header = () => {
           >
             ORDER
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
+          </button>
+          <Link
+            to="/gift-cards"
+            className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors relative group"
+          >
+            GIFT
+            <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
+          </Link>
+          <button
+            onClick={() => {
+              const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
+              document.dispatchEvent(event);
+            }}
+            className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground hover:text-foreground transition-colors border border-border/50 rounded-md"
+            title="Quick search (⌘K)"
+          >
+            <Search size={14} />
+            <span className="font-body text-xs text-muted-foreground/70">⌘K</span>
           </button>
           <UserMenu />
         </div>
