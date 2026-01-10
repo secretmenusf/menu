@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,8 +12,9 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { weeklyMenu, WHATSAPP_NUMBER } from '@/lib/menuData';
 import { PAYMENT_CONFIG } from '@/lib/wagmi';
+import { subscriptionPlans, type SubscriptionPlan } from '@/data/plans';
 import { format, addDays } from 'date-fns';
-import { CalendarIcon, Plus, Minus, MessageCircle, AlertCircle } from 'lucide-react';
+import { CalendarIcon, Plus, Minus, MessageCircle, AlertCircle, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -43,9 +44,16 @@ const upsellItems = [
 
 const Order = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isConnected } = useAccount();
   const { toast } = useToast();
-  
+
+  // Get plan from URL params or default to standard
+  const initialPlanId = searchParams.get('plan') || 'standard';
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan>(
+    subscriptionPlans.find(p => p.id === initialPlanId) || subscriptionPlans[1]
+  );
+
   const [selections, setSelections] = useState<MealSelection[]>([]);
   const [upsells, setUpsells] = useState<UpsellSelection[]>([]);
   const [deliveryDate, setDeliveryDate] = useState<Date | undefined>();
@@ -128,11 +136,14 @@ const Order = () => {
     };
   }, [selections, upsells]);
 
-  const isMinimumMet = totalUsd >= PAYMENT_CONFIG.minimumOrder;
+  const isMinimumMet = totalUsd >= selectedPlan.price;
+  const amountRemaining = Math.max(0, selectedPlan.price - totalUsd);
+  const progressPercent = Math.min(100, (totalUsd / selectedPlan.price) * 100);
 
   const buildWhatsAppMessage = () => {
     const lines = ['🍽️ *SECRET MENU ORDER*\n'];
-    
+    lines.push(`*Plan:* ${selectedPlan.name} ($${selectedPlan.price}/mo)\n`);
+
     if (selections.length > 0) {
       lines.push('*MEALS:*');
       selections.forEach(s => {
@@ -169,7 +180,7 @@ const Order = () => {
     if (!isMinimumMet) {
       toast({
         title: "Minimum order not met",
-        description: `Please add at least $${PAYMENT_CONFIG.minimumOrder} worth of meals`,
+        description: `Please add $${amountRemaining} more to meet the ${selectedPlan.name} plan minimum of $${selectedPlan.price}`,
         variant: "destructive",
       });
       return;
@@ -221,13 +232,94 @@ const Order = () => {
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-6 max-w-5xl">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-4">
               PLACE YOUR ORDER
             </h1>
             <p className="font-body text-lg text-muted-foreground">
-              Custom menu • $50 regular / $80 premium • $900 minimum
+              Select your plan, then choose your meals
             </p>
+          </div>
+
+          {/* Plan Selector */}
+          <div className="mb-12">
+            <p className="font-display text-xs tracking-[0.3em] text-muted-foreground text-center mb-6">
+              SELECT YOUR PLAN
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              {subscriptionPlans.map((plan) => (
+                <button
+                  key={plan.id}
+                  onClick={() => setSelectedPlan(plan)}
+                  className={`relative p-5 border rounded-lg transition-all duration-300 ${
+                    selectedPlan.id === plan.id
+                      ? 'border-foreground bg-foreground/10 scale-[1.02]'
+                      : plan.popular
+                      ? 'border-foreground/30 bg-card/50 hover:border-foreground/50'
+                      : 'border-border/30 bg-card/30 hover:border-border/50'
+                  }`}
+                >
+                  {plan.popular && selectedPlan.id !== plan.id && (
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
+                      <span className="px-3 py-0.5 text-[9px] font-display tracking-[0.2em] bg-foreground text-background rounded-full">
+                        POPULAR
+                      </span>
+                    </div>
+                  )}
+                  {selectedPlan.id === plan.id && (
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
+                      <span className="px-3 py-0.5 text-[9px] font-display tracking-[0.2em] bg-foreground text-background rounded-full flex items-center gap-1">
+                        <Check size={10} />
+                        SELECTED
+                      </span>
+                    </div>
+                  )}
+                  <div className="text-center">
+                    <h4 className="font-display text-sm tracking-[0.15em] text-foreground mb-1">
+                      {plan.name.toUpperCase()}
+                    </h4>
+                    <p className="font-display text-2xl text-mystical mb-1">
+                      ${plan.price}
+                      <span className="text-sm text-muted-foreground">/mo</span>
+                    </p>
+                    <p className="font-body text-xs text-muted-foreground/60">
+                      {plan.mealsPerWeek} meals/week
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Progress toward minimum */}
+          <div className="max-w-xl mx-auto mb-12">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="font-display text-xs tracking-wider text-muted-foreground">
+                ORDER PROGRESS
+              </span>
+              <span className="font-display text-xs tracking-wider">
+                ${totalUsd} / ${selectedPlan.price}
+              </span>
+            </div>
+            <div className="h-2 bg-secondary rounded-full overflow-hidden">
+              <div
+                className={`h-full transition-all duration-500 rounded-full ${
+                  isMinimumMet ? 'bg-green-500' : 'bg-foreground/50'
+                }`}
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+            {!isMinimumMet && totalUsd > 0 && (
+              <p className="text-center mt-2 text-sm text-muted-foreground">
+                Add <span className="text-foreground font-semibold">${amountRemaining}</span> more to meet {selectedPlan.name} minimum
+              </p>
+            )}
+            {isMinimumMet && (
+              <p className="text-center mt-2 text-sm text-green-500 flex items-center justify-center gap-1">
+                <Check size={14} />
+                {selectedPlan.name} minimum met!
+              </p>
+            )}
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
@@ -432,17 +524,17 @@ const Order = () => {
                 {!isMinimumMet && totalUsd > 0 && (
                   <div className="flex items-center gap-2 text-destructive text-xs mb-4">
                     <AlertCircle size={14} />
-                    <span>Minimum order: ${PAYMENT_CONFIG.minimumOrder}</span>
+                    <span>Add ${amountRemaining} more for {selectedPlan.name}</span>
                   </div>
                 )}
 
                 {/* Checkout Button */}
                 <Button
                   onClick={handleCheckout}
-                  disabled={selections.length === 0 && upsells.length === 0}
+                  disabled={!isMinimumMet || (selections.length === 0 && upsells.length === 0)}
                   className="w-full font-display tracking-wider mb-3"
                 >
-                  CHECKOUT ${totalUsd}
+                  {isMinimumMet ? `CHECKOUT $${totalUsd}` : `ADD $${amountRemaining} MORE`}
                 </Button>
 
                 {/* WhatsApp confirmation */}
