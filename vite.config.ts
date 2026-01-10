@@ -5,6 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Base path for GitHub Pages (use '/' for custom domain or '/repo-name/' for project pages)
+  base: process.env.GITHUB_ACTIONS ? '/' : '/',
   server: {
     host: "::",
     port: 8080,
@@ -13,6 +15,14 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    // Copy index.html to 404.html for SPA routing on GitHub Pages
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
     },
   },
 }));
