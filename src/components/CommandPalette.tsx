@@ -25,6 +25,7 @@ import {
   Users,
   Search,
   Keyboard,
+  Image,
 } from 'lucide-react';
 
 const CommandPalette = () => {
@@ -51,6 +52,7 @@ const CommandPalette = () => {
 
   const pages = [
     { icon: Home, label: 'Home', shortcut: 'G H', action: () => navigate('/') },
+    { icon: Image, label: 'Gallery', shortcut: 'G L', action: () => { navigate('/'); setTimeout(() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
     { icon: UtensilsCrossed, label: 'Menu', shortcut: 'G M', action: () => navigate('/menu') },
     { icon: ShoppingCart, label: 'Order', shortcut: 'G O', action: () => navigate('/order') },
     { icon: CreditCard, label: 'Pricing', shortcut: 'G P', action: () => navigate('/pricing') },
