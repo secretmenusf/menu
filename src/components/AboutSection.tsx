@@ -27,7 +27,7 @@ const AboutSection = () => {
 
             {/* Name plaque */}
             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-card border border-border px-8 py-3">
-              <p className="font-display text-sm tracking-[0.3em] text-foreground">A.K.</p>
+              <p className="font-display text-sm tracking-[0.3em] text-foreground">Antje</p>
             </div>
           </div>
 
@@ -36,7 +36,7 @@ const AboutSection = () => {
             <div>
               <span className="text-foreground text-2xl">❂</span>
               <h2 className="font-display text-3xl md:text-4xl tracking-[0.15em] text-mystical mt-4 mb-2">
-                A.K.
+                Antje
                 <span className="block text-muted-foreground text-2xl mt-1">Culinary Alchemist</span>
               </h2>
             </div>
@@ -45,7 +45,7 @@ const AboutSection = () => {
 
             <div className="space-y-6 font-body text-lg text-foreground/80 leading-relaxed">
               <p>
-                Multi-disciplinary artist and culinary wizard, <span className="text-foreground font-semibold">A.K.</span> brings
+                Multi-disciplinary artist and culinary wizard, <span className="text-foreground font-semibold">Antje</span> brings
                 her globe-trotting adventures and international flair to the Bay Area—crafting
                 gourmet, organic meals that nourish body and soul.
               </p>

@@ -62,8 +62,8 @@ const Header = () => {
             align="start" 
             className="w-56 bg-card border-border"
           >
-            <DropdownMenuItem 
-              onClick={() => scrollToSection('hero')}
+            <DropdownMenuItem
+              onClick={() => navigate('/')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
               HOME

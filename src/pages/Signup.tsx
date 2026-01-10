@@ -73,7 +73,6 @@ const Signup = () => {
         <Header />
         <main className="pt-32 pb-20">
           <div className="container mx-auto px-6 max-w-md text-center">
-            <span className="text-foreground text-4xl mb-6 block">✧</span>
             <h1 className="font-display text-3xl tracking-[0.2em] text-mystical mb-4">
               INITIATION BEGUN
             </h1>

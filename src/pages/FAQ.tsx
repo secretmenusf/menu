@@ -92,7 +92,7 @@ const faqCategories = [
     questions: [
       {
         q: 'What makes Secret Menu different?',
-        a: 'Every meal is crafted with intention by our culinary artist, A.K. We source organic, seasonal ingredients and treat cooking as a sacred practice of nourishment.',
+        a: 'Every meal is crafted with intention by our culinary artist, Antje. We source organic, seasonal ingredients and treat cooking as a sacred practice of nourishment.',
       },
       {
         q: 'Do you cater events?',
@@ -100,7 +100,7 @@ const faqCategories = [
       },
       {
         q: 'Can I meet the chef?',
-        a: 'Premium subscribers and select events offer opportunities to dine with A.K. and experience the ritual of her kitchen.',
+        a: 'Premium subscribers and select events offer opportunities to dine with Antje and experience the ritual of her kitchen.',
       },
     ],
   },

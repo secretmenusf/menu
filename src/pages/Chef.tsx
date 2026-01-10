@@ -12,7 +12,6 @@ const Chef = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           {/* Chef Section */}
           <div className="text-center mb-16">
-            <span className="text-foreground text-3xl mb-4 block">☽</span>
             <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-8">
               THE CHEF
             </h1>
@@ -23,7 +22,7 @@ const Chef = () => {
               <div className="relative w-full h-full rounded-full overflow-hidden border border-border">
                 <img 
                   src={chefPortrait} 
-                  alt="Chef A.K.W." 
+                  alt="Chef Antje" 
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -32,7 +31,7 @@ const Chef = () => {
             {/* Bio */}
             <div className="max-w-2xl mx-auto">
               <p className="font-body text-lg text-foreground/80 leading-relaxed">
-                Bay Area native chef A.K.W. is a world traveler. After spending years overseas in Central and South America, Europe, Africa, the Middle East and Asia, she has returned to share her favorite dishes with gastronomic precision.
+                Bay Area native Chef Antje is a world traveler. After spending years overseas in Central and South America, Europe, Africa, the Middle East and Asia, she has returned to share her favorite dishes with gastronomic precision.
               </p>
               <p className="font-display text-sm tracking-[0.2em] text-muted-foreground mt-6">
                 MENU TO CHANGE RAPIDLY
