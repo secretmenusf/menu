@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import PasswordGate from '@/components/PasswordGate';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mail, Lock, Sparkles } from 'lucide-react';
 
 const Login = () => {
+  const [hasAccess, setHasAccess] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,6 +19,19 @@ const Login = () => {
   const { signIn, signInWithMagicLink } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Check if user has passed the password gate
+  useEffect(() => {
+    const access = sessionStorage.getItem('secretmenu_access');
+    if (access === 'true') {
+      setHasAccess(true);
+    }
+  }, []);
+
+  const handleGateSuccess = () => {
+    sessionStorage.setItem('secretmenu_access', 'true');
+    setHasAccess(true);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,6 +85,11 @@ const Login = () => {
 
     setLoading(false);
   };
+
+  // Show password gate if user hasn't passed it yet
+  if (!hasAccess) {
+    return <PasswordGate onSuccess={handleGateSuccess} />;
+  }
 
   if (magicLinkSent) {
     return (
