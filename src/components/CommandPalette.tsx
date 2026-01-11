@@ -26,6 +26,11 @@ import {
   Search,
   Keyboard,
   Image,
+  ChefHat,
+  Star,
+  Info,
+  Calendar,
+  Phone,
 } from 'lucide-react';
 
 const CommandPalette = () => {
@@ -53,9 +58,13 @@ const CommandPalette = () => {
   const pages = [
     { icon: Home, label: 'Home', shortcut: 'G H', action: () => navigate('/') },
     { icon: Image, label: 'Gallery', shortcut: 'G L', action: () => { navigate('/'); setTimeout(() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
+    { icon: ChefHat, label: 'The Chef', shortcut: 'G C', action: () => navigate('/chef') },
     { icon: UtensilsCrossed, label: 'Menu', shortcut: 'G M', action: () => navigate('/menu') },
+    { icon: Calendar, label: "This Week's Menu", shortcut: 'G W', action: () => navigate('/entry') },
     { icon: ShoppingCart, label: 'Order', shortcut: 'G O', action: () => navigate('/order') },
     { icon: CreditCard, label: 'Pricing', shortcut: 'G P', action: () => navigate('/pricing') },
+    { icon: Star, label: 'Reviews', shortcut: 'G V', action: () => navigate('/reviews') },
+    { icon: Info, label: 'About', shortcut: 'G A', action: () => navigate('/about') },
     { icon: HelpCircle, label: 'FAQ', shortcut: 'G F', action: () => navigate('/faq') },
     { icon: MessageCircle, label: 'Support', shortcut: 'G S', action: () => navigate('/support') },
     { icon: Gift, label: 'Gift Cards', shortcut: 'G G', action: () => navigate('/gift-cards') },
@@ -69,8 +78,9 @@ const CommandPalette = () => {
   ] : [];
 
   const actions = [
-    { icon: ShoppingCart, label: 'Place Order', action: () => navigate('/order') },
-    { icon: MessageCircle, label: 'Contact Support', action: () => window.open('https://wa.me/14153732496', '_blank') },
+    { icon: ShoppingCart, label: 'Start Order', action: () => navigate('/entry') },
+    { icon: Phone, label: 'WhatsApp Us', action: () => window.open('https://wa.me/14153732496', '_blank') },
+    { icon: MessageCircle, label: 'Contact Support', action: () => navigate('/support') },
   ];
 
   if (user) {

@@ -1,22 +1,19 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import {
+  referralService,
+  type ReferralStats,
+  type ReferredFriend,
+  type ReferralStatus,
+} from '@/services/referralService';
 
-export type ReferralStatus = 'pending_signup' | 'signed_up' | 'first_order' | 'active';
-
-export interface ReferredFriend {
-  id: string;
-  name: string;
-  email: string;
-  status: ReferralStatus;
-  referredAt: Date;
-  signedUpAt?: Date;
-  firstOrderAt?: Date;
-  rewardEarned: boolean;
-}
+export type { ReferralStatus, ReferredFriend };
 
 export interface ReferralData {
   referralCode: string;
   referralLink: string;
+  invitesRemaining: number;
+  invitesUsed: number;
   totalReferrals: number;
   pendingReferrals: number;
   completedReferrals: number;
@@ -25,56 +22,43 @@ export interface ReferralData {
   referredFriends: ReferredFriend[];
 }
 
-// Generate a unique referral code from user info
-function generateReferralCode(name: string | null, id: string): string {
-  const namePart = name
-    ? name.split(' ')[0].toUpperCase().slice(0, 6)
-    : 'FRIEND';
-  const idPart = id.slice(-4).toUpperCase();
-  return `${namePart}${idPart}`;
-}
-
-// Mock data for development - replace with actual API calls
-const mockReferredFriends: ReferredFriend[] = [
-  {
-    id: '1',
-    name: 'Sarah Chen',
-    email: 's***@gmail.com',
-    status: 'first_order',
-    referredAt: new Date('2024-12-01'),
-    signedUpAt: new Date('2024-12-02'),
-    firstOrderAt: new Date('2024-12-05'),
-    rewardEarned: true,
-  },
-  {
-    id: '2',
-    name: 'Mike Johnson',
-    email: 'm***@yahoo.com',
-    status: 'signed_up',
-    referredAt: new Date('2024-12-10'),
-    signedUpAt: new Date('2024-12-11'),
-    rewardEarned: false,
-  },
-  {
-    id: '3',
-    name: 'Emily Davis',
-    email: 'e***@outlook.com',
-    status: 'pending_signup',
-    referredAt: new Date('2024-12-20'),
-    rewardEarned: false,
-  },
-];
+const MAX_INVITES = 10;
 
 export function useReferrals() {
   const { user, profile } = useAuth();
+  const [stats, setStats] = useState<ReferralStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate referral code based on user profile
+  // Fetch referral stats from database
+  const fetchStats = useCallback(async () => {
+    if (!user) {
+      setStats(null);
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await referralService.getReferralStats(user.id);
+      setStats(data);
+    } catch {
+      setError('Failed to load referral data');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  // Fetch stats on mount and when user changes
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  // Get referral code from profile (database-generated) or stats
   const referralCode = useMemo(() => {
-    if (!user) return '';
-    return generateReferralCode(profile?.name ?? null, user.id);
-  }, [user, profile?.name]);
+    return stats?.referralCode || profile?.referral_code || '';
+  }, [stats?.referralCode, profile?.referral_code]);
 
   // Generate referral link
   const referralLink = useMemo(() => {
@@ -83,29 +67,24 @@ export function useReferrals() {
     return `${baseUrl}/signup?ref=${referralCode}`;
   }, [referralCode]);
 
-  // Calculate stats from mock data
-  const stats = useMemo(() => {
-    const completed = mockReferredFriends.filter(f => f.status === 'first_order').length;
-    const pending = mockReferredFriends.filter(
-      f => f.status === 'pending_signup' || f.status === 'signed_up'
-    ).length;
-
-    return {
-      totalReferrals: mockReferredFriends.length,
-      pendingReferrals: pending,
-      completedReferrals: completed,
-      freeMealsEarned: completed,
-      freeMealsAvailable: completed, // Assuming all earned meals are still available
-    };
-  }, []);
+  // Invites remaining (from database)
+  const invitesRemaining = useMemo(() => {
+    return stats?.invitesRemaining ?? profile?.invites_remaining ?? MAX_INVITES;
+  }, [stats?.invitesRemaining, profile?.invites_remaining]);
 
   // Full referral data
   const referralData: ReferralData = useMemo(() => ({
     referralCode,
     referralLink,
-    ...stats,
-    referredFriends: mockReferredFriends,
-  }), [referralCode, referralLink, stats]);
+    invitesRemaining,
+    invitesUsed: stats?.invitesUsed ?? (MAX_INVITES - invitesRemaining),
+    totalReferrals: stats?.totalReferrals ?? 0,
+    pendingReferrals: stats?.pendingReferrals ?? 0,
+    completedReferrals: stats?.completedReferrals ?? 0,
+    freeMealsEarned: stats?.freeMealsEarned ?? 0,
+    freeMealsAvailable: stats?.freeMealsEarned ?? 0,
+    referredFriends: stats?.referredFriends ?? [],
+  }), [referralCode, referralLink, invitesRemaining, stats]);
 
   // Copy referral link to clipboard
   const copyReferralLink = useCallback(async () => {
@@ -145,25 +124,20 @@ export function useReferrals() {
     window.open(urls[platform], '_blank');
   }, [referralCode, referralLink]);
 
-  // Refresh referral data (would fetch from API)
+  // Refresh referral data
   const refreshReferrals = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // TODO: Implement actual API call
-      // const data = await fetchReferralData(user?.id);
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
-    } catch (err) {
-      setError('Failed to load referral data');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    await fetchStats();
+  }, [fetchStats]);
+
+  // Check if user can still invite
+  const canInvite = invitesRemaining > 0;
 
   return {
     referralData,
     referralCode,
     referralLink,
+    invitesRemaining,
+    canInvite,
     isLoading,
     error,
     copyReferralLink,

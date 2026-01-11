@@ -1,6 +1,7 @@
-import { Check } from 'lucide-react';
+import { Check, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 import type { SubscriptionPlan } from '@/data/plans';
 
 interface PlanCardProps {
@@ -8,7 +9,9 @@ interface PlanCardProps {
 }
 
 const PlanCard = ({ plan }: PlanCardProps) => {
+  const { user } = useAuth();
   const isPopular = plan.popular;
+  const isLoggedIn = !!user;
 
   return (
     <div
@@ -39,17 +42,36 @@ const PlanCard = ({ plan }: PlanCardProps) => {
 
       {/* Price */}
       <div className="text-center mb-8">
-        <div className="flex items-baseline justify-center gap-1">
-          <span className="font-display text-5xl text-mystical">
-            ${plan.price}
-          </span>
-          <span className="font-body text-muted-foreground">
-            /{plan.period}
-          </span>
-        </div>
-        <p className="font-body text-xs text-muted-foreground/60 mt-2">
-          {plan.mealsPerWeek} meals per week
-        </p>
+        {isLoggedIn ? (
+          <>
+            <div className="flex items-baseline justify-center gap-1">
+              <span className="font-display text-5xl text-mystical">
+                ${plan.price}
+              </span>
+              <span className="font-body text-muted-foreground">
+                /{plan.period}
+              </span>
+            </div>
+            <p className="font-body text-xs text-muted-foreground/60 mt-2">
+              {plan.mealsPerWeek} meals per week
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Lock size={18} className="text-muted-foreground" />
+              <span className="font-display text-2xl text-muted-foreground">
+                • • •
+              </span>
+            </div>
+            <p className="font-body text-xs text-muted-foreground/60 mt-2">
+              {plan.mealsPerWeek} meals per week
+            </p>
+            <p className="font-body text-xs text-foreground/70 mt-1">
+              Sign in to see pricing
+            </p>
+          </>
+        )}
       </div>
 
       {/* Features */}
@@ -76,9 +98,16 @@ const PlanCard = ({ plan }: PlanCardProps) => {
         }`}
         variant={isPopular ? 'default' : 'outline'}
       >
-        <Link to={`/signup?plan=${plan.id}`}>
-          SELECT {plan.name.toUpperCase()}
-        </Link>
+        {isLoggedIn ? (
+          <Link to={`/order?plan=${plan.id}`}>
+            SELECT {plan.name.toUpperCase()}
+          </Link>
+        ) : (
+          <Link to="/login">
+            <Lock size={14} className="mr-2" />
+            JOIN TO UNLOCK
+          </Link>
+        )}
       </Button>
     </div>
   );

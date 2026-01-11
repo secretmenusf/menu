@@ -198,6 +198,9 @@ export type Database = {
           phone: string | null
           updated_at: string
           wallet_address: string | null
+          referral_code: string | null
+          referred_by: string | null
+          invites_remaining: number
         }
         Insert: {
           created_at?: string
@@ -207,6 +210,9 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           wallet_address?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
+          invites_remaining?: number
         }
         Update: {
           created_at?: string
@@ -216,8 +222,59 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           wallet_address?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
+          invites_remaining?: number
         }
         Relationships: []
+      }
+      referrals: {
+        Row: {
+          id: string
+          referrer_id: string
+          referred_id: string | null
+          referral_code: string
+          status: Database["public"]["Enums"]["referral_status"]
+          created_at: string
+          signed_up_at: string | null
+          first_order_at: string | null
+        }
+        Insert: {
+          id?: string
+          referrer_id: string
+          referred_id?: string | null
+          referral_code: string
+          status?: Database["public"]["Enums"]["referral_status"]
+          created_at?: string
+          signed_up_at?: string | null
+          first_order_at?: string | null
+        }
+        Update: {
+          id?: string
+          referrer_id?: string
+          referred_id?: string | null
+          referral_code?: string
+          status?: Database["public"]["Enums"]["referral_status"]
+          created_at?: string
+          signed_up_at?: string | null
+          first_order_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       subscriptions: {
         Row: {
@@ -288,6 +345,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      referral_status: "pending" | "signed_up" | "first_order" | "active"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -416,6 +474,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      referral_status: ["pending", "signed_up", "first_order", "active"],
     },
   },
 } as const

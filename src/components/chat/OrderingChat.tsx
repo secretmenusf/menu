@@ -18,6 +18,10 @@ import {
   ExternalLink,
   ShoppingBag,
   Utensils,
+  Image,
+  ChefHat,
+  Star,
+  ShoppingCart,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -29,6 +33,7 @@ import {
   type AssistantAction,
 } from '@/services/orderingAssistant';
 import { useNavigate } from 'react-router-dom';
+import chefAntje from '@/assets/chef-antje.jpg';
 
 const WHATSAPP_NUMBER = '14153732496';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -38,11 +43,11 @@ function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-// Welcome message
+// Welcome message from Chef Antje
 const WELCOME_MESSAGE: Message = {
   id: 'welcome',
   role: 'assistant',
-  content: "Hi! I'm your Secret Menu assistant. I can help you explore our chef-crafted menu, find dishes that match your taste, or answer any questions. What sounds good today?",
+  content: "Welcome! I'm Antje, your personal culinary guide. I'd love to help you explore my menu, find dishes that match your taste, or answer any questions about our service. What sounds good to you today?",
   timestamp: new Date(),
 };
 
@@ -87,8 +92,21 @@ export function OrderingChat() {
         window.open(WHATSAPP_URL, '_blank');
         break;
       case 'ADD_TO_CART':
-        // Navigate to order page
-        navigate('/order');
+      case 'START_ORDER':
+        navigate('/entry');
+        setIsOpen(false);
+        break;
+      case 'VIEW_GALLERY':
+        navigate('/');
+        setIsOpen(false);
+        setTimeout(() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }), 100);
+        break;
+      case 'VIEW_CHEF':
+        navigate('/chef');
+        setIsOpen(false);
+        break;
+      case 'VIEW_REVIEWS':
+        navigate('/reviews');
         setIsOpen(false);
         break;
       default:
@@ -170,14 +188,13 @@ export function OrderingChat() {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button - Chef Antje's photo */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-orange-500/30 flex items-center justify-center text-white hover:scale-110 transition-all duration-200"
-          style={{ borderRadius: '50%' }}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full overflow-hidden shadow-lg shadow-black/30 hover:scale-110 transition-all duration-200 ring-2 ring-amber-500/50 hover:ring-amber-500"
         >
-          <MessageCircle className="w-6 h-6" />
+          <img src={chefAntje} alt="Chat with Chef Antje" className="w-full h-full object-cover" />
         </button>
       )}
 
@@ -186,13 +203,13 @@ export function OrderingChat() {
         <div
           className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[600px] max-h-[calc(100vh-100px)] bg-background border border-border/50 rounded-2xl shadow-2xl shadow-black/20 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200"
         >
-          {/* Header */}
+          {/* Header - Chef Antje */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-border/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-amber-500/30">
+              <img src={chefAntje} alt="Chef Antje" className="w-full h-full object-cover" />
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-sm tracking-wider text-foreground">SECRET MENU AI</h3>
+              <h3 className="font-display text-sm tracking-wider text-foreground">CHEF ANTJE</h3>
               <p className="text-xs text-muted-foreground">Your culinary guide</p>
             </div>
             <button
@@ -367,6 +384,27 @@ function ActionButton({
     ADD_TO_CART: {
       label: 'Build Order',
       icon: ShoppingBag,
+      variant: 'outline' as const,
+    },
+    START_ORDER: {
+      label: 'Start Order',
+      icon: ShoppingCart,
+      variant: 'default' as const,
+      className: 'bg-amber-500 hover:bg-amber-600 text-white',
+    },
+    VIEW_GALLERY: {
+      label: 'See Gallery',
+      icon: Image,
+      variant: 'outline' as const,
+    },
+    VIEW_CHEF: {
+      label: 'Meet the Chef',
+      icon: ChefHat,
+      variant: 'outline' as const,
+    },
+    VIEW_REVIEWS: {
+      label: 'Read Reviews',
+      icon: Star,
       variant: 'outline' as const,
     },
   };

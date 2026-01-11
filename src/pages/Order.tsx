@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -13,9 +13,10 @@ import { PAYMENT_CONFIG } from '@/lib/wagmi';
 import { subscriptionPlans, type SubscriptionPlan } from '@/data/plans';
 import { allMenus, dietaryInfo, type WeekMenu, type DayMenu, type MenuItem } from '@/data/menus';
 import { format } from 'date-fns';
-import { Plus, Minus, MessageCircle, AlertCircle, Check, Shuffle, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { Plus, Minus, MessageCircle, AlertCircle, Check, Shuffle, ChevronLeft, ChevronRight, Sparkles, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Extra meal price (beyond plan max)
 const EXTRA_MEAL_PRICE = 50;
@@ -62,6 +63,7 @@ const Order = () => {
   const [searchParams] = useSearchParams();
   const { isConnected } = useAccount();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   // Get week from URL params or default to first available
   const initialWeekId = searchParams.get('week');
@@ -380,6 +382,45 @@ const Order = () => {
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=${message}`;
     window.open(whatsappUrl, '_blank');
   };
+
+  // Show login prompt for logged-out users
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="pt-32 pb-20">
+          <div className="container mx-auto px-6 max-w-md text-center">
+            <Lock size={48} className="mx-auto mb-6 text-muted-foreground" />
+            <h1 className="font-display text-3xl tracking-[0.2em] text-mystical mb-4">
+              MEMBERS ONLY
+            </h1>
+            <p className="font-body text-muted-foreground mb-8">
+              Sign in to access our weekly menu ordering and build your personalized meal plan.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild className="font-display tracking-wider">
+                <Link to="/login">SIGN IN</Link>
+              </Button>
+              <Button asChild variant="outline" className="font-display tracking-wider">
+                <Link to="/signup">JOIN THE ORDER</Link>
+              </Button>
+            </div>
+            <p className="mt-8 font-body text-sm text-muted-foreground">
+              Not a member?{' '}
+              <Link to="/menu" className="text-foreground hover:underline">
+                Browse our menu
+              </Link>
+              {' '}or{' '}
+              <Link to="/pricing" className="text-foreground hover:underline">
+                view membership plans
+              </Link>
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

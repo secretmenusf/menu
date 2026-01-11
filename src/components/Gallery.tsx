@@ -62,10 +62,13 @@ const shuffleArray = <T,>(array: T[], seed: number): T[] => {
   return shuffled;
 };
 
+const ITEMS_PER_PAGE = 12;
+
 const Gallery = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [visibleImages, setVisibleImages] = useState<boolean[]>(new Array(galleryItems.length).fill(false));
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const sectionRef = useRef<HTMLElement | null>(null);
   const timeoutsRef = useRef<number[]>([]);
   
@@ -92,10 +95,13 @@ const Gallery = () => {
     return () => observer.disconnect();
   }, [hasAnimated]);
 
+  // Animate only the currently visible items
   useEffect(() => {
     if (!hasAnimated) return;
 
-    shuffledItems.forEach((_, index) => {
+    // Only animate items up to visibleCount
+    for (let index = 0; index < visibleCount; index++) {
+      if (visibleImages[index]) continue; // Skip already animated
       const timeoutId = window.setTimeout(() => {
         setVisibleImages(prev => {
           const newState = [...prev];
@@ -104,13 +110,23 @@ const Gallery = () => {
         });
       }, index * 90);
       timeoutsRef.current.push(timeoutId);
-    });
+    }
 
     return () => {
       timeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId));
       timeoutsRef.current = [];
     };
-  }, [hasAnimated, shuffledItems]);
+  }, [hasAnimated, visibleCount]);
+
+  // Load more items
+  const loadMore = () => {
+    const newCount = Math.min(visibleCount + ITEMS_PER_PAGE, shuffledItems.length);
+    setVisibleCount(newCount);
+  };
+
+  // Get items to display
+  const displayedItems = shuffledItems.slice(0, visibleCount);
+  const hasMore = visibleCount < shuffledItems.length;
 
   const openLightbox = (index: number) => {
     setSelectedIndex(index);
@@ -169,33 +185,34 @@ const Gallery = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-7xl mx-auto">
-            {shuffledItems.map((item, index) => (
+          {/* Responsive grid: 1 col mobile, 2 col tablet, 3 col desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+            {displayedItems.map((item, index) => (
               <button
                 key={index}
                 onClick={() => openLightbox(index)}
-                className={`group relative aspect-square overflow-visible rounded-xl cursor-pointer transition-all duration-700 ease-out ${
-                  visibleImages[index] 
-                    ? 'opacity-100 translate-y-0 scale-100' 
+                className={`group relative aspect-[4/3] overflow-visible rounded-2xl cursor-pointer transition-all duration-700 ease-out ${
+                  visibleImages[index]
+                    ? 'opacity-100 translate-y-0 scale-100'
                     : 'opacity-0 translate-y-8 scale-95'
                 }`}
-                style={{ transitionDelay: `${index * 50}ms` }}
+                style={{ transitionDelay: `${(index % ITEMS_PER_PAGE) * 80}ms` }}
                 data-testid={`gallery-item-${index}`}
                 data-visible={visibleImages[index] ? 'true' : 'false'}
               >
                 {/* Subtle backglow for PNG transparency */}
-                <div className="absolute inset-0 -m-1 bg-foreground/3 blur-lg rounded-2xl opacity-40 group-hover:opacity-60 group-hover:bg-foreground/5 transition-all duration-500" />
-                
-                {/* Image container */}
-                <div className="relative w-full h-full bg-card/30 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 -m-2 bg-foreground/3 blur-xl rounded-3xl opacity-40 group-hover:opacity-60 group-hover:bg-foreground/5 transition-all duration-500" />
+
+                {/* Image container - larger with better presentation */}
+                <div className="relative w-full h-full bg-card/30 rounded-2xl overflow-hidden shadow-lg">
                   <img
                     src={item.src}
                     alt={item.title}
                     className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
                   />
-                  {/* Title overlay on hover */}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="font-display text-xs tracking-[0.1em] text-foreground text-center truncate">
+                  {/* Title overlay - always visible on larger cards */}
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent p-4 sm:p-5">
+                    <p className="font-display text-sm sm:text-base tracking-[0.15em] text-foreground text-center">
                       {item.title.toUpperCase()}
                     </p>
                   </div>
@@ -203,6 +220,18 @@ const Gallery = () => {
               </button>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="flex justify-center mt-12">
+              <button
+                onClick={loadMore}
+                className="px-8 py-3 font-display text-sm tracking-[0.2em] border border-border rounded-full hover:bg-muted/50 transition-colors"
+              >
+                LOAD MORE
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
