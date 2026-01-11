@@ -50,15 +50,14 @@ const initFBPixel = () => {
   const f = window;
   const b = document;
   const e = 'script';
-  let n: HTMLScriptElement;
-  let t: HTMLScriptElement | null;
 
   if (f.fbq) return;
-  n = f.fbq = function (...args: unknown[]) {
-    if (n.callMethod) {
-      n.callMethod.apply(n, args);
+
+  const n = f.fbq = function (...args: unknown[]) {
+    if ((n as unknown as { callMethod?: (...a: unknown[]) => void }).callMethod) {
+      (n as unknown as { callMethod: (...a: unknown[]) => void }).callMethod(...args);
     } else {
-      n.queue.push(args);
+      (n as unknown as { queue: unknown[] }).queue.push(args);
     }
   } as unknown as HTMLScriptElement;
 
@@ -67,7 +66,7 @@ const initFBPixel = () => {
   (n as unknown as { version: string }).version = '2.0';
   (n as unknown as { queue: unknown[] }).queue = [];
 
-  t = b.createElement(e) as HTMLScriptElement;
+  const t = b.createElement(e) as HTMLScriptElement;
   t.async = true;
   t.src = 'https://connect.facebook.net/en_US/fbevents.js';
   const s = b.getElementsByTagName(e)[0];
