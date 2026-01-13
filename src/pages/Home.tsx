@@ -11,6 +11,7 @@ import { StatsSection } from '@/components/social-proof/StatsBar';
 import { HowItWorksSection } from '@/components/HowItWorks';
 import { DeliveryZoneChecker } from '@/components/DeliveryZoneChecker';
 import { GuaranteeBadges } from '@/components/social-proof/TrustBadges';
+import StandardsSection from '@/components/StandardsSection';
 
 const Home = () => {
   return (
@@ -35,6 +36,9 @@ const Home = () => {
 
         {/* Stats - Rating, Meals Delivered, Happy Members */}
         <StatsSection />
+
+        {/* Our Standards & Bay Area Suppliers */}
+        <StandardsSection />
 
         {/* How It Works - 5 step process */}
         <HowItWorksSection />
