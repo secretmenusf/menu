@@ -76,6 +76,15 @@ export function OrderingChat() {
   // Handle action buttons
   const handleAction = useCallback((action: AssistantAction) => {
     switch (action.type) {
+      case 'SEND_ORDER':
+        // Open WhatsApp with pre-filled order message
+        if (action.orderItems) {
+          const orderMessage = encodeURIComponent(
+            `Hi Chef Antje! I'd like to order:\n\n${action.orderItems}\n\nPlease let me know the total and delivery details!`
+          );
+          window.open(`${WHATSAPP_URL}?text=${orderMessage}`, '_blank');
+        }
+        break;
       case 'VIEW_MENU':
         navigate('/menu');
         setIsOpen(false);
@@ -333,6 +342,12 @@ function ActionButton({
   onClick: () => void;
 }) {
   const config = {
+    SEND_ORDER: {
+      label: 'Send Order to WhatsApp',
+      icon: Send,
+      variant: 'default' as const,
+      className: 'bg-green-500 hover:bg-green-600 text-white',
+    },
     VIEW_MENU: {
       label: 'View Menu',
       icon: Utensils,
