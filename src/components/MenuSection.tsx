@@ -6,6 +6,7 @@ import { subscriptionPlans } from '@/data/plans';
 import { Button } from '@/components/ui/button';
 import { useKonamiCode } from '@/hooks/useKonamiCode';
 import SecretSecretMenu from '@/components/SecretSecretMenu';
+import { NutritionLabel } from '@/components/NutritionLabel';
 
 const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
   const info = dietaryInfo[tag];
@@ -20,8 +21,8 @@ const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
 };
 
 const MenuItemDisplay = ({ item }: { item: MenuItemType }) => (
-  <div className="mb-2">
-    <div className="flex items-center gap-2">
+  <div className="mb-3">
+    <div className="flex items-center gap-2 flex-wrap">
       <p className="font-body text-foreground">{item.name}</p>
       {item.tags && item.tags.length > 0 && (
         <div className="flex gap-1">
@@ -34,6 +35,7 @@ const MenuItemDisplay = ({ item }: { item: MenuItemType }) => (
     {item.description && (
       <p className="font-body text-sm text-muted-foreground italic">{item.description}</p>
     )}
+    <NutritionLabel dishName={item.name} compact className="mt-1.5 scale-90 origin-left" />
   </div>
 );
 

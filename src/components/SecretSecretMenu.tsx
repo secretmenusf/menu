@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { X, Sparkles, Flame, Wrench, Leaf, Cookie } from 'lucide-react';
+import { X, Sparkles, Flame, Wrench, Leaf, Cookie, Waves } from 'lucide-react';
 import { SECRET_SECRET_MENU, SECRET_CATEGORIES, type SecretMenuItem } from '@/data/secretSecretMenu';
 import { Button } from '@/components/ui/button';
+import { NutritionLabel } from '@/components/NutritionLabel';
 
 // Get theme colors and icons based on category
 const getCategoryTheme = (category: SecretMenuItem['category']) => {
@@ -41,6 +42,18 @@ const getCategoryTheme = (category: SecretMenuItem['category']) => {
         tagBorder: 'border-orange-500/20',
         tagText: 'text-orange-500/80',
         Icon: Cookie,
+      };
+    case 'swimwear':
+      return {
+        bgGradient: 'bg-gradient-to-br from-sky-900/20 to-rose-900/20',
+        radialGradient: 'bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.1),transparent_70%)]',
+        iconColor: 'text-sky-500/40',
+        iconHover: 'text-sky-500/60',
+        textHover: 'group-hover:text-sky-400',
+        priceColor: 'text-sky-500',
+        tagBorder: 'border-sky-500/20',
+        tagText: 'text-sky-500/80',
+        Icon: Waves,
       };
     default:
       return {
@@ -141,6 +154,13 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
           <p className="font-body text-[10px] text-muted-foreground/50 italic pt-1">
             Inspired by {item.inspiration}
           </p>
+        )}
+
+        {/* Nutrition label for food items only */}
+        {!['services', 'plants', 'swimwear'].includes(item.category) && (
+          <div className="pt-2">
+            <NutritionLabel dishName={item.name} compact className="scale-90 origin-left" />
+          </div>
         )}
       </div>
     </div>
