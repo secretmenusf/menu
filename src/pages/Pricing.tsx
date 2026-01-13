@@ -5,10 +5,20 @@ import Footer from '@/components/Footer';
 import PlanCard from '@/components/subscription/PlanCard';
 import { subscriptionPlans, planBenefits } from '@/data/plans';
 import { ShareButton } from '@/components/social/ShareButton';
+import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 
 const Pricing = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        {...pageSEO.pricing}
+        url="https://sfsecretmenu.com/pricing"
+        schema={schemas.breadcrumb([
+          { name: 'Home', url: 'https://sfsecretmenu.com' },
+          { name: 'Pricing', url: 'https://sfsecretmenu.com/pricing' },
+        ])}
+      />
+
       <Header />
 
       <main className="pt-32 pb-24">

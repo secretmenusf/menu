@@ -9,6 +9,7 @@ import { ShareButton } from '@/components/ShareButton';
 import { TestimonialModal } from '@/components/TestimonialModal';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 
 interface ApprovedTestimonial {
   id: string;
@@ -88,6 +89,15 @@ const Reviews = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        {...pageSEO.reviews}
+        url="https://sfsecretmenu.com/reviews"
+        schema={schemas.breadcrumb([
+          { name: 'Home', url: 'https://sfsecretmenu.com' },
+          { name: 'Reviews', url: 'https://sfsecretmenu.com/reviews' },
+        ])}
+      />
+
       <Header />
 
       <main className="pt-24 pb-16">
