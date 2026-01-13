@@ -21,6 +21,7 @@ import {
   UtensilsCrossed,
   CreditCard,
   Settings,
+  Video,
   LogOut,
 } from 'lucide-react';
 
@@ -54,6 +55,11 @@ const navItems = [
     title: 'Payments',
     icon: CreditCard,
     href: '/admin/payments',
+  },
+  {
+    title: 'Testimonials',
+    icon: Video,
+    href: '/admin/testimonials',
   },
   {
     title: 'Settings',

@@ -98,8 +98,8 @@ const Support = () => {
                   hello@sfsecretmenu.com
                 </a>
                 {' · '}
-                <a href="tel:+13235551234" className="hover:text-foreground transition-colors">
-                  (323) 555-1234
+                <a href="tel:+14153732496" className="hover:text-foreground transition-colors">
+                  (415) 373-2496
                 </a>
               </p>
               <p className="text-muted-foreground/60">Response time: Within 24 hours</p>

@@ -222,7 +222,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
                     </button>
                   ) : (
                     <a
-                      href="https://wa.me/14155551234?text=Hi%20Secret%20Menu!"
+                      href="https://wa.me/14153732496?text=Hi%20Secret%20Menu!"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-4 block font-display text-xs tracking-wider text-muted-foreground hover:text-foreground transition-colors border-t border-border/30 pt-3"

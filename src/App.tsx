@@ -46,6 +46,7 @@ const AdminCustomers = lazy(() => import("./pages/admin/Customers"));
 const AdminDeliveries = lazy(() => import("./pages/admin/Deliveries"));
 const AdminMenus = lazy(() => import("./pages/admin/Menus"));
 const AdminPayments = lazy(() => import("./pages/admin/Payments"));
+const AdminTestimonials = lazy(() => import("./pages/admin/Testimonials"));
 const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 
 // Admin Layout
@@ -130,6 +131,7 @@ const AppRoutes = () => (
         <Route path="deliveries" element={<AdminDeliveries />} />
         <Route path="menus" element={<AdminMenus />} />
         <Route path="payments" element={<AdminPayments />} />
+        <Route path="testimonials" element={<AdminTestimonials />} />
         <Route path="settings" element={<AdminSettings />} />
       </Route>
 

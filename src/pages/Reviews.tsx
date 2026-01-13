@@ -1,10 +1,27 @@
-import { Star, Twitter, Instagram, Facebook, Linkedin, Quote, ArrowLeft, Share2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Star, Twitter, Instagram, Facebook, Linkedin, Quote, ArrowLeft, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { reviews } from '@/data/reviews';
 import { Button } from '@/components/ui/button';
 import { ShareButton } from '@/components/ShareButton';
+import { TestimonialModal } from '@/components/TestimonialModal';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+interface ApprovedTestimonial {
+  id: string;
+  name: string;
+  rating: number;
+  text: string | null;
+  video_url: string | null;
+  image_urls: string[] | null;
+  social_platform: string | null;
+  social_handle: string | null;
+  social_url: string | null;
+  created_at: string;
+}
 
 // Platform icons mapping
 const platformIcons = {
@@ -28,6 +45,47 @@ const totalReviews = reviews.length;
 const fiveStarCount = reviews.filter(r => r.rating === 5).length;
 
 const Reviews = () => {
+  const [testimonialOpen, setTestimonialOpen] = useState(false);
+  const [approvedTestimonials, setApprovedTestimonials] = useState<ApprovedTestimonial[]>([]);
+  const [isLoadingTestimonials, setIsLoadingTestimonials] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    let active = true;
+
+    const loadApprovedTestimonials = async () => {
+      setIsLoadingTestimonials(true);
+      const { data, error } = await supabase
+        .from('testimonial_submissions')
+        .select('id,name,rating,text,video_url,image_urls,social_platform,social_handle,social_url,created_at')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
+        .limit(6);
+
+      if (error) {
+        if (active) {
+          toast({
+            title: 'Unable to load video testimonials',
+            description: error.message,
+            variant: 'destructive',
+          });
+        }
+      } else if (active) {
+        setApprovedTestimonials((data ?? []) as ApprovedTestimonial[]);
+      }
+
+      if (active) {
+        setIsLoadingTestimonials(false);
+      }
+    };
+
+    loadApprovedTestimonials();
+
+    return () => {
+      active = false;
+    };
+  }, [toast]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -69,6 +127,17 @@ const Reviews = () => {
                 <div className="font-display text-4xl text-foreground mb-2">{Math.round((fiveStarCount / totalReviews) * 100)}%</div>
                 <p className="font-body text-sm text-muted-foreground">5-Star Reviews</p>
               </div>
+            </div>
+
+            {/* Video testimonial CTA */}
+            <div className="mt-10 flex flex-col items-center gap-3">
+              <Button onClick={() => setTestimonialOpen(true)} className="font-display tracking-wider">
+                <Video className="mr-2 h-4 w-4" />
+                RECORD VIDEO REVIEW
+              </Button>
+              <p className="font-body text-sm text-muted-foreground">
+                Add a short video or upload photos to share your experience.
+              </p>
             </div>
           </div>
 
@@ -164,6 +233,99 @@ const Reviews = () => {
             })}
           </div>
 
+          {/* Video testimonials */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="font-display text-2xl tracking-[0.2em] text-foreground mb-3">
+                VIDEO TESTIMONIALS
+              </h2>
+              <p className="font-body text-muted-foreground">
+                Real voices from the community.
+              </p>
+            </div>
+
+            {isLoadingTestimonials && (
+              <div className="text-center text-sm text-muted-foreground">
+                Loading testimonials...
+              </div>
+            )}
+
+            {!isLoadingTestimonials && approvedTestimonials.length === 0 && (
+              <div className="text-center text-sm text-muted-foreground">
+                Be the first to share a video review.
+              </div>
+            )}
+
+            {!isLoadingTestimonials && approvedTestimonials.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {approvedTestimonials.map((item) => (
+                  <div
+                    key={item.id}
+                    className="group p-5 border border-border/30 rounded-2xl bg-card/30 hover:border-border/50 hover:bg-card/50 transition-all duration-300"
+                  >
+                    {item.video_url ? (
+                      <video controls className="w-full h-48 rounded-xl object-cover mb-4">
+                        <source src={item.video_url} />
+                      </video>
+                    ) : item.image_urls && item.image_urls.length > 0 ? (
+                      <img
+                        src={item.image_urls[0]}
+                        alt={`Testimonial from ${item.name}`}
+                        className="w-full h-48 rounded-xl object-cover mb-4"
+                      />
+                    ) : (
+                      <div className="w-full h-48 rounded-xl bg-muted/30 flex items-center justify-center text-muted-foreground mb-4">
+                        No media provided
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-foreground font-display text-xs">
+                        {item.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-display text-sm tracking-wider text-foreground">{item.name}</p>
+                        <p className="text-xs text-muted-foreground/60">
+                          {new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-0.5 mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={14}
+                          className={i < item.rating ? 'fill-foreground text-foreground' : 'text-muted-foreground/30'}
+                        />
+                      ))}
+                    </div>
+
+                    {item.text && (
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                        &quot;{item.text}&quot;
+                      </p>
+                    )}
+
+                    {item.social_url && (
+                      <a
+                        href={item.social_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <span className="font-display tracking-wider">
+                          {item.social_platform ? item.social_platform.toUpperCase() : 'SOCIAL'}
+                        </span>
+                        <span>{item.social_handle || 'View profile'}</span>
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Social proof section */}
           <div className="text-center py-12 border-t border-border/30">
             <h2 className="font-display text-2xl tracking-[0.2em] text-foreground mb-4">
@@ -209,6 +371,8 @@ const Reviews = () => {
       </main>
 
       <Footer />
+
+      <TestimonialModal open={testimonialOpen} onOpenChange={setTestimonialOpen} />
     </div>
   );
 };

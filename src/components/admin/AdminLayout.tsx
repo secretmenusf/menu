@@ -19,6 +19,7 @@ const breadcrumbMap: Record<string, string> = {
   '/admin/deliveries': 'Deliveries',
   '/admin/menus': 'Menus',
   '/admin/payments': 'Payments',
+  '/admin/testimonials': 'Testimonials',
   '/admin/settings': 'Settings',
 };
 
