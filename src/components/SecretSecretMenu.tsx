@@ -1,7 +1,61 @@
 import { useState, useEffect } from 'react';
-import { X, Sparkles, Flame, Wrench } from 'lucide-react';
+import { X, Sparkles, Flame, Wrench, Leaf, Cookie } from 'lucide-react';
 import { SECRET_SECRET_MENU, SECRET_CATEGORIES, type SecretMenuItem } from '@/data/secretSecretMenu';
 import { Button } from '@/components/ui/button';
+
+// Get theme colors and icons based on category
+const getCategoryTheme = (category: SecretMenuItem['category']) => {
+  switch (category) {
+    case 'services':
+      return {
+        bgGradient: 'bg-gradient-to-br from-blue-900/20 to-cyan-900/20',
+        radialGradient: 'bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_70%)]',
+        iconColor: 'text-cyan-500/40',
+        iconHover: 'text-cyan-500/60',
+        textHover: 'group-hover:text-cyan-400',
+        priceColor: 'text-cyan-500',
+        tagBorder: 'border-cyan-500/20',
+        tagText: 'text-cyan-500/80',
+        Icon: Wrench,
+      };
+    case 'plants':
+      return {
+        bgGradient: 'bg-gradient-to-br from-green-900/20 to-emerald-900/20',
+        radialGradient: 'bg-[radial-gradient(circle_at_50%_50%,rgba(52,211,153,0.1),transparent_70%)]',
+        iconColor: 'text-emerald-500/40',
+        iconHover: 'text-emerald-500/60',
+        textHover: 'group-hover:text-emerald-400',
+        priceColor: 'text-emerald-500',
+        tagBorder: 'border-emerald-500/20',
+        tagText: 'text-emerald-500/80',
+        Icon: Leaf,
+      };
+    case 'pantry':
+      return {
+        bgGradient: 'bg-gradient-to-br from-orange-900/20 to-rose-900/20',
+        radialGradient: 'bg-[radial-gradient(circle_at_50%_50%,rgba(251,146,60,0.1),transparent_70%)]',
+        iconColor: 'text-orange-500/40',
+        iconHover: 'text-orange-500/60',
+        textHover: 'group-hover:text-orange-400',
+        priceColor: 'text-orange-500',
+        tagBorder: 'border-orange-500/20',
+        tagText: 'text-orange-500/80',
+        Icon: Cookie,
+      };
+    default:
+      return {
+        bgGradient: 'bg-gradient-to-br from-amber-900/20 to-orange-900/20',
+        radialGradient: 'bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1),transparent_70%)]',
+        iconColor: 'text-amber-500/40',
+        iconHover: 'text-amber-500/60',
+        textHover: 'group-hover:text-amber-400',
+        priceColor: 'text-amber-500',
+        tagBorder: 'border-amber-500/20',
+        tagText: 'text-amber-500/80',
+        Icon: Flame,
+      };
+  }
+};
 
 interface SecretSecretMenuProps {
   isVisible: boolean;
@@ -10,6 +64,8 @@ interface SecretSecretMenuProps {
 
 const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const theme = getCategoryTheme(item.category);
+  const IconComponent = theme.Icon;
 
   return (
     <div
@@ -18,30 +74,20 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image placeholder - in production would use actual images */}
-      <div className={`aspect-square mb-4 rounded-md flex items-center justify-center overflow-hidden relative ${
-        item.category === 'services'
-          ? 'bg-gradient-to-br from-blue-900/20 to-cyan-900/20'
-          : 'bg-gradient-to-br from-amber-900/20 to-orange-900/20'
-      }`}>
-        <div className={`absolute inset-0 ${
-          item.category === 'services'
-            ? 'bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_70%)]'
-            : 'bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1),transparent_70%)]'
-        }`} />
-        {item.category === 'services' ? (
-          <Wrench
-            className={`text-cyan-500/40 transition-all duration-500 ${isHovered ? 'scale-125 text-cyan-500/60' : ''}`}
-            size={48}
-          />
-        ) : (
-          <Flame
-            className={`text-amber-500/40 transition-all duration-500 ${isHovered ? 'scale-125 text-amber-500/60' : ''}`}
-            size={48}
-          />
-        )}
+      <div className={`aspect-square mb-4 rounded-md flex items-center justify-center overflow-hidden relative ${theme.bgGradient}`}>
+        <div className={`absolute inset-0 ${theme.radialGradient}`} />
+        <IconComponent
+          className={`${theme.iconColor} transition-all duration-500 ${isHovered ? `scale-125 ${theme.iconHover}` : ''}`}
+          size={48}
+        />
         {item.tags.includes('Signature') && (
           <div className="absolute top-2 right-2">
             <Sparkles className="text-amber-400" size={16} />
+          </div>
+        )}
+        {item.tags.includes('Bundle') && (
+          <div className="absolute top-2 right-2">
+            <Sparkles className={theme.priceColor} size={16} />
           </div>
         )}
       </div>
@@ -49,13 +95,11 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
       {/* Item info */}
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-2">
-          <h4 className={`font-display text-sm tracking-[0.1em] text-foreground transition-colors ${
-            item.category === 'services' ? 'group-hover:text-cyan-400' : 'group-hover:text-amber-400'
-          }`}>
+          <h4 className={`font-display text-sm tracking-[0.1em] text-foreground transition-colors ${theme.textHover}`}>
             {item.name.toUpperCase()}
           </h4>
           <div className="text-right">
-            <span className={`font-display text-lg ${item.category === 'services' ? 'text-cyan-500' : 'text-amber-500'}`}>
+            <span className={`font-display text-lg ${theme.priceColor}`}>
               ${item.price}{item.priceUnit || ''}
             </span>
             {item.minHours && (
@@ -75,11 +119,7 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
           {item.tags.map((tag) => (
             <span
               key={tag}
-              className={`px-2 py-0.5 text-[9px] font-display tracking-wider border rounded-full ${
-                item.category === 'services'
-                  ? 'border-cyan-500/20 text-cyan-500/80'
-                  : 'border-amber-500/20 text-amber-500/80'
-              }`}
+              className={`px-2 py-0.5 text-[9px] font-display tracking-wider border rounded-full ${theme.tagBorder} ${theme.tagText}`}
             >
               {tag}
             </span>
