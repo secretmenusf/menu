@@ -1073,6 +1073,48 @@ export const SECRET_SECRET_MENU: SecretMenuItem[] = [
     category: 'pantry',
     tags: ['Bundle', 'Best Value', 'Longevity'],
   },
+
+  // CHARCUTERIE BOARDS
+  {
+    id: 'charcuterie-small',
+    name: 'Charcuterie Board (Small)',
+    description: 'Artisan meats, cheeses, fruits, nuts - feeds 4-6',
+    longDescription: 'Curated selection of prosciutto, salami, aged cheddar, brie, seasonal fruits, marcona almonds, honeycomb, and grilled sourdough.',
+    price: 125,
+    image: '/images/pantry/charcuterie-small.jpg',
+    category: 'pantry',
+    tags: ['Feeds 4-6', 'Artisan', 'Party'],
+  },
+  {
+    id: 'charcuterie-medium',
+    name: 'Charcuterie Board (Medium)',
+    description: 'Expanded selection, premium imports - feeds 8-12',
+    longDescription: 'Ibérico chorizo, coppa, manchego, gorgonzola, fig jam, olives, cornichons, dried apricots, and fresh baguette. Beautiful presentation.',
+    price: 185,
+    image: '/images/pantry/charcuterie-medium.jpg',
+    category: 'pantry',
+    tags: ['Feeds 8-12', 'Premium', 'Party'],
+  },
+  {
+    id: 'charcuterie-large',
+    name: 'Charcuterie Board (Large)',
+    description: 'Full spread, showstopper presentation - feeds 15-20',
+    longDescription: 'The full experience: 5 premium meats, 5 artisan cheeses, fresh and dried fruits, nuts, spreads, crackers, and fresh bread. Stunning centerpiece.',
+    price: 275,
+    image: '/images/pantry/charcuterie-large.jpg',
+    category: 'pantry',
+    tags: ['Feeds 15-20', 'Showstopper', 'Events'],
+  },
+  {
+    id: 'charcuterie-party',
+    name: 'Charcuterie Board (XL Party)',
+    description: 'Epic grazing table setup - feeds 25-30+',
+    longDescription: 'Full grazing table setup with 7+ meats, 7+ cheeses, charcuterie roses, seasonal fruits, multiple spreads, crackers, bread, and edible flowers. Instagram-worthy.',
+    price: 400,
+    image: '/images/pantry/charcuterie-party.jpg',
+    category: 'pantry',
+    tags: ['Feeds 25-30', 'Epic', 'Full Setup'],
+  },
 ];
 
 export const SECRET_CATEGORIES = [
