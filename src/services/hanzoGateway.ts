@@ -177,7 +177,7 @@ class HanzoGatewayService {
 
     for await (const chunk of this.chatCompletionStream(
       {
-        model: options?.model || 'deepseek-chat',
+        model: options?.model || 'llama3.3-70b-instruct',
         messages,
         temperature: options?.temperature ?? 0.7,
         max_tokens: options?.maxTokens ?? 2048,
@@ -226,7 +226,7 @@ class HanzoGatewayService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: options?.model || 'deepseek-chat',
+        model: options?.model || 'llama3.3-70b-instruct',
         messages,
         temperature: options?.temperature ?? 0.7,
         max_tokens: options?.maxTokens ?? 2048,
