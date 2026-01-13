@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import SeedOfLife from '@/components/SeedOfLife';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 import {
   Check,
   X,
@@ -288,6 +289,15 @@ const Compare = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEOHead
+        {...pageSEO.compare}
+        url="https://sfsecretmenu.com/compare"
+        schema={schemas.breadcrumb([
+          { name: 'Home', url: 'https://sfsecretmenu.com' },
+          { name: 'Compare', url: 'https://sfsecretmenu.com/compare' },
+        ])}
+      />
+
       <Header />
 
       <main className="flex-1 pt-24 pb-20">

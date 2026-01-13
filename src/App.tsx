@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { WagmiProvider } from 'wagmi';
+import { HelmetProvider } from 'react-helmet-async';
 import { config } from '@/lib/wagmi';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { OrderProvider } from '@/contexts/OrderContext';
@@ -55,6 +56,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import CommandPalette from '@/components/CommandPalette';
 import Analytics from '@/components/Analytics';
 import { OrderingChat } from '@/components/chat/OrderingChat';
+import { MobileStickyCTA } from '@/components/MobileStickyCTA';
 
 const queryClient = new QueryClient();
 
@@ -144,24 +146,27 @@ const AppRoutes = () => (
 );
 
 const App = () => (
-  <WagmiProvider config={config}>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <OrderProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Analytics />
-              <CommandPalette />
-              <OrderingChat />
-              <AppRoutes />
-            </BrowserRouter>
-          </TooltipProvider>
-        </OrderProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </WagmiProvider>
+  <HelmetProvider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <OrderProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Analytics />
+                <CommandPalette />
+                <OrderingChat />
+                <MobileStickyCTA />
+                <AppRoutes />
+              </BrowserRouter>
+            </TooltipProvider>
+          </OrderProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  </HelmetProvider>
 );
 
 export default App;

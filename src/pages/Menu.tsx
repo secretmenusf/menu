@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { Leaf, WheatOff, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ShareButton } from '@/components/social/ShareButton';
+import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 
 interface MenuItem {
   name: string;
@@ -414,6 +415,15 @@ const Menu = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEOHead
+        {...pageSEO.menu}
+        url="https://sfsecretmenu.com/menu"
+        schema={schemas.breadcrumb([
+          { name: 'Home', url: 'https://sfsecretmenu.com' },
+          { name: 'Menu', url: 'https://sfsecretmenu.com/menu' },
+        ])}
+      />
+
       <Header />
 
       <main className="flex-1 pt-24 pb-20">
