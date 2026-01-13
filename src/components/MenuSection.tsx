@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { allMenus, dietaryInfo, pricingInfo, type MenuItem as MenuItemType, type WeekMenu } from '@/data/menus';
 import { subscriptionPlans } from '@/data/plans';
 import { Button } from '@/components/ui/button';
+import { useKonamiCode } from '@/hooks/useKonamiCode';
+import SecretSecretMenu from '@/components/SecretSecretMenu';
 
 const DietaryTag = ({ tag }: { tag: 'gf' | 'df' | 'v' | 'vg' }) => {
   const info = dietaryInfo[tag];
@@ -88,7 +90,20 @@ const WeekSelector = ({
 
 const MenuSection = () => {
   const [selectedWeekIndex, setSelectedWeekIndex] = useState(0);
+  const [showSecretMenu, setShowSecretMenu] = useState(false);
   const currentMenu = allMenus[selectedWeekIndex];
+
+  // Konami code activation
+  const handleKonamiActivate = useCallback(() => {
+    setShowSecretMenu(true);
+  }, []);
+
+  const { deactivate } = useKonamiCode(handleKonamiActivate);
+
+  const handleCloseSecretMenu = useCallback(() => {
+    setShowSecretMenu(false);
+    deactivate();
+  }, [deactivate]);
 
   const formatDateRange = (start: string, end: string) => {
     const startDate = new Date(start);
@@ -105,7 +120,10 @@ const MenuSection = () => {
   };
 
   return (
-    <section id="menu" className="relative py-32 bg-background">
+    <section id="menu" className="relative py-32 bg-background overflow-hidden">
+      {/* Secret Secret Menu Overlay */}
+      <SecretSecretMenu isVisible={showSecretMenu} onClose={handleCloseSecretMenu} />
+
       {/* Decorative top border */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
