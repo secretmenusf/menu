@@ -12,12 +12,9 @@ import {
   ChevronRight,
   MapPin,
   ExternalLink,
-  ShieldCheck,
-  Heart,
-  Sprout,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { standards, suppliers, certifications } from '@/data/suppliers';
+import { supplierLogos, certificationLogos } from '@/components/supplier-logos';
 import { cn } from '@/lib/utils';
 
 // Icon mapping
@@ -80,57 +77,54 @@ const StandardCard = ({ standard }: { standard: typeof standards[0] }) => {
 };
 
 // Supplier card component
-const SupplierCard = ({ supplier }: { supplier: typeof suppliers[0] }) => (
-  <a
-    href={supplier.website}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex-shrink-0 w-[240px] group"
-  >
-    <div className="p-5 rounded-xl border border-border/30 bg-card/20 hover:border-border/50 hover:bg-card/40 transition-all duration-300 h-full">
-      {/* Logo placeholder - using styled text */}
-      <div className="h-16 flex items-center justify-center mb-4 rounded-lg bg-background/50 border border-border/20">
-        <span className="font-display text-sm tracking-wider text-foreground/80 group-hover:text-foreground transition-colors">
-          {supplier.name.split(' ').map(word => word[0]).join('')}
-        </span>
-      </div>
-
-      <h4 className="font-display text-sm tracking-wider text-foreground mb-1 group-hover:text-amber-400 transition-colors">
-        {supplier.name}
-      </h4>
-
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
-        <MapPin className="h-3 w-3" />
-        {supplier.location}
-      </div>
-
-      <p className="font-body text-xs text-muted-foreground/70 leading-relaxed">
-        {supplier.category}
-      </p>
-
-      <div className="mt-3 flex items-center gap-1 text-xs text-muted-foreground/50 group-hover:text-amber-500/70 transition-colors">
-        <span>Visit</span>
-        <ExternalLink className="h-3 w-3" />
-      </div>
-    </div>
-  </a>
-);
-
-// Certification badge
-const CertificationBadge = ({ cert }: { cert: typeof certifications[0] }) => {
-  const icons: Record<string, React.ElementType> = {
-    'usda-organic': ShieldCheck,
-    'certified-humane': Heart,
-    'grass-fed': Sprout,
-  };
-  const Icon = icons[cert.id] || ShieldCheck;
+const SupplierCard = ({ supplier }: { supplier: typeof suppliers[0] }) => {
+  const Logo = supplierLogos[supplier.id];
 
   return (
-    <div className="flex items-center gap-3 px-5 py-3 rounded-full border border-border/30 bg-card/20">
-      <Icon className="h-5 w-5 text-emerald-500" />
-      <span className="font-display text-xs tracking-wider text-foreground">
-        {cert.name.toUpperCase()}
-      </span>
+    <a
+      href={supplier.website}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex-shrink-0 w-[200px] group"
+    >
+      <div className="p-4 rounded-xl border border-border/30 bg-card/20 hover:border-amber-500/30 hover:bg-card/40 transition-all duration-300 h-full">
+        {/* Monochrome Logo */}
+        <div className="h-14 flex items-center justify-center mb-3">
+          {Logo ? (
+            <Logo className="w-full h-full text-foreground/70 group-hover:text-foreground transition-colors" />
+          ) : (
+            <span className="font-display text-sm tracking-wider text-foreground/70">
+              {supplier.name}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+          <MapPin className="h-3 w-3" />
+          {supplier.location}
+        </div>
+      </div>
+    </a>
+  );
+};
+
+// Certification badge with SVG logo
+const CertificationBadge = ({ cert }: { cert: typeof certifications[0] }) => {
+  const Logo = certificationLogos[cert.id];
+
+  return (
+    <div className="flex items-center gap-3 px-5 py-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 hover:border-emerald-500/40 transition-colors">
+      {Logo && (
+        <Logo className="h-10 w-10 text-emerald-500" />
+      )}
+      <div>
+        <span className="font-display text-xs tracking-wider text-foreground block">
+          {cert.name.toUpperCase()}
+        </span>
+        <span className="text-[10px] text-muted-foreground">
+          {cert.description}
+        </span>
+      </div>
     </div>
   );
 };
