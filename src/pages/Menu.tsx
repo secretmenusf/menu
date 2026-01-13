@@ -28,23 +28,23 @@ const week2Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Bulgogi bowl with steamed jasmine rice, garlic broccoli & preserved egg", glutenFree: true }
+          { name: "Bulgogi Bowl with Steamed Jasmine Rice, Garlic Broccoli & Preserved Egg", glutenFree: true }
         ]
       },
       {
         type: "Snack",
-        items: [{ name: "Blistered padrón peppers with sea salt", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Blistered Padrón Peppers with Sea Salt", vegetarian: true, glutenFree: true }]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Duck confit with roasted root vegetables", glutenFree: true },
-          { name: "Mixed greens with lemon vinaigrette", vegetarian: true, glutenFree: true }
+          { name: "Duck Confit with Roasted Root Vegetables", glutenFree: true },
+          { name: "Mixed Greens with Lemon Vinaigrette", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Rice pudding with blueberries", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Rice Pudding with Blueberries", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -54,20 +54,20 @@ const week2Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Caprese panini with green goddess sauce", vegetarian: true },
-          { name: "Fennel dill cucumber & bulgur salad", vegetarian: true }
+          { name: "Caprese Panini with Green Goddess Sauce", vegetarian: true },
+          { name: "Fennel Dill Cucumber & Bulgur Salad", vegetarian: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Crispy Persian rice with spiced beef skewers", glutenFree: true },
-          { name: "Beet salad with feta & caramelized onions", vegetarian: true, glutenFree: true }
+          { name: "Crispy Persian Rice with Spiced Beef Skewers", glutenFree: true },
+          { name: "Beet Salad with Feta & Caramelized Onions", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Colossal chocolate chip cookies", vegetarian: true }]
+        items: [{ name: "Colossal Chocolate Chip Cookies", vegetarian: true }]
       }
     ]
   },
@@ -77,20 +77,20 @@ const week2Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Kale chicken Caesar wrap with crudités", },
-          { name: "Roasted garlic hummus", vegetarian: true, glutenFree: true }
+          { name: "Kale Chicken Caesar Wrap with Crudités", },
+          { name: "Roasted Garlic Hummus", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Spanish chicken paella with chorizo", glutenFree: true },
-          { name: "Spanish gildas with anchovies", glutenFree: true }
+          { name: "Spanish Chicken Paella with Chorizo", glutenFree: true },
+          { name: "Spanish Gildas with Anchovies", glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Burnt Basque cheesecake", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Burnt Basque Cheesecake", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -100,20 +100,20 @@ const week2Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Grilled cheese on fresh sourdough", vegetarian: true },
-          { name: "Roasted tomato soup", vegetarian: true, glutenFree: true }
+          { name: "Grilled Cheese on Fresh Sourdough", vegetarian: true },
+          { name: "Roasted Tomato Soup", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Almond saffron albondigas", glutenFree: true },
-          { name: "Roasted smashed potatoes", vegetarian: true, glutenFree: true }
+          { name: "Almond Saffron Albondigas", glutenFree: true },
+          { name: "Roasted Smashed Potatoes", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
+        items: [{ name: "Chocolate Chip Cookies", vegetarian: true }]
       }
     ]
   },
@@ -123,14 +123,14 @@ const week2Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Fresh falafel stuffed pita", vegetarian: true },
-          { name: "Tabbouleh salad", vegetarian: true }
+          { name: "Fresh Falafel Stuffed Pita", vegetarian: true },
+          { name: "Tabbouleh Salad", vegetarian: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Classic dinner favorites: Duck confit, mixed greens & rice pudding", glutenFree: true }
+          { name: "Classic Dinner Favorites: Duck Confit, Mixed Greens & Rice Pudding", glutenFree: true }
         ]
       }
     ]
@@ -145,24 +145,24 @@ const week1Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Caprese panini on freshly baked artisan bread", vegetarian: true },
-          { name: "Mixed green salad with vinaigrette & pickled red onions", vegetarian: true, glutenFree: true }
+          { name: "Caprese Panini on Freshly Baked Artisan Bread", vegetarian: true },
+          { name: "Mixed Green Salad with Vinaigrette & Pickled Red Onions", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Snack",
-        items: [{ name: "Spanish gildas with anchovies", glutenFree: true }]
+        items: [{ name: "Spanish Gildas with Anchovies", glutenFree: true }]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Chicken & beef andouille sausage paella", glutenFree: true },
-          { name: "Grilled padrón peppers", vegetarian: true, glutenFree: true }
+          { name: "Chicken & Beef Andouille Sausage Paella", glutenFree: true },
+          { name: "Grilled Padrón Peppers", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Burnt Basque cheesecake", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Burnt Basque Cheesecake", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -172,24 +172,24 @@ const week1Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Grilled chicken Caesar kale wrap" },
-          { name: "Beet salad", vegetarian: true, glutenFree: true }
+          { name: "Grilled Chicken Caesar Kale Wrap" },
+          { name: "Beet Salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Snack",
-        items: [{ name: "Carrots with hummus", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Carrots with Hummus", vegetarian: true, glutenFree: true }]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Pita sandwich with freshly made falafel", vegetarian: true },
+          { name: "Pita Sandwich with Freshly Made Falafel", vegetarian: true },
           { name: "Tabbouleh", vegetarian: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
+        items: [{ name: "Chocolate Chip Cookies", vegetarian: true }]
       }
     ]
   },
@@ -199,22 +199,22 @@ const week1Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Bulgogi bowl with steamed jasmine rice, garlic broccoli, preserved egg, pickled carrots & chili crunch", glutenFree: true }
+          { name: "Bulgogi Bowl with Steamed Jasmine Rice, Garlic Broccoli, Preserved Egg, Pickled Carrots & Chili Crunch", glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Mezze spread: beet hummus, roasted pepper hummus & roasted garlic hummus", vegetarian: true, glutenFree: true },
-          { name: "Fresh pita bread", vegetarian: true },
-          { name: "Grilled meat skewers", glutenFree: true },
-          { name: "Saffron rice", vegetarian: true, glutenFree: true },
-          { name: "Beet salad", vegetarian: true, glutenFree: true }
+          { name: "Mezze Spread: Beet Hummus, Roasted Pepper Hummus & Roasted Garlic Hummus", vegetarian: true, glutenFree: true },
+          { name: "Fresh Pita Bread", vegetarian: true },
+          { name: "Grilled Meat Skewers", glutenFree: true },
+          { name: "Saffron Rice", vegetarian: true, glutenFree: true },
+          { name: "Beet Salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
+        items: [{ name: "Chocolate Chip Cookies", vegetarian: true }]
       }
     ]
   },
@@ -224,20 +224,20 @@ const week1Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Spanish albondigas with almond saffron sauce", glutenFree: true },
-          { name: "Smashed potatoes with bravas sauce", vegetarian: true, glutenFree: true }
+          { name: "Spanish Albondigas with Almond Saffron Sauce", glutenFree: true },
+          { name: "Smashed Potatoes with Bravas Sauce", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Beef \"Sunday roast\" with rosemary potatoes, carrots & gravy", glutenFree: true },
-          { name: "Side salad with vinaigrette", vegetarian: true, glutenFree: true }
+          { name: "Beef \"Sunday Roast\" with Rosemary Potatoes, Carrots & Gravy", glutenFree: true },
+          { name: "Side Salad with Vinaigrette", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Rice pudding", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Rice Pudding", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -247,16 +247,16 @@ const week1Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Duck confit (48-hour)", glutenFree: true },
-          { name: "Seasonal vegetable medley", vegetarian: true, glutenFree: true },
-          { name: "French lentil salad", vegetarian: true, glutenFree: true }
+          { name: "Duck Confit (48-Hour)", glutenFree: true },
+          { name: "Seasonal Vegetable Medley", vegetarian: true, glutenFree: true },
+          { name: "French Lentil Salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Grilled cheese sandwich on fresh sourdough", vegetarian: true },
-          { name: "Tomato soup", vegetarian: true, glutenFree: true }
+          { name: "Grilled Cheese Sandwich on Fresh Sourdough", vegetarian: true },
+          { name: "Tomato Soup", vegetarian: true, glutenFree: true }
         ]
       }
     ]
@@ -271,23 +271,23 @@ const week3Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Shoyu chicken bowl with jasmine rice, pickled daikon & sesame greens", glutenFree: true }
+          { name: "Shoyu Chicken Bowl with Jasmine Rice, Pickled Daikon & Sesame Greens", glutenFree: true }
         ]
       },
       {
         type: "Snack",
-        items: [{ name: "Charred shishito peppers with sea salt", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Charred Shishito Peppers with Sea Salt", vegetarian: true, glutenFree: true }]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Harissa-spiced lamb meatballs with tomato fennel ragout", glutenFree: true },
-          { name: "Citrus herb salad", vegetarian: true, glutenFree: true }
+          { name: "Harissa-Spiced Lamb Meatballs with Tomato Fennel Ragout", glutenFree: true },
+          { name: "Citrus Herb Salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Rose water rice pudding", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Rose Water Rice Pudding", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -297,20 +297,20 @@ const week3Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Caprese panini with basil aioli", vegetarian: true },
-          { name: "Roasted beet & orange salad", vegetarian: true, glutenFree: true }
+          { name: "Caprese Panini with Basil Aioli", vegetarian: true },
+          { name: "Roasted Beet & Orange Salad", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Saffron chicken paella with chorizo", glutenFree: true },
-          { name: "Marinated Spanish gildas", glutenFree: true }
+          { name: "Saffron Chicken Paella with Chorizo", glutenFree: true },
+          { name: "Marinated Spanish Gildas", glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Burnt Basque cheesecake", vegetarian: true, glutenFree: true }]
+        items: [{ name: "Burnt Basque Cheesecake", vegetarian: true, glutenFree: true }]
       }
     ]
   },
@@ -320,20 +320,20 @@ const week3Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Kale chicken Caesar wrap with herb croutons" },
-          { name: "Roasted garlic hummus", vegetarian: true, glutenFree: true }
+          { name: "Kale Chicken Caesar Wrap with Herb Croutons" },
+          { name: "Roasted Garlic Hummus", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Duck confit with rosemary potatoes", glutenFree: true },
-          { name: "Mixed greens with lemon vinaigrette", vegetarian: true, glutenFree: true }
+          { name: "Duck Confit with Rosemary Potatoes", glutenFree: true },
+          { name: "Mixed Greens with Lemon Vinaigrette", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Colossal chocolate chip cookies", vegetarian: true }]
+        items: [{ name: "Colossal Chocolate Chip Cookies", vegetarian: true }]
       }
     ]
   },
@@ -343,20 +343,20 @@ const week3Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Falafel pita with tahini slaw", vegetarian: true },
-          { name: "Tabbouleh salad", vegetarian: true }
+          { name: "Falafel Pita with Tahini Slaw", vegetarian: true },
+          { name: "Tabbouleh Salad", vegetarian: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Almond saffron albondigas", glutenFree: true },
-          { name: "Roasted smashed potatoes", vegetarian: true, glutenFree: true }
+          { name: "Almond Saffron Albondigas", glutenFree: true },
+          { name: "Roasted Smashed Potatoes", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dessert",
-        items: [{ name: "Chocolate chip cookies", vegetarian: true }]
+        items: [{ name: "Chocolate Chip Cookies", vegetarian: true }]
       }
     ]
   },
@@ -366,14 +366,14 @@ const week3Data: DayMenu[] = [
       {
         type: "Lunch",
         items: [
-          { name: "Grilled cheese on fresh sourdough", vegetarian: true },
-          { name: "Roasted tomato soup", vegetarian: true, glutenFree: true }
+          { name: "Grilled Cheese on Fresh Sourdough", vegetarian: true },
+          { name: "Roasted Tomato Soup", vegetarian: true, glutenFree: true }
         ]
       },
       {
         type: "Dinner",
         items: [
-          { name: "Beef bulgogi bowl with chili crunch & scallions", glutenFree: true }
+          { name: "Beef Bulgogi Bowl with Chili Crunch & Scallions", glutenFree: true }
         ]
       }
     ]

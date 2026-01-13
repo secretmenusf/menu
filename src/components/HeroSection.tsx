@@ -34,7 +34,7 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link to="/entry">
+          <Link to="/order">
             <Button size="lg" className="px-10 font-display tracking-wider">
               START YOUR JOURNEY
             </Button>

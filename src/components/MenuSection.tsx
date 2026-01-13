@@ -238,7 +238,7 @@ const MenuSection = () => {
 
         {/* Order CTA */}
         <div className="mt-12 text-center">
-          <Link to={`/entry?week=${currentMenu.id}`}>
+          <Link to={`/order?week=${currentMenu.id}`}>
             <Button size="lg" className="rounded-full px-12 font-display tracking-wider text-lg">
               ORDER {currentMenu.theme?.toUpperCase()} WEEK
             </Button>

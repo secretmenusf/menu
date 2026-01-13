@@ -399,10 +399,10 @@ const Order = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild className="font-display tracking-wider">
-                <Link to="/login">SIGN IN</Link>
+                <Link to="/login?redirect=/order">SIGN IN</Link>
               </Button>
               <Button asChild variant="outline" className="font-display tracking-wider">
-                <Link to="/signup">JOIN THE ORDER</Link>
+                <Link to="/signup?redirect=/order">JOIN THE ORDER</Link>
               </Button>
             </div>
             <p className="mt-8 font-body text-sm text-muted-foreground">

@@ -68,7 +68,7 @@ Include these action tags in your responses when appropriate - they create click
 NAVIGATION ACTIONS:
 - "[VIEW_MENU]" - Show full menu page
 - "[VIEW_PLANS]" - Show subscription/pricing plans
-- "[START_ORDER]" - Go to order/entry page to start ordering
+- "[START_ORDER]" - Go to order page to start ordering
 - "[VIEW_GALLERY]" - Show food gallery photos
 - "[VIEW_CHEF]" - Learn about Chef Antje
 - "[VIEW_REVIEWS]" - See customer testimonials

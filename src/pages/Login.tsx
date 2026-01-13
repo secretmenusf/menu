@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -18,7 +18,10 @@ const Login = () => {
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const { signIn, signInWithMagicLink } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  const redirectParam = searchParams.get('redirect');
+  const redirectTo = redirectParam && redirectParam.startsWith('/') ? redirectParam : '/';
 
   // Check if user has passed the password gate
   useEffect(() => {
@@ -50,7 +53,7 @@ const Login = () => {
         title: 'Welcome back',
         description: 'The sanctum awaits',
       });
-      navigate('/');
+      navigate(redirectTo);
     }
 
     setLoading(false);
@@ -225,7 +228,10 @@ const Login = () => {
           {/* Signup Link */}
           <p className="text-center mt-8 font-body text-muted-foreground">
             New to the order?{' '}
-            <Link to="/signup" className="text-foreground hover:underline">
+            <Link
+              to={redirectParam ? `/signup?redirect=${encodeURIComponent(redirectParam)}` : '/signup'}
+              className="text-foreground hover:underline"
+            >
               Seek entry
             </Link>
           </p>

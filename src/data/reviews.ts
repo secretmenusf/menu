@@ -76,4 +76,11 @@ export const reviews: Review[] = [
     socialUrl: 'https://facebook.com/jamesliu',
     mealsOrdered: ['Beef Bulgogi Bowl', 'Padrón Peppers', 'Colossal Cookies'],
   },
+  {
+    id: '7',
+    name: 'Merve Isler',
+    rating: 5,
+    text: 'Chef Antje\'s meals have been a real game changer for me. I\'m really busy with work, and I\'ve tried other "chef-crafted" meal services before, but this is the first time it actually felt special. Everything tastes fresh and thoughtfully made, like true restaurant-quality food at home. And it\'s not just delicious, I genuinely feel better after eating it. It feels nourishing in a way that\'s hard to find. Having this kind of food ready during the week takes so much stress off my plate. I\'m really grateful for it.',
+    date: '2025-12-08',
+  },
 ];

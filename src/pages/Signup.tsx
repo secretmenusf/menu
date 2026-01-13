@@ -16,7 +16,11 @@ const Signup = () => {
   const [searchParams] = useSearchParams();
   const planId = searchParams.get('plan');
   const refCode = searchParams.get('ref');
+  const redirectParam = searchParams.get('redirect');
   const selectedPlan = planId ? getPlanById(planId) : null;
+  const loginLink = redirectParam
+    ? `/login?redirect=${encodeURIComponent(redirectParam)}`
+    : '/login';
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -101,7 +105,7 @@ const Signup = () => {
               Check your email at <span className="text-foreground">{email}</span> to confirm your
               entry into the order.
             </p>
-            <Link to="/login">
+            <Link to={loginLink}>
               <Button variant="outline" className="font-display tracking-wider">
                 RETURN TO LOGIN
               </Button>
@@ -273,7 +277,7 @@ const Signup = () => {
           {/* Login Link */}
           <p className="text-center mt-8 font-body text-muted-foreground">
             Already initiated?{' '}
-            <Link to="/login" className="text-foreground hover:underline">
+            <Link to={loginLink} className="text-foreground hover:underline">
               Enter here
             </Link>
           </p>

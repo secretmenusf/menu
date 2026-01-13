@@ -60,7 +60,7 @@ const CommandPalette = () => {
     { icon: Image, label: 'Gallery', shortcut: 'G L', action: () => { navigate('/'); setTimeout(() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
     { icon: ChefHat, label: 'The Chef', shortcut: 'G C', action: () => navigate('/chef') },
     { icon: UtensilsCrossed, label: 'Menu', shortcut: 'G M', action: () => navigate('/menu') },
-    { icon: Calendar, label: "This Week's Menu", shortcut: 'G W', action: () => navigate('/entry') },
+    { icon: Calendar, label: "This Week's Menu", shortcut: 'G W', action: () => navigate('/menu') },
     { icon: ShoppingCart, label: 'Order', shortcut: 'G O', action: () => navigate('/order') },
     { icon: CreditCard, label: 'Pricing', shortcut: 'G P', action: () => navigate('/pricing') },
     { icon: Star, label: 'Reviews', shortcut: 'G V', action: () => navigate('/reviews') },
@@ -78,7 +78,7 @@ const CommandPalette = () => {
   ] : [];
 
   const actions = [
-    { icon: ShoppingCart, label: 'Start Order', action: () => navigate('/entry') },
+    { icon: ShoppingCart, label: 'Start Order', action: () => navigate('/order') },
     { icon: Phone, label: 'WhatsApp Us', action: () => window.open('https://wa.me/14153732496', '_blank') },
     { icon: MessageCircle, label: 'Contact Support', action: () => navigate('/support') },
   ];

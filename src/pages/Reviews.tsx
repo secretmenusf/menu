@@ -199,7 +199,7 @@ const Reviews = () => {
             <p className="font-body text-muted-foreground mb-6">
               Ready to experience it yourself?
             </p>
-            <Link to="/entry">
+            <Link to="/order">
               <Button size="lg" className="px-12 font-display tracking-wider">
                 START YOUR JOURNEY
               </Button>

@@ -93,7 +93,7 @@ export function OrderingChat() {
         break;
       case 'ADD_TO_CART':
       case 'START_ORDER':
-        navigate('/entry');
+        navigate('/order');
         setIsOpen(false);
         break;
       case 'VIEW_GALLERY':
