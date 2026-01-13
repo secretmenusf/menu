@@ -30,7 +30,7 @@ const HeroSection = () => {
         </p>
 
         <p className="font-body text-sm text-muted-foreground/70 mb-10">
-          Weekly menus • Flexible subscriptions • Bay Area delivery
+          100% Organic • Locally-Sourced • Healing Ingredients • Bay Area Delivery
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">

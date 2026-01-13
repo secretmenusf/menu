@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="font-display text-sm tracking-[0.3em] text-foreground">SECRET MENU</span>
             </div>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
-              Chef-crafted meals delivered to your door. San Francisco Bay Area.
+              Nourishing body, mind, and soul with organic, locally-sourced ingredients held to the highest standards. Food as medicine, food as art.
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-4">

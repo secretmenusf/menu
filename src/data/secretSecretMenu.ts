@@ -10,7 +10,7 @@ export interface SecretMenuItem {
   priceUnit?: string; // e.g., '/hr' for hourly services
   minHours?: number;
   image: string;
-  category: 'burger' | 'sides' | 'drinks' | 'dessert' | 'special' | 'services' | 'plants' | 'pantry';
+  category: 'burger' | 'sides' | 'drinks' | 'dessert' | 'special' | 'services' | 'plants' | 'pantry' | 'swimwear';
   tags: string[];
   inspiration?: string;
 }
@@ -1115,6 +1115,141 @@ export const SECRET_SECRET_MENU: SecretMenuItem[] = [
     category: 'pantry',
     tags: ['Feeds 25-30', 'Epic', 'Full Setup'],
   },
+
+  // KARMA BIKINIS - Luxury Swimwear Collection
+  // Curated selection from @karma_bikinis
+  {
+    id: 'karma-sol-top',
+    name: 'Sol Triangle Top',
+    description: 'Minimalist triangle top, adjustable ties, Brazilian-made',
+    longDescription: 'Hand-crafted in Brazil with premium recycled nylon. Minimalist triangle silhouette with adjustable neck and back ties. Buttery soft fabric with UPF 50+ protection. Perfect for the conscious sun goddess.',
+    price: 85,
+    image: '/images/swimwear/karma-sol-top.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'UPF 50+', 'Brazilian', 'Top'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-sol-bottom',
+    name: 'Sol Cheeky Bottom',
+    description: 'Brazilian-cut cheeky bottom, seamless design',
+    longDescription: 'The perfect match to the Sol Top. Brazilian cheeky cut that flatters every body. Seamless construction, no visible panty lines. Recycled nylon blend with 4-way stretch.',
+    price: 75,
+    image: '/images/swimwear/karma-sol-bottom.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Cheeky', 'Brazilian', 'Bottom'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-sol-set',
+    name: 'Sol Set',
+    description: 'Complete Sol bikini set - triangle top + cheeky bottom',
+    longDescription: 'The full Sol experience. Save when you buy the set. Triangle top and cheeky bottom in matching colorway. Available in Earth, Ocean, Sunset, and Midnight.',
+    price: 145,
+    image: '/images/swimwear/karma-sol-set.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Set', 'Best Value', 'Brazilian'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-luna-one-piece',
+    name: 'Luna One-Piece',
+    description: 'Sculptural one-piece with cutout details',
+    longDescription: 'Elevated one-piece with strategic cutouts that elongate and flatter. High-cut leg, moderate back coverage. Compression fabric smooths and supports. The power suit of swimwear.',
+    price: 165,
+    image: '/images/swimwear/karma-luna-onepiece.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'One-Piece', 'Sculptural', 'Premium'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-wave-top',
+    name: 'Wave Bandeau Top',
+    description: 'Strapless bandeau with removable straps',
+    longDescription: 'Versatile bandeau with internal silicone grip for no-slip wear. Removable adjustable straps included. Ribbed texture, double-lined for opacity. Surf-ready.',
+    price: 78,
+    image: '/images/swimwear/karma-wave-top.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Strapless', 'Versatile', 'Top'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-wave-bottom',
+    name: 'Wave High-Waist Bottom',
+    description: 'Flattering high-waisted cut with tummy control',
+    longDescription: 'Retro-inspired high-waist bottom with modern compression. Smooths and sculpts while staying comfortable all day. Full rear coverage. Pairs with Wave Bandeau or any top.',
+    price: 72,
+    image: '/images/swimwear/karma-wave-bottom.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'High-Waist', 'Sculpting', 'Bottom'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-wave-set',
+    name: 'Wave Set',
+    description: 'Bandeau top + high-waist bottom set',
+    longDescription: 'Vintage glamour meets modern sustainability. The Wave set in matching colorways. Sophisticated coverage that doesn\'t sacrifice style. Available in Coconut, Terracotta, Marine, and Onyx.',
+    price: 135,
+    image: '/images/swimwear/karma-wave-set.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Set', 'Retro', 'Best Value'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-reef-top',
+    name: 'Reef Sport Top',
+    description: 'Athletic crop top for active beach days',
+    longDescription: 'For the woman who actually swims. Sport-inspired crop with built-in shelf bra. Medium support for surfing, paddling, beach volleyball. Quick-dry recycled fabric.',
+    price: 88,
+    image: '/images/swimwear/karma-reef-top.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Sport', 'Active', 'Top'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-reef-bottom',
+    name: 'Reef Surf Short',
+    description: 'Boy-short cut for active water sports',
+    longDescription: 'Stay secure during any activity. Boy-short style with 2" inseam. Flatlock seams prevent chafing. UPF 50+ protection. The choice of ocean athletes.',
+    price: 68,
+    image: '/images/swimwear/karma-reef-bottom.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Sport', 'UPF 50+', 'Bottom'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-reef-set',
+    name: 'Reef Active Set',
+    description: 'Sport top + surf short - surf ready',
+    longDescription: 'Built for movement. The Reef set for serious water activities. Secure fit that moves with you. Available in Seafoam, Coral, Storm, and Black.',
+    price: 140,
+    image: '/images/swimwear/karma-reef-set.jpg',
+    category: 'swimwear',
+    tags: ['Sustainable', 'Set', 'Sport', 'Active'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-sarong',
+    name: 'Karma Sarong',
+    description: 'Oversized beach wrap, organic cotton',
+    longDescription: 'Luxurious organic cotton sarong. Oversized at 6ft x 3ft for multiple styling options. Hand-dyed with plant-based dyes. From beach to brunch with one tie.',
+    price: 65,
+    image: '/images/swimwear/karma-sarong.jpg',
+    category: 'swimwear',
+    tags: ['Organic', 'Coverup', 'Versatile', 'Accessory'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
+  {
+    id: 'karma-beach-bag',
+    name: 'Karma Beach Tote',
+    description: 'Woven beach bag, ethically made',
+    longDescription: 'Hand-woven by artisan cooperatives. Natural palm leaf with leather handles. Spacious interior fits towel, sunscreen, and all your essentials. Waterproof lining.',
+    price: 95,
+    image: '/images/swimwear/karma-beach-bag.jpg',
+    category: 'swimwear',
+    tags: ['Artisan', 'Ethical', 'Accessory', 'Handmade'],
+    inspiration: 'Karma Bikinis @karma_bikinis',
+  },
 ];
 
 export const SECRET_CATEGORIES = [
@@ -1127,6 +1262,7 @@ export const SECRET_CATEGORIES = [
   { id: 'services', name: 'SERVICES' },
   { id: 'plants', name: 'PLANTS' },
   { id: 'pantry', name: 'PANTRY' },
+  { id: 'swimwear', name: 'SWIMWEAR' },
 ];
 
 export default SECRET_SECRET_MENU;
