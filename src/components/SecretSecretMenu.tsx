@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Sparkles, Flame } from 'lucide-react';
+import { X, Sparkles, Flame, Wrench } from 'lucide-react';
 import { SECRET_SECRET_MENU, SECRET_CATEGORIES, type SecretMenuItem } from '@/data/secretSecretMenu';
 import { Button } from '@/components/ui/button';
 
@@ -18,12 +18,27 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image placeholder - in production would use actual images */}
-      <div className="aspect-square mb-4 rounded-md bg-gradient-to-br from-amber-900/20 to-orange-900/20 flex items-center justify-center overflow-hidden relative">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1),transparent_70%)]" />
-        <Flame
-          className={`text-amber-500/40 transition-all duration-500 ${isHovered ? 'scale-125 text-amber-500/60' : ''}`}
-          size={48}
-        />
+      <div className={`aspect-square mb-4 rounded-md flex items-center justify-center overflow-hidden relative ${
+        item.category === 'services'
+          ? 'bg-gradient-to-br from-blue-900/20 to-cyan-900/20'
+          : 'bg-gradient-to-br from-amber-900/20 to-orange-900/20'
+      }`}>
+        <div className={`absolute inset-0 ${
+          item.category === 'services'
+            ? 'bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.1),transparent_70%)]'
+            : 'bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1),transparent_70%)]'
+        }`} />
+        {item.category === 'services' ? (
+          <Wrench
+            className={`text-cyan-500/40 transition-all duration-500 ${isHovered ? 'scale-125 text-cyan-500/60' : ''}`}
+            size={48}
+          />
+        ) : (
+          <Flame
+            className={`text-amber-500/40 transition-all duration-500 ${isHovered ? 'scale-125 text-amber-500/60' : ''}`}
+            size={48}
+          />
+        )}
         {item.tags.includes('Signature') && (
           <div className="absolute top-2 right-2">
             <Sparkles className="text-amber-400" size={16} />
@@ -34,10 +49,21 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
       {/* Item info */}
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-2">
-          <h4 className="font-display text-sm tracking-[0.1em] text-foreground group-hover:text-amber-400 transition-colors">
+          <h4 className={`font-display text-sm tracking-[0.1em] text-foreground transition-colors ${
+            item.category === 'services' ? 'group-hover:text-cyan-400' : 'group-hover:text-amber-400'
+          }`}>
             {item.name.toUpperCase()}
           </h4>
-          <span className="font-display text-amber-500 text-lg">${item.price}</span>
+          <div className="text-right">
+            <span className={`font-display text-lg ${item.category === 'services' ? 'text-cyan-500' : 'text-amber-500'}`}>
+              ${item.price}{item.priceUnit || ''}
+            </span>
+            {item.minHours && (
+              <p className="font-body text-[10px] text-muted-foreground">
+                {item.minHours}hr min
+              </p>
+            )}
+          </div>
         </div>
 
         <p className="font-body text-xs text-muted-foreground leading-relaxed">
@@ -49,7 +75,11 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
           {item.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 text-[9px] font-display tracking-wider border border-amber-500/20 rounded-full text-amber-500/80"
+              className={`px-2 py-0.5 text-[9px] font-display tracking-wider border rounded-full ${
+                item.category === 'services'
+                  ? 'border-cyan-500/20 text-cyan-500/80'
+                  : 'border-amber-500/20 text-amber-500/80'
+              }`}
             >
               {tag}
             </span>

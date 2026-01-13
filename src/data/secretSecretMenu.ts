@@ -7,8 +7,10 @@ export interface SecretMenuItem {
   description: string;
   longDescription?: string;
   price: number;
+  priceUnit?: string; // e.g., '/hr' for hourly services
+  minHours?: number;
   image: string;
-  category: 'burger' | 'sides' | 'drinks' | 'dessert' | 'special';
+  category: 'burger' | 'sides' | 'drinks' | 'dessert' | 'special' | 'services';
   tags: string[];
   inspiration?: string;
 }
@@ -199,6 +201,128 @@ export const SECRET_SECRET_MENU: SecretMenuItem[] = [
     tags: ['Massive', 'Indulgent'],
     inspiration: 'In-N-Out (unofficial)',
   },
+
+  // HACKER HOUSE SERVICES
+  {
+    id: 'maid-service',
+    name: 'Maid Service',
+    description: 'Professional deep clean for your hacker house',
+    longDescription: 'Full house cleaning including kitchens, bathrooms, common areas, and bedrooms. We handle the mess so you can focus on shipping.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 4,
+    image: '/images/services/maid-service.jpg',
+    category: 'services',
+    tags: ['4hr min', 'Deep Clean', 'Recurring'],
+  },
+  {
+    id: 'laundry-service',
+    name: 'Laundry & Fold',
+    description: 'Wash, dry, fold, and deliver',
+    longDescription: 'We pick up your dirty laundry, wash and fold everything, and return it same-day or next-day. Per bag pricing available.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 2,
+    image: '/images/services/laundry.jpg',
+    category: 'services',
+    tags: ['2hr min', 'Same-Day', 'Pickup'],
+  },
+  {
+    id: 'grocery-run',
+    name: 'Grocery Run',
+    description: 'We shop, you code',
+    longDescription: 'Send us your list and we handle the shopping. Trader Joe\'s, Whole Foods, Costco, or any local market. Delivered to your door.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 2,
+    image: '/images/services/grocery.jpg',
+    category: 'services',
+    tags: ['2hr min', 'Any Store', 'Delivery'],
+  },
+  {
+    id: 'kitchen-restock',
+    name: 'Kitchen Restock',
+    description: 'Snacks, drinks, and essentials always stocked',
+    longDescription: 'We keep your kitchen stocked with snacks, energy drinks, coffee, and essentials. Weekly or bi-weekly restocking available.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 2,
+    image: '/images/services/restock.jpg',
+    category: 'services',
+    tags: ['2hr min', 'Recurring', 'Essentials'],
+  },
+  {
+    id: 'late-night-run',
+    name: 'Late Night Run',
+    description: '2am cravings? We got you',
+    longDescription: 'Craving tacos at 3am? Need energy drinks for an all-nighter? We make the run so you don\'t have to leave your desk.',
+    price: 75,
+    priceUnit: '/hr',
+    minHours: 2,
+    image: '/images/services/late-night.jpg',
+    category: 'services',
+    tags: ['2hr min', '24/7', 'On-Demand'],
+  },
+  {
+    id: 'event-catering',
+    name: 'Demo Day Catering',
+    description: 'Feed your investors, impress your guests',
+    longDescription: 'Full catering setup for demo days, investor meetings, or team celebrations. From finger foods to full spreads.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 4,
+    image: '/images/services/catering.jpg',
+    category: 'services',
+    tags: ['4hr min', 'Events', 'Setup'],
+  },
+  {
+    id: 'office-setup',
+    name: 'Office Setup',
+    description: 'Desks, monitors, chairs assembled',
+    longDescription: 'Moving into a new space? We handle furniture assembly, cable management, and office organization.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 4,
+    image: '/images/services/office-setup.jpg',
+    category: 'services',
+    tags: ['4hr min', 'Assembly', 'Organization'],
+  },
+  {
+    id: 'errand-runner',
+    name: 'Errand Runner',
+    description: 'Your personal assistant for random tasks',
+    longDescription: 'Post office runs, package pickups, returns, DMV visits, key copies, whatever you need done. We handle the errands.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 2,
+    image: '/images/services/errands.jpg',
+    category: 'services',
+    tags: ['2hr min', 'Flexible', 'On-Demand'],
+  },
+  {
+    id: 'meal-prep',
+    name: 'Weekly Meal Prep',
+    description: 'Batch cooking for the whole house',
+    longDescription: 'We prep a week\'s worth of healthy meals for your entire house. Portioned, labeled, and ready to heat.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 6,
+    image: '/images/services/meal-prep.jpg',
+    category: 'services',
+    tags: ['6hr min', 'Bulk', 'Healthy'],
+  },
+  {
+    id: 'move-help',
+    name: 'Move-In/Out Help',
+    description: 'Extra hands for moving day',
+    longDescription: 'Need help moving furniture, boxes, or equipment? We provide the muscle and the hustle.',
+    price: 50,
+    priceUnit: '/hr',
+    minHours: 4,
+    image: '/images/services/moving.jpg',
+    category: 'services',
+    tags: ['4hr min', 'Heavy Lifting', 'Moving'],
+  },
 ];
 
 export const SECRET_CATEGORIES = [
@@ -208,6 +332,7 @@ export const SECRET_CATEGORIES = [
   { id: 'drinks', name: 'DRINKS' },
   { id: 'dessert', name: 'DESSERT' },
   { id: 'special', name: 'SPECIALS' },
+  { id: 'services', name: 'SERVICES' },
 ];
 
 export default SECRET_SECRET_MENU;
