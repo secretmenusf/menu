@@ -64,6 +64,7 @@ interface SecretSecretMenuProps {
 
 const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const theme = getCategoryTheme(item.category);
   const IconComponent = theme.Icon;
 
@@ -73,20 +74,29 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image placeholder - in production would use actual images */}
+      {/* Item image */}
       <div className={`aspect-square mb-4 rounded-md flex items-center justify-center overflow-hidden relative ${theme.bgGradient}`}>
         <div className={`absolute inset-0 ${theme.radialGradient}`} />
-        <IconComponent
-          className={`${theme.iconColor} transition-all duration-500 ${isHovered ? `scale-125 ${theme.iconHover}` : ''}`}
-          size={48}
-        />
+        {item.image && !imageError ? (
+          <img
+            src={item.image}
+            alt={item.name}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${isHovered ? 'scale-110' : 'scale-100'}`}
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <IconComponent
+            className={`${theme.iconColor} transition-all duration-500 ${isHovered ? `scale-125 ${theme.iconHover}` : ''}`}
+            size={48}
+          />
+        )}
         {item.tags.includes('Signature') && (
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 z-10">
             <Sparkles className="text-amber-400" size={16} />
           </div>
         )}
         {item.tags.includes('Bundle') && (
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 z-10">
             <Sparkles className={theme.priceColor} size={16} />
           </div>
         )}
@@ -160,6 +170,29 @@ const SecretSecretMenu = ({ isVisible, onClose }: SecretSecretMenuProps) => {
     }
   }, [isVisible]);
 
+  // Handle Escape key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isVisible) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible, onClose]);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isVisible]);
+
   const filteredItems = selectedCategory === 'all'
     ? SECRET_SECRET_MENU
     : SECRET_SECRET_MENU.filter((item) => item.category === selectedCategory);
@@ -168,7 +201,7 @@ const SecretSecretMenu = ({ isVisible, onClose }: SecretSecretMenuProps) => {
 
   return (
     <div
-      className={`absolute inset-0 z-50 overflow-hidden transition-all duration-500 ${
+      className={`fixed inset-0 z-[100] overflow-hidden transition-all duration-500 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
