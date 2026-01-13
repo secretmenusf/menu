@@ -584,6 +584,28 @@ export const SECRET_SECRET_MENU: SecretMenuItem[] = [
     category: 'services',
     tags: ['Per Day', 'Pioneer', 'Self-Service'],
   },
+  {
+    id: 'guitar-rental',
+    name: 'Guitar Rental',
+    description: 'Acoustic or electric, your pick',
+    longDescription: 'Quality guitars for your jam sessions. Fender, Gibson, Taylor acoustics available. Amp included with electrics.',
+    price: 50,
+    priceUnit: '/day',
+    image: '/images/services/guitar.jpg',
+    category: 'services',
+    tags: ['Per Day', 'Acoustic/Electric', 'Amp Included'],
+  },
+  {
+    id: 'piano-rental',
+    name: 'Piano/Keyboard Rental',
+    description: 'Digital piano delivered to your door',
+    longDescription: 'Yamaha or Roland digital pianos with weighted keys, stand, and bench. Perfect for practice or performances.',
+    price: 100,
+    priceUnit: '/day',
+    image: '/images/services/piano.jpg',
+    category: 'services',
+    tags: ['Per Day', 'Weighted Keys', 'Stand Included'],
+  },
 
   // PANTRY / SNACK DROPS
   {
