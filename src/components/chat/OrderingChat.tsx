@@ -27,8 +27,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
   orderingAssistant,
-  parseActions,
-  cleanResponse,
   type Message,
   type AssistantAction,
 } from '@/services/orderingAssistant';
@@ -56,19 +54,17 @@ export function OrderingChat() {
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [streamingContent, setStreamingContent] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
 
   const navigate = useNavigate();
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, streamingContent]);
+  }, [messages]);
 
   // Focus input when opened
   useEffect(() => {
@@ -114,7 +110,7 @@ export function OrderingChat() {
     }
   }, [navigate]);
 
-  // Send message
+  // Send message (non-streaming for gateway compatibility)
   const sendMessage = useCallback(async (content: string) => {
     if (!content.trim() || isTyping) return;
 
@@ -130,48 +126,30 @@ export function OrderingChat() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsTyping(true);
-    setStreamingContent('');
-
-    abortControllerRef.current = new AbortController();
 
     try {
-      let fullResponse = '';
-
-      for await (const chunk of orderingAssistant.chat(
-        content.trim(),
-        abortControllerRef.current.signal
-      )) {
-        fullResponse += chunk;
-        setStreamingContent(fullResponse);
-      }
-
-      const actions = parseActions(fullResponse);
-      const cleanedContent = cleanResponse(fullResponse);
+      const response = await orderingAssistant.sendMessage(content.trim());
 
       const assistantMessage: Message = {
         id: generateId(),
         role: 'assistant',
-        content: cleanedContent,
+        content: response.content,
         timestamp: new Date(),
-        actions: actions.filter(a => a.type !== 'NONE'),
+        actions: response.actions.filter(a => a.type !== 'NONE'),
       };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      if ((error as Error).name !== 'AbortError') {
-        const errorMessage: Message = {
-          id: generateId(),
-          role: 'assistant',
-          content: "I'm having trouble connecting right now. You can reach us directly on WhatsApp at (415) 373-2496!",
-          timestamp: new Date(),
-          actions: [{ type: 'CONTACT_WHATSAPP' }],
-        };
-        setMessages(prev => [...prev, errorMessage]);
-      }
+      const errorMessage: Message = {
+        id: generateId(),
+        role: 'assistant',
+        content: "I'm having trouble connecting right now. You can reach us directly on WhatsApp at (415) 373-2496!",
+        timestamp: new Date(),
+        actions: [{ type: 'CONTACT_WHATSAPP' }],
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
-      setStreamingContent('');
-      abortControllerRef.current = null;
     }
   }, [isTyping]);
 
@@ -263,18 +241,8 @@ export function OrderingChat() {
               </div>
             ))}
 
-            {/* Streaming Message */}
-            {streamingContent && (
-              <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-2xl px-4 py-3 bg-muted/50 text-foreground">
-                  <p className="text-sm whitespace-pre-wrap">{streamingContent}</p>
-                  <span className="inline-block w-2 h-4 ml-1 bg-amber-500 animate-pulse" />
-                </div>
-              </div>
-            )}
-
             {/* Typing Indicator */}
-            {isTyping && !streamingContent && (
+            {isTyping && (
               <div className="flex justify-start">
                 <div className="bg-muted/50 rounded-2xl px-4 py-3">
                   <div className="flex gap-1">
