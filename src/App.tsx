@@ -26,6 +26,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Refund = lazy(() => import("./pages/Refund"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Reviews = lazy(() => import("./pages/Reviews"));
+const Compare = lazy(() => import("./pages/Compare"));
 const GiftCards = lazy(() => import("./pages/GiftCards"));
 const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
 const Login = lazy(() => import("./pages/Login"));
@@ -103,6 +104,7 @@ const AppRoutes = () => (
       <Route path="/support" element={<Support />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/reviews" element={<Reviews />} />
+      <Route path="/compare" element={<Compare />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/refund" element={<Refund />} />

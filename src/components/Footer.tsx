@@ -79,6 +79,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/compare" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Compare
+                </Link>
+              </li>
+              <li>
                 <Link to="/order" className="text-muted-foreground hover:text-foreground transition-colors">
                   Order
                 </Link>
