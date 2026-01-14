@@ -11,13 +11,23 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
   const [phase, setPhase] = useState<'black' | 'logo' | 'password'>('black');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
-  const [isAutoTyping, setIsAutoTyping] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const timersRef = useRef<number[]>([]);
+  const autoTypeStartedRef = useRef(false);
+
+  const trackTimeout = (id: number) => {
+    timersRef.current.push(id);
+  };
+
+  const clearTimers = () => {
+    timersRef.current.forEach((id) => clearTimeout(id));
+    timersRef.current = [];
+  };
 
   // Auto-type password character by character
   const startAutoType = () => {
-    if (isAutoTyping) return;
-    setIsAutoTyping(true);
+    if (autoTypeStartedRef.current) return;
+    autoTypeStartedRef.current = true;
     setPassword('');
     inputRef.current?.focus();
 
@@ -28,39 +38,33 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
       if (index < secret.length) {
         setPassword(secret.slice(0, index + 1));
         index++;
-        setTimeout(typeChar, 80 + Math.random() * 60); // Random delay for natural feel
+        trackTimeout(window.setTimeout(typeChar, 80 + Math.random() * 60));
       } else {
-        // Pause then auto-submit
-        setTimeout(() => {
-          onSuccess();
-        }, 500);
+        trackTimeout(window.setTimeout(() => onSuccess(), 500));
       }
     };
 
-    setTimeout(typeChar, 200);
+    trackTimeout(window.setTimeout(typeChar, 200));
   };
 
   useEffect(() => {
     // Phase 1: Complete black for 1 second
-    const timer1 = setTimeout(() => setPhase('logo'), 1000);
+    const timer1 = window.setTimeout(() => setPhase('logo'), 1000);
     // Phase 2: Logo animates in, then password after 2 more seconds
-    const timer2 = setTimeout(() => setPhase('password'), 3000);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (phase === 'password' && inputRef.current) {
-      // Auto-type password immediately on first load
-      setTimeout(() => {
+    const timer2 = window.setTimeout(() => {
+      setPhase('password');
+      trackTimeout(window.setTimeout(() => {
         inputRef.current?.focus();
         startAutoType();
-      }, 500);
-    }
-  }, [phase]);
+      }, 500));
+    }, 3000);
+    trackTimeout(timer1);
+    trackTimeout(timer2);
+
+    return () => {
+      clearTimers();
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

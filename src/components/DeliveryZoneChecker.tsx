@@ -4,25 +4,61 @@ import { Input } from '@/components/ui/input';
 import { MapPin, Check, X, Loader2, Clock, Truck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// SF neighborhoods we deliver to
-const sfNeighborhoods = [
-  'Marina', 'Pacific Heights', 'Presidio Heights', 'Russian Hill', 'Nob Hill',
-  'North Beach', 'Telegraph Hill', 'Financial District', 'SOMA', 'South Beach',
-  'Mission Bay', 'Potrero Hill', 'Mission', 'Castro', 'Noe Valley',
-  'Bernal Heights', 'Glen Park', 'Diamond Heights', 'Twin Peaks', 'Cole Valley',
-  'Haight-Ashbury', 'Lower Haight', 'Hayes Valley', 'Civic Center', 'Tenderloin',
-  'Inner Richmond', 'Outer Richmond', 'Inner Sunset', 'Outer Sunset', 'Parkside',
-  'West Portal', 'Forest Hill', 'St. Francis Wood', 'Ingleside', 'Excelsior',
-  'Crocker-Amazon', 'Visitacion Valley', 'Bayview', 'Hunters Point', 'Dogpatch',
-  'Laurel Heights', 'Anza Vista', 'Western Addition', 'Japantown', 'Fillmore',
+const coveredCityKeywords = [
+  'san francisco',
+  'sf',
+  'daly city',
+  'south san francisco',
+  'san bruno',
+  'millbrae',
+  'burlingame',
+  'san mateo',
+  'foster city',
+  'redwood city',
+  'menlo park',
+  'palo alto',
+  'mountain view',
+  'sunnyvale',
+  'santa clara',
+  'cupertino',
+  'los altos',
+  'los gatos',
+  'saratoga',
+  'campbell',
+  'san jose',
+  'petaluma',
+  'novato',
+  'san rafael',
+  'mill valley',
+  'sausalito',
+  'tiburon',
+  'larkspur',
+  'corte madera',
+  'san anselmo',
+  'fairfax',
+  'oakland',
+  'emeryville',
+  'berkeley',
+  'albany',
+  'el cerrito',
+  'richmond',
+  'alameda',
+  'san leandro',
+  'piedmont',
 ];
 
-// Zip codes in SF
-const sfZipCodes = [
-  '94102', '94103', '94104', '94105', '94107', '94108', '94109', '94110',
-  '94111', '94112', '94114', '94115', '94116', '94117', '94118', '94119',
-  '94120', '94121', '94122', '94123', '94124', '94125', '94126', '94127',
-  '94128', '94129', '94130', '94131', '94132', '94133', '94134', '94158',
+const coveredZipPrefixes = [
+  '941', // San Francisco (includes 94155 PO Boxes)
+  '940', // Peninsula + Daly City/South SF
+  '943', // Palo Alto
+  '944', // San Mateo
+  '950', // South Bay
+  '951', // San Jose
+  '949', // North Bay (Petaluma/Marin)
+  '945', // East Bay + Tri-Valley + Contra Costa
+  '946', // Oakland
+  '947', // Berkeley
+  '948', // Richmond
 ];
 
 interface DeliveryZoneCheckerProps {
@@ -47,29 +83,18 @@ export function DeliveryZoneChecker({ className, compact = false }: DeliveryZone
 
     const input = address.toLowerCase().trim();
 
-    // Check for SF zip codes
-    const hasZipMatch = sfZipCodes.some(zip => input.includes(zip));
+    const hasZipPrefixMatch = coveredZipPrefixes.some(prefix => input.includes(prefix));
+    const hasCityMatch = coveredCityKeywords.some((city) => {
+      if (city === 'sf') return /\bsf\b/.test(input);
+      return input.includes(city);
+    });
 
-    // Check for SF neighborhoods
-    const hasNeighborhoodMatch = sfNeighborhoods.some(
-      n => input.toLowerCase().includes(n.toLowerCase())
-    );
-
-    // Check for "San Francisco" or "SF"
-    const hasSFMatch = input.includes('san francisco') ||
-                       input.includes('sf, ca') ||
-                       input.includes('sf ca') ||
-                       /\bsf\b/.test(input);
-
-    if (hasZipMatch || hasNeighborhoodMatch || hasSFMatch) {
+    if (hasZipPrefixMatch || hasCityMatch) {
       setStatus('yes');
-      setMessage('Great news! We deliver to your area. Same-day delivery available.');
-    } else if (input.includes('oakland') || input.includes('berkeley') || input.includes('daly city')) {
-      setStatus('maybe');
-      setMessage('We\'re expanding soon! Join the waitlist for East Bay & Peninsula.');
+      setMessage('Great news! We deliver across the Bay Area, from Petaluma to San Jose and throughout the East Bay. Same-day delivery available.');
     } else {
       setStatus('no');
-      setMessage('We currently deliver within San Francisco only. Check back soon!');
+      setMessage('We currently deliver across the Bay Area only. Check back soon!');
     }
   };
 
@@ -208,7 +233,7 @@ export function DeliveryZoneChecker({ className, compact = false }: DeliveryZone
         )}
 
         <p className="text-xs text-muted-foreground/60 text-center mt-4">
-          Currently serving all San Francisco neighborhoods
+          Currently serving the entire Bay Area
         </p>
       </div>
     </div>
