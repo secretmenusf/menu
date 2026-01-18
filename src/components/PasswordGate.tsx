@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import SeedOfLife3D from './SeedOfLife3D';
+import { useTheme } from '@/components/theme-provider';
 
 interface PasswordGateProps {
   onSuccess: () => void;
@@ -14,6 +15,7 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const timersRef = useRef<number[]>([]);
   const autoTypeStartedRef = useRef(false);
+  const { theme, setTheme } = useTheme();
 
   const trackTimeout = (id: number) => {
     timersRef.current.push(id);
@@ -40,7 +42,12 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
         index++;
         trackTimeout(window.setTimeout(typeChar, 80 + Math.random() * 60));
       } else {
-        trackTimeout(window.setTimeout(() => onSuccess(), 500));
+        // Auto submit after typing
+        trackTimeout(window.setTimeout(() => {
+          // Start theme transition
+          setTheme('light');
+          setTimeout(() => onSuccess(), 800);
+        }, 1000));
       }
     };
 
@@ -69,7 +76,9 @@ const PasswordGate = ({ onSuccess }: PasswordGateProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password.toLowerCase().trim() === 'ilovesecrets') {
-      onSuccess();
+      // Start theme transition to light mode
+      setTimeout(() => setTheme('light'), 100);
+      setTimeout(() => onSuccess(), 800);
     } else {
       setError(true);
       setPassword('');

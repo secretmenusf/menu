@@ -5,12 +5,18 @@ const Entry = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('/order', { replace: true });
+    // Check if user has access, if not redirect to login which will show password gate
+    const access = sessionStorage.getItem('secretmenu_access');
+    if (access !== 'true') {
+      navigate('/login', { replace: true });
+    } else {
+      navigate('/order', { replace: true });
+    }
   }, [navigate]);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
-      <p className="font-body text-sm text-muted-foreground">Redirecting to order...</p>
+      <p className="font-body text-sm text-muted-foreground">Authenticating...</p>
     </div>
   );
 };
