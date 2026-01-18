@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import path from 'path';
 
 export default defineConfig({
-  base: process.env.GITHUB_ACTIONS ? '/sfsecretmenu/' : '/',
+  base: '/',
   server: {
     host: true,
     port: 5173,
