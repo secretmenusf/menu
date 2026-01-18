@@ -39,7 +39,7 @@ const Checkout = () => {
     toast({ title: 'Copied', description: `${type} address copied` });
   };
 
-  const handlePaymentSuccess = (result: any) => {
+  const handlePaymentSuccess = (result: { token?: string; status?: string; [key: string]: unknown }) => {
     setPaymentSuccess(true);
     console.log('Payment successful:', result);
     
@@ -54,7 +54,7 @@ const Checkout = () => {
     navigate('/my-orders');
   };
 
-  const handlePaymentError = (error: any) => {
+  const handlePaymentError = (error: { message?: string; code?: string; [key: string]: unknown }) => {
     console.error('Payment failed:', error);
     toast({
       title: 'Payment failed',

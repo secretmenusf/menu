@@ -145,7 +145,7 @@ export function formatPrice(price: number): string {
 }
 
 // Generate WhatsApp order message
-export function generateWhatsAppMessage(orderSummary: OrderSummary, customerInfo?: any): string {
+export function generateWhatsAppMessage(orderSummary: OrderSummary, customerInfo?: { name?: string; phone?: string; email?: string; address?: string }): string {
   const itemsList = orderSummary.items.map(item => 
     `• ${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)}`
   ).join('\n');

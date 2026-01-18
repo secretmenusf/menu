@@ -4,10 +4,22 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+interface PaymentResult {
+  token?: string;
+  status?: string;
+  [key: string]: unknown;
+}
+
+interface PaymentError {
+  message?: string;
+  code?: string;
+  [key: string]: unknown;
+}
+
 interface SquarePaymentProps {
   amount: number;
-  onPaymentSuccess: (result: any) => void;
-  onPaymentError: (error: any) => void;
+  onPaymentSuccess: (result: PaymentResult) => void;
+  onPaymentError: (error: PaymentError) => void;
   loading: boolean;
 }
 
