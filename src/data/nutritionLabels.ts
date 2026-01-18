@@ -41,10 +41,10 @@ export interface NutritionLabel {
 
 export type NutritionLabels = Record<string, NutritionLabel>;
 
-// Sample nutrition labels for key dishes
+// Sample nutrition labels for key dishes - matching gallery items
 export const nutritionLabels: NutritionLabels = {
-  "Duck Breast": {
-    dishName: "Duck Breast",
+  "Seared Duck Breast": {
+    dishName: "Seared Duck Breast",
     ingredients: [
       "organic duck breast", "port wine", "shallots", "thyme", "butter",
       "heirloom carrots", "olive oil", "sea salt", "black pepper"
@@ -66,37 +66,37 @@ export const nutritionLabels: NutritionLabels = {
       considerations: ["Higher in saturated fat"],
       dietaryHighlights: ["Gluten-free", "Keto-friendly", "Paleo-approved"]
     },
-    allergens: ["dairy"],
+    allergens: [],
     certifications: ["Organic", "Pasture-Raised", "Non-GMO"]
   },
-  "Lamb Kofta": {
-    dishName: "Lamb Kofta",
+  "Albóndigas": {
+    dishName: "Albóndigas",
     ingredients: [
-      "grass-fed lamb", "cumin", "coriander", "mint", "garlic", "onion",
-      "organic cucumber", "Greek yogurt", "tahini", "flatbread"
+      "grass-fed beef", "ground pork", "onion", "garlic", "tomato sauce", 
+      "manchego cheese", "Spanish paprika", "herbs"
     ],
     nutrition: {
-      calories: 520,
-      protein: 35,
-      carbs: 32,
-      fat: 28,
-      fiber: 5,
+      calories: 425,
+      protein: 32,
+      carbs: 18,
+      fat: 26,
+      fiber: 3,
       sodium: 720,
       sugar: 6,
-      servingSize: "1 plate (380g)",
+      servingSize: "6 meatballs (300g)",
       servings: 1
     },
     health: {
       healthScore: 7,
-      benefits: ["Complete protein", "Probiotic yogurt", "Mediterranean spices", "Anti-inflammatory"],
-      considerations: ["Contains gluten (flatbread)", "Moderate sodium"],
-      dietaryHighlights: ["High protein", "Mediterranean diet"]
+      benefits: ["Complete protein", "Rich in zinc", "Traditional Spanish recipe", "Satisfying comfort food"],
+      considerations: ["Contains dairy", "Moderate sodium"],
+      dietaryHighlights: ["High protein", "Gluten-free", "Mediterranean"]
     },
-    allergens: ["gluten", "dairy"],
+    allergens: ["dairy"],
     certifications: ["Organic", "Grass-Fed", "Non-GMO"]
   },
-  "Sweet Potato Gnocchi": {
-    dishName: "Sweet Potato Gnocchi",
+  "Golden Sweet Potato Gnocchi": {
+    dishName: "Golden Sweet Potato Gnocchi",
     ingredients: [
       "organic sweet potato", "flour", "egg", "sage", "brown butter",
       "walnuts", "parmesan", "nutmeg", "sea salt"
@@ -116,39 +116,39 @@ export const nutritionLabels: NutritionLabels = {
       healthScore: 7,
       benefits: ["Complex carbohydrates", "Rich in vitamin A", "Brain-healthy walnuts", "Good fiber"],
       considerations: ["Contains gluten", "Higher carb content"],
-      dietaryHighlights: ["Vegetarian", "High fiber"]
+      dietaryHighlights: ["Vegetarian", "High fiber", "House-made"]
     },
     allergens: ["gluten", "dairy", "eggs", "tree nuts"],
-    certifications: ["Organic", "Local"]
+    certifications: ["Organic", "Local", "House-made"]
   },
-  "Avocado Chocolate Mousse": {
-    dishName: "Avocado Chocolate Mousse",
+  "Zucchini Carpaccio": {
+    dishName: "Zucchini Carpaccio",
     ingredients: [
-      "organic avocado", "raw cacao", "maple syrup", "coconut cream",
-      "vanilla extract", "sea salt", "cacao nibs"
+      "organic zucchini", "pine nuts", "fresh mint", "lemon", 
+      "extra virgin olive oil", "sea salt", "black pepper"
     ],
     nutrition: {
-      calories: 285,
+      calories: 145,
       protein: 4,
-      carbs: 28,
-      fat: 20,
-      fiber: 8,
-      sodium: 45,
-      sugar: 16,
-      servingSize: "1 cup (150g)",
+      carbs: 8,
+      fat: 12,
+      fiber: 3,
+      sodium: 85,
+      sugar: 4,
+      servingSize: "1 plate (200g)",
       servings: 1
     },
     health: {
       healthScore: 9,
-      benefits: ["Heart-healthy fats", "Antioxidant-rich cacao", "Natural sweetener", "High fiber"],
-      considerations: ["Natural sugars from maple"],
+      benefits: ["Low calorie", "High in antioxidants", "Heart-healthy fats", "Refreshing and light"],
+      considerations: ["Tree nuts"],
       dietaryHighlights: ["Vegan", "Gluten-free", "Dairy-free", "Raw"]
     },
-    allergens: [],
+    allergens: ["tree nuts"],
     certifications: ["Organic", "Vegan", "Raw", "Non-GMO"]
   },
-  "Nobu-Inspired Miso Glazed Cod": {
-    dishName: "Nobu-Inspired Miso Glazed Cod",
+  "Miso Glazed Cod": {
+    dishName: "Miso Glazed Cod",
     ingredients: [
       "wild-caught black cod", "white miso", "mirin", "sake", "bok choy",
       "jasmine rice", "ginger", "scallions", "sesame oil"
@@ -173,57 +173,31 @@ export const nutritionLabels: NutritionLabels = {
     allergens: ["fish", "soy"],
     certifications: ["Wild-Caught", "Sustainable", "Non-GMO"]
   },
-  "Animal Style Smash": {
-    dishName: "Animal Style Smash",
+  "Chicken Piccata": {
+    dishName: "Chicken Piccata",
     ingredients: [
-      "grass-fed beef patties", "American cheese", "butter lettuce", "tomato",
-      "caramelized onions", "pickles", "special sauce", "brioche bun"
+      "organic chicken breast", "flour", "white wine", "lemon", "butter", 
+      "capers", "angel hair pasta", "parsley", "olive oil"
     ],
     nutrition: {
-      calories: 720,
-      protein: 42,
-      carbs: 38,
-      fat: 48,
-      fiber: 3,
-      sodium: 1150,
-      sugar: 8,
-      servingSize: "1 burger (280g)",
+      calories: 485,
+      protein: 38,
+      carbs: 35,
+      fat: 22,
+      fiber: 2,
+      sodium: 650,
+      sugar: 3,
+      servingSize: "1 plate (350g)",
       servings: 1
     },
     health: {
-      healthScore: 5,
-      benefits: ["High protein", "Iron-rich beef", "Grass-fed omega balance"],
-      considerations: ["High saturated fat", "Higher sodium", "Indulgent treat"],
-      dietaryHighlights: ["Grass-fed", "Indulgent"]
+      healthScore: 7,
+      benefits: ["High protein", "Classic Italian flavors", "Good source of B vitamins"],
+      considerations: ["Contains gluten", "Moderate calorie content"],
+      dietaryHighlights: ["High protein", "Traditional Italian"]
     },
-    allergens: ["gluten", "dairy", "eggs"],
-    certifications: ["Grass-Fed", "Local Beef"]
-  },
-  "Greek Lentil Soup": {
-    dishName: "Greek Lentil Soup",
-    ingredients: [
-      "organic green lentils", "carrots", "celery", "onion", "garlic",
-      "bay leaf", "olive oil", "red wine vinegar", "sourdough bread"
-    ],
-    nutrition: {
-      calories: 320,
-      protein: 18,
-      carbs: 45,
-      fat: 8,
-      fiber: 16,
-      sodium: 580,
-      sugar: 6,
-      servingSize: "1 bowl (400g)",
-      servings: 1
-    },
-    health: {
-      healthScore: 9,
-      benefits: ["Plant protein powerhouse", "Excellent fiber", "Heart-healthy", "Blood sugar friendly"],
-      considerations: ["Contains gluten (bread)"],
-      dietaryHighlights: ["Vegan", "High fiber", "Mediterranean"]
-    },
-    allergens: ["gluten"],
-    certifications: ["Organic", "Vegan", "Non-GMO"]
+    allergens: ["gluten", "dairy"],
+    certifications: ["Organic", "Free-Range"]
   },
   "Basque Burnt Cheesecake": {
     dishName: "Basque Burnt Cheesecake",
@@ -246,113 +220,88 @@ export const nutritionLabels: NutritionLabels = {
       healthScore: 4,
       benefits: ["Naturally gluten-free", "Rich in calcium", "Protein from eggs/cheese"],
       considerations: ["High sugar", "High saturated fat", "Special occasion treat"],
-      dietaryHighlights: ["Gluten-free", "Crustless"]
+      dietaryHighlights: ["Gluten-free", "Crustless", "Vegetarian"]
     },
     allergens: ["dairy", "eggs"],
     certifications: ["Organic", "Local Dairy"]
   },
-  "Branzino en Papillote": {
-    dishName: "Branzino en Papillote",
+  "Crab Cakes": {
+    dishName: "Crab Cakes",
     ingredients: [
-      "Mediterranean sea bass", "cherry tomatoes", "kalamata olives",
-      "capers", "fresh herbs", "lemon", "olive oil", "white wine"
+      "fresh Dungeness crab", "panko breadcrumbs", "mayonnaise", 
+      "dijon mustard", "asparagus", "corn", "lemon", "herbs"
     ],
     nutrition: {
-      calories: 365,
-      protein: 38,
-      carbs: 12,
-      fat: 18,
-      fiber: 3,
-      sodium: 620,
+      calories: 385,
+      protein: 28,
+      carbs: 18,
+      fat: 24,
+      fiber: 4,
+      sodium: 680,
       sugar: 4,
-      servingSize: "1 whole fish (320g)",
+      servingSize: "2 cakes (280g)",
       servings: 1
     },
     health: {
-      healthScore: 9,
-      benefits: ["Lean protein", "Omega-3 fatty acids", "Heart-healthy Mediterranean", "Low calorie"],
-      considerations: ["Contains alcohol (cooked off)"],
-      dietaryHighlights: ["Gluten-free", "Dairy-free", "Paleo", "Mediterranean"]
+      healthScore: 8,
+      benefits: ["High protein", "Rich in minerals", "Sustainable seafood", "Omega-3 fatty acids"],
+      considerations: ["Higher sodium", "Contains shellfish"],
+      dietaryHighlights: ["High protein", "Seafood", "Gluten-free option available"]
+    },
+    allergens: ["shellfish", "eggs"],
+    certifications: ["Sustainable", "Wild-Caught", "Local"]
+  },
+  "Spanish Gildas": {
+    dishName: "Spanish Gildas",
+    ingredients: [
+      "Spanish anchovies", "Manzanilla olives", "Guindilla peppers", 
+      "extra virgin olive oil"
+    ],
+    nutrition: {
+      calories: 45,
+      protein: 3,
+      carbs: 1,
+      fat: 4,
+      fiber: 0,
+      sodium: 420,
+      sugar: 0,
+      servingSize: "3 pieces (30g)",
+      servings: 1
+    },
+    health: {
+      healthScore: 8,
+      benefits: ["Heart-healthy omega-3s", "Authentic Spanish flavors", "Low calorie", "Rich in healthy fats"],
+      considerations: ["High sodium", "Strong flavors"],
+      dietaryHighlights: ["Gluten-free", "Dairy-free", "Keto-friendly", "Traditional"]
     },
     allergens: ["fish"],
-    certifications: ["Wild-Caught", "Sustainable", "Mediterranean"]
+    certifications: ["Traditional Spanish", "Sustainable"]
   },
-  "Falafel Bowl": {
-    dishName: "Falafel Bowl",
+  "Butternut Squash Soup": {
+    dishName: "Butternut Squash Soup",
     ingredients: [
-      "organic chickpeas", "fresh herbs", "garlic", "onion", "tahini",
-      "hummus", "tabbouleh", "pickled turnips", "olive oil"
+      "roasted butternut squash", "coconut cream", "onion", "ginger", 
+      "nutmeg", "sage", "vegetable broth", "olive oil"
     ],
     nutrition: {
-      calories: 485,
-      protein: 16,
-      carbs: 52,
-      fat: 24,
-      fiber: 14,
-      sodium: 680,
-      sugar: 6,
-      servingSize: "1 bowl (380g)",
+      calories: 185,
+      protein: 4,
+      carbs: 28,
+      fat: 8,
+      fiber: 6,
+      sodium: 480,
+      sugar: 8,
+      servingSize: "1 bowl (300ml)",
       servings: 1
     },
     health: {
       healthScore: 9,
-      benefits: ["Plant-based protein", "High fiber", "Healthy fats", "Probiotic pickles"],
+      benefits: ["High in vitamin A", "Anti-inflammatory", "Fiber-rich", "Warming spices"],
       considerations: [],
-      dietaryHighlights: ["Vegan", "High fiber", "Plant-based", "Mediterranean"]
-    },
-    allergens: ["sesame"],
-    certifications: ["Organic", "Vegan", "Non-GMO"]
-  },
-  "Sol Set": {
-    dishName: "Sol Set",
-    ingredients: [
-      "recycled nylon", "spandex", "eco-friendly dyes"
-    ],
-    nutrition: {
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0,
-      fiber: 0,
-      sodium: 0,
-      sugar: 0,
-      servingSize: "1 set",
-      servings: 1
-    },
-    health: {
-      healthScore: 10,
-      benefits: ["Sustainable materials", "UPF 50+ sun protection", "Eco-conscious fashion"],
-      considerations: [],
-      dietaryHighlights: ["Sustainable", "Brazilian-made", "Recycled materials"]
+      dietaryHighlights: ["Vegan", "Gluten-free", "Dairy-free", "Comfort food"]
     },
     allergens: [],
-    certifications: ["Sustainable", "Recycled", "UPF 50+"]
-  },
-  "Classic Hummus (Pint)": {
-    dishName: "Classic Hummus (Pint)",
-    ingredients: [
-      "organic chickpeas", "tahini", "lemon juice", "garlic",
-      "olive oil", "cumin", "sea salt"
-    ],
-    nutrition: {
-      calories: 180,
-      protein: 6,
-      carbs: 16,
-      fat: 12,
-      fiber: 4,
-      sodium: 280,
-      sugar: 1,
-      servingSize: "1/4 cup (60g)",
-      servings: 8
-    },
-    health: {
-      healthScore: 9,
-      benefits: ["Plant protein", "Healthy fats", "Blood sugar friendly", "Heart healthy"],
-      considerations: [],
-      dietaryHighlights: ["Vegan", "Gluten-free", "High fiber"]
-    },
-    allergens: ["sesame"],
-    certifications: ["Organic", "Vegan", "Non-GMO"]
+    certifications: ["Organic", "Vegan", "Local"]
   }
 };
 

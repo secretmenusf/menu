@@ -4,6 +4,7 @@ import { useOrder } from '@/contexts/OrderContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SquarePayment from '@/components/payment/SquarePayment';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,17 +25,42 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const [paymentMethod, setPaymentMethod] = useState('crypto');
+  const [paymentMethod, setPaymentMethod] = useState('card');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryNotes, setDeliveryNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     setCopied(type);
     setTimeout(() => setCopied(null), 2000);
     toast({ title: 'Copied', description: `${type} address copied` });
+  };
+
+  const handlePaymentSuccess = (result: any) => {
+    setPaymentSuccess(true);
+    console.log('Payment successful:', result);
+    
+    // Here you would typically send the payment token to your backend
+    // For now, we'll proceed with the order
+    toast({
+      title: 'Payment processed',
+      description: 'Your order is being prepared',
+    });
+    
+    clearCart();
+    navigate('/my-orders');
+  };
+
+  const handlePaymentError = (error: any) => {
+    console.error('Payment failed:', error);
+    toast({
+      title: 'Payment failed',
+      description: 'Please try again or contact support',
+      variant: 'destructive',
+    });
   };
 
   const handleSubmit = async () => {
@@ -47,9 +73,16 @@ const Checkout = () => {
       return;
     }
 
+    // For card payments, the payment form handles submission
+    if (paymentMethod === 'card') {
+      // Square payment form will handle the submission
+      // The payment success/error handlers will be called automatically
+      return;
+    }
+
     setLoading(true);
 
-    // Build WhatsApp message
+    // Build WhatsApp message for non-card payments
     const message = `🍽️ *SECRET MENU ORDER*
 
 📦 *Items:*
@@ -191,88 +224,102 @@ ${user?.email ? `👤 *Account:* ${user.email}` : ''}`;
               </div>
 
               {/* Payment */}
-              <div className="border border-border/30 rounded-lg p-6 bg-card/30">
-                <h2 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-6">
-                  PAYMENT METHOD
-                </h2>
+              {paymentMethod === 'card' ? (
+                <SquarePayment
+                  amount={total}
+                  onPaymentSuccess={handlePaymentSuccess}
+                  onPaymentError={handlePaymentError}
+                  loading={loading}
+                />
+              ) : (
+                <div className="border border-border/30 rounded-lg p-6 bg-card/30">
+                  <h2 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-6">
+                    PAYMENT METHOD
+                  </h2>
 
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <div className="space-y-3">
-                    <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
-                      <RadioGroupItem value="crypto" />
-                      <Bitcoin size={20} />
-                      <span className="font-body">Crypto (ETH, USDC, USDT)</span>
-                    </Label>
+                  <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                    <div className="space-y-3">
+                      <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
+                        <RadioGroupItem value="card" />
+                        <CreditCard size={20} />
+                        <span className="font-body">Credit/Debit Card</span>
+                        <span className="ml-auto text-xs text-primary">Recommended</span>
+                      </Label>
 
-                    <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
-                      <RadioGroupItem value="zelle" />
-                      <CreditCard size={20} />
-                      <span className="font-body">Zelle</span>
-                    </Label>
+                      <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
+                        <RadioGroupItem value="zelle" />
+                        <CreditCard size={20} />
+                        <span className="font-body">Zelle</span>
+                      </Label>
 
-                    <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
-                      <RadioGroupItem value="venmo" />
-                      <CreditCard size={20} />
-                      <span className="font-body">Venmo</span>
-                    </Label>
+                      <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
+                        <RadioGroupItem value="venmo" />
+                        <CreditCard size={20} />
+                        <span className="font-body">Venmo</span>
+                      </Label>
 
-                    <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
-                      <RadioGroupItem value="cashapp" />
-                      <CreditCard size={20} />
-                      <span className="font-body">CashApp</span>
-                    </Label>
-                  </div>
-                </RadioGroup>
-
-                {/* Fiat payment info */}
-                {paymentMethod !== 'crypto' && (
-                  <div className="mt-4 p-4 bg-background/50 rounded-lg">
-                    <p className="font-body text-sm text-muted-foreground mb-2">
-                      Send payment to:
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <code className="font-mono text-foreground flex-1">
-                        {PAYMENT_ADDRESSES[paymentMethod as keyof typeof PAYMENT_ADDRESSES]}
-                      </code>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() =>
-                          copyToClipboard(
-                            PAYMENT_ADDRESSES[paymentMethod as keyof typeof PAYMENT_ADDRESSES],
-                            paymentMethod
-                          )
-                        }
-                      >
-                        {copied === paymentMethod ? <Check size={16} /> : <Copy size={16} />}
-                      </Button>
+                      <Label className="flex items-center gap-3 p-4 border border-border/30 rounded-lg cursor-pointer hover:bg-card/50 transition-colors">
+                        <RadioGroupItem value="cashapp" />
+                        <CreditCard size={20} />
+                        <span className="font-body">CashApp</span>
+                      </Label>
                     </div>
-                  </div>
-                )}
-              </div>
+                  </RadioGroup>
 
-              {/* Submit */}
-              <Button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="w-full h-14 font-display tracking-wider text-lg"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    PROCESSING...
-                  </>
-                ) : (
-                  <>
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    CONFIRM VIA WHATSAPP
-                  </>
-                )}
-              </Button>
+                  {/* Payment instructions */}
+                  {paymentMethod !== 'card' && (
+                    <div className="mt-4 p-4 bg-background/50 rounded-lg">
+                      <p className="font-body text-sm text-muted-foreground mb-2">
+                        Send payment to:
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <code className="font-mono text-foreground flex-1">
+                          {PAYMENT_ADDRESSES[paymentMethod as keyof typeof PAYMENT_ADDRESSES]}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() =>
+                            copyToClipboard(
+                              PAYMENT_ADDRESSES[paymentMethod as keyof typeof PAYMENT_ADDRESSES],
+                              paymentMethod
+                            )
+                          }
+                        >
+                          {copied === paymentMethod ? <Check size={16} /> : <Copy size={16} />}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
-              <p className="font-body text-xs text-muted-foreground text-center">
-                You'll be redirected to WhatsApp to complete your order
-              </p>
+              {/* Submit - only for non-card payments */}
+              {paymentMethod !== 'card' && (
+                <>
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="w-full h-14 font-display tracking-wider text-lg"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        PROCESSING...
+                      </>
+                    ) : (
+                      <>
+                        <MessageCircle className="mr-2 h-5 w-5" />
+                        CONFIRM VIA WHATSAPP
+                      </>
+                    )}
+                  </Button>
+
+                  <p className="font-body text-xs text-muted-foreground text-center">
+                    You'll be redirected to WhatsApp to complete your order
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

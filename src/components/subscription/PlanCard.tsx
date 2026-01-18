@@ -1,7 +1,11 @@
-import { Check, Lock } from 'lucide-react';
+import { Check, Lock, CreditCard } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
+import { StripeCheckout } from '@/components/StripeCheckout';
+import { useToast } from '@/hooks/use-toast';
 import type { SubscriptionPlan } from '@/data/plans';
 
 interface PlanCardProps {
@@ -10,8 +14,18 @@ interface PlanCardProps {
 
 const PlanCard = ({ plan }: PlanCardProps) => {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [showCheckout, setShowCheckout] = useState(false);
   const isPopular = plan.popular;
   const isLoggedIn = !!user;
+
+  const handleSubscriptionSuccess = () => {
+    setShowCheckout(false);
+    toast({
+      title: 'Subscription Created!',
+      description: `Welcome to the ${plan.name} plan. You'll receive your first delivery soon.`,
+    });
+  };
 
   return (
     <div
@@ -89,26 +103,42 @@ const PlanCard = ({ plan }: PlanCardProps) => {
       </ul>
 
       {/* CTA */}
-      <Button
-        asChild
-        className={`w-full rounded-full font-display tracking-wider ${
-          isPopular
-            ? 'bg-foreground text-background hover:bg-foreground/90'
-            : 'bg-transparent border border-border hover:bg-card hover:border-foreground/50'
-        }`}
-        variant={isPopular ? 'default' : 'outline'}
-      >
-        {isLoggedIn ? (
-          <Link to={`/order?plan=${plan.id}`}>
-            SELECT {plan.name.toUpperCase()}
-          </Link>
-        ) : (
+      {isLoggedIn ? (
+        <Dialog open={showCheckout} onOpenChange={setShowCheckout}>
+          <DialogTrigger asChild>
+            <Button
+              className={`w-full rounded-full font-display tracking-wider ${
+                isPopular
+                  ? 'bg-mystical text-background hover:bg-mystical/90'
+                  : 'bg-transparent border border-border hover:bg-card hover:border-mystical/50'
+              }`}
+              variant={isPopular ? 'default' : 'outline'}
+            >
+              <CreditCard size={14} className="mr-2" />
+              SELECT {plan.name.toUpperCase()}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg border-mystical/30">
+            <StripeCheckout
+              plan={plan}
+              customerEmail={user?.email}
+              onSuccess={handleSubscriptionSuccess}
+              onCancel={() => setShowCheckout(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Button
+          asChild
+          className="w-full rounded-full font-display tracking-wider bg-transparent border border-border hover:bg-card hover:border-mystical/50"
+          variant="outline"
+        >
           <Link to="/login">
             <Lock size={14} className="mr-2" />
             JOIN TO UNLOCK
           </Link>
-        )}
-      </Button>
+        </Button>
+      )}
     </div>
   );
 };

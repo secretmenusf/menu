@@ -8,6 +8,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { config } from '@/lib/wagmi';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { OrderProvider } from '@/contexts/OrderContext';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeTransition } from '@/components/ThemeTransition';
 import { Suspense, lazy, ReactNode } from 'react';
 
 // Core pages (eager loaded)
@@ -55,7 +57,7 @@ const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import CommandPalette from '@/components/CommandPalette';
 import Analytics from '@/components/Analytics';
-import { OrderingChat } from '@/components/chat/OrderingChat';
+import { EnhancedOrderingChat } from '@/components/chat/EnhancedOrderingChat';
 import { MobileStickyCTA } from '@/components/MobileStickyCTA';
 
 const queryClient = new QueryClient();
@@ -104,6 +106,7 @@ const AppRoutes = () => (
       <Route path="/about" element={<About />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/support" element={<Support />} />
+      <Route path="/supprt" element={<Navigate to="/support" replace />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/reviews" element={<Reviews />} />
       <Route path="/compare" element={<Compare />} />
@@ -147,25 +150,29 @@ const AppRoutes = () => (
 
 const App = () => (
   <HelmetProvider>
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <OrderProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Analytics />
-                <CommandPalette />
-                <OrderingChat />
-                <MobileStickyCTA />
-                <AppRoutes />
-              </BrowserRouter>
-            </TooltipProvider>
-          </OrderProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="sfsecretmenu-ui-theme">
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <OrderProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <ThemeTransition>
+                  <BrowserRouter>
+                    <Analytics />
+                    <CommandPalette />
+                    <EnhancedOrderingChat />
+                    <MobileStickyCTA />
+                    <AppRoutes />
+                  </BrowserRouter>
+                </ThemeTransition>
+              </TooltipProvider>
+            </OrderProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </ThemeProvider>
   </HelmetProvider>
 );
 

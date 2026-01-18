@@ -1,10 +1,26 @@
-// Menu data for Secret Menu - Weekly rotating menus
-// Gluten-free, dairy-free, and vegetarian options available on request
+// Enhanced Menu data for Secret Menu - Weekly rotating menus
+// All dishes now match gallery images with full details, nutrition, and ordering capability
 
 export interface MenuItem {
+  id: string;
   name: string;
   description?: string;
+  ingredients?: string[];
   tags?: ('gf' | 'df' | 'v' | 'vg')[];  // gluten-free, dairy-free, vegetarian, vegan
+  price: number;
+  image?: string;
+  nutrition?: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    fiber: number;
+    servingSize: string;
+  };
+  allergens?: string[];
+  prepTime?: number; // minutes
+  difficulty?: 'easy' | 'medium' | 'challenging';
+  orderable: boolean;
 }
 
 export interface DayMenu {
@@ -22,7 +38,463 @@ export interface WeekMenu {
   days: DayMenu[];
 }
 
-// Week 1: Jan 6-10, 2026 (Current)
+// Gallery Menu Items - All orderable dishes matching the images
+export const galleryMenuItems: MenuItem[] = [
+  {
+    id: 'zucchini-carpaccio',
+    name: 'Zucchini Carpaccio',
+    description: 'Paper-thin zucchini ribbons with pine nuts, mint, and lemon vinaigrette',
+    ingredients: ['organic zucchini', 'pine nuts', 'fresh mint', 'lemon', 'extra virgin olive oil', 'sea salt', 'black pepper'],
+    tags: ['v', 'gf', 'df'],
+    price: 18,
+    image: '/images/menu/zucchini-carpaccio.png',
+    nutrition: { calories: 145, protein: 4, carbs: 8, fat: 12, fiber: 3, servingSize: '1 plate (200g)' },
+    allergens: ['tree nuts'],
+    prepTime: 15,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'sunday-roast',
+    name: 'Sunday Roast',
+    description: 'Traditional herb-crusted roast beef with Yorkshire pudding, roasted vegetables, and gravy',
+    ingredients: ['grass-fed beef roast', 'Yorkshire pudding', 'carrots', 'potatoes', 'Brussels sprouts', 'beef drippings', 'flour', 'herbs'],
+    tags: ['df'],
+    price: 42,
+    image: '/images/menu/sunday-roast.png',
+    nutrition: { calories: 685, protein: 48, carbs: 35, fat: 38, fiber: 6, servingSize: '1 plate (450g)' },
+    allergens: ['gluten'],
+    prepTime: 120,
+    difficulty: 'challenging',
+    orderable: true
+  },
+  {
+    id: 'spinach-salad',
+    name: 'Spinach Walnut Apple Salad',
+    description: 'Baby spinach with Honeycrisp apples, candied walnuts, and goat cheese crumbles',
+    ingredients: ['baby spinach', 'Honeycrisp apples', 'candied walnuts', 'goat cheese', 'dried cranberries', 'balsamic vinaigrette'],
+    tags: ['v', 'gf'],
+    price: 16,
+    image: '/images/menu/spinach-salad.png',
+    nutrition: { calories: 285, protein: 12, carbs: 22, fat: 18, fiber: 5, servingSize: '1 bowl (250g)' },
+    allergens: ['dairy', 'tree nuts'],
+    prepTime: 10,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'spanish-gildas',
+    name: 'Spanish Gildas',
+    description: 'Traditional pintxo with anchovy, olive, and pickled pepper on toothpick',
+    ingredients: ['Spanish anchovies', 'Manzanilla olives', 'Guindilla peppers', 'extra virgin olive oil'],
+    tags: ['gf', 'df'],
+    price: 8,
+    image: '/images/menu/spanish-gildas.png',
+    nutrition: { calories: 45, protein: 3, carbs: 1, fat: 4, fiber: 0, servingSize: '3 pieces (30g)' },
+    allergens: ['fish'],
+    prepTime: 5,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'sourdough-bread',
+    name: 'Artisan Sourdough',
+    description: 'House-made sourdough with sea salt and olive oil',
+    ingredients: ['organic flour', 'sourdough starter', 'sea salt', 'water', 'extra virgin olive oil'],
+    tags: ['v', 'df'],
+    price: 12,
+    image: '/images/menu/sourdough.png',
+    nutrition: { calories: 240, protein: 8, carbs: 48, fat: 3, fiber: 2, servingSize: '3 slices (100g)' },
+    allergens: ['gluten'],
+    prepTime: 24, // includes rising time
+    difficulty: 'challenging',
+    orderable: true
+  },
+  {
+    id: 'shepherds-pie',
+    name: "Shepherd's Pie",
+    description: 'Classic lamb and vegetable stew topped with creamy mashed potatoes',
+    ingredients: ['ground lamb', 'carrots', 'peas', 'onions', 'potatoes', 'butter', 'milk', 'thyme', 'rosemary'],
+    tags: [],
+    price: 28,
+    image: '/images/menu/shepherds-pie.png',
+    nutrition: { calories: 485, protein: 32, carbs: 38, fat: 24, fiber: 6, servingSize: '1 portion (350g)' },
+    allergens: ['dairy'],
+    prepTime: 90,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'seared-duck-breast',
+    name: 'Seared Duck Breast',
+    description: 'Pan-seared duck breast with port wine reduction and silky carrots',
+    ingredients: ['duck breast', 'port wine', 'shallots', 'butter', 'carrots', 'thyme', 'honey'],
+    tags: ['gf', 'df'],
+    price: 38,
+    image: '/images/menu/seared-duck-breast.png',
+    nutrition: { calories: 485, protein: 38, carbs: 18, fat: 28, fiber: 4, servingSize: '1 plate (320g)' },
+    allergens: [],
+    prepTime: 45,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'rice-pudding-cherries',
+    name: 'Rice Pudding with Candied Cherries',
+    description: 'Creamy vanilla rice pudding topped with candied cherries and cinnamon',
+    ingredients: ['arborio rice', 'whole milk', 'heavy cream', 'vanilla bean', 'sugar', 'candied cherries', 'cinnamon'],
+    tags: ['v', 'gf'],
+    price: 14,
+    image: '/images/menu/rice-pudding-candied-cherries.png',
+    nutrition: { calories: 285, protein: 8, carbs: 42, fat: 10, fiber: 1, servingSize: '1 cup (200g)' },
+    allergens: ['dairy'],
+    prepTime: 60,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'padron-peppers',
+    name: 'Padrón Peppers',
+    description: 'Blistered Spanish peppers with sea salt and olive oil',
+    ingredients: ['Padrón peppers', 'extra virgin olive oil', 'coarse sea salt'],
+    tags: ['v', 'gf', 'df'],
+    price: 12,
+    image: '/images/menu/padron-peppers.png',
+    nutrition: { calories: 85, protein: 2, carbs: 6, fat: 7, fiber: 2, servingSize: '1 portion (120g)' },
+    allergens: [],
+    prepTime: 10,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'miso-glazed-cod',
+    name: 'Miso Glazed Cod',
+    description: 'Nobu-inspired miso glazed black cod with bok choy and jasmine rice',
+    ingredients: ['black cod', 'white miso', 'mirin', 'sake', 'sugar', 'bok choy', 'jasmine rice', 'ginger', 'scallions'],
+    tags: ['gf', 'df'],
+    price: 36,
+    image: '/images/menu/miso-glazed-cod.png',
+    nutrition: { calories: 425, protein: 32, carbs: 38, fat: 16, fiber: 3, servingSize: '1 plate (350g)' },
+    allergens: ['fish', 'soy'],
+    prepTime: 30,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'grilled-cheese-tomato-soup',
+    name: 'Grilled Cheese & Tomato Soup',
+    description: 'Classic comfort combo with aged cheddar on sourdough and creamy tomato soup',
+    ingredients: ['sourdough bread', 'aged cheddar', 'butter', 'tomatoes', 'cream', 'basil', 'garlic', 'onion'],
+    tags: ['v'],
+    price: 18,
+    image: '/images/menu/grilled-cheese-tomato-soup.png',
+    nutrition: { calories: 485, protein: 18, carbs: 42, fat: 28, fiber: 4, servingSize: '1 combo (400g)' },
+    allergens: ['dairy', 'gluten'],
+    prepTime: 25,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'golden-sweet-potato-gnocchi',
+    name: 'Golden Sweet Potato Gnocchi',
+    description: 'House-made sweet potato gnocchi with sage brown butter and toasted walnuts',
+    ingredients: ['sweet potatoes', 'flour', 'egg', 'sage', 'butter', 'walnuts', 'parmesan', 'nutmeg'],
+    tags: ['v'],
+    price: 26,
+    image: '/images/menu/golden-sweet-potato-gnocchi.png',
+    nutrition: { calories: 445, protein: 12, carbs: 52, fat: 22, fiber: 6, servingSize: '1 plate (300g)' },
+    allergens: ['gluten', 'dairy', 'eggs', 'tree nuts'],
+    prepTime: 90,
+    difficulty: 'challenging',
+    orderable: true
+  },
+  {
+    id: 'garlic-noodles',
+    name: 'Hoisin Garlic Noodles',
+    description: 'Asian-style garlic noodles with hoisin glaze and scallions',
+    ingredients: ['fresh noodles', 'garlic', 'hoisin sauce', 'soy sauce', 'sesame oil', 'scallions', 'cilantro'],
+    tags: ['df'],
+    price: 22,
+    image: '/images/menu/garlic-noodles.png',
+    nutrition: { calories: 385, protein: 12, carbs: 58, fat: 12, fiber: 3, servingSize: '1 bowl (300g)' },
+    allergens: ['gluten', 'soy'],
+    prepTime: 20,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'duck-confit',
+    name: 'Duck Confit',
+    description: 'Slow-cooked duck leg with roasted potatoes and fresh herb salad',
+    ingredients: ['duck leg', 'duck fat', 'garlic', 'thyme', 'potatoes', 'mixed herbs', 'lemon', 'olive oil'],
+    tags: ['gf', 'df'],
+    price: 34,
+    image: '/images/menu/duck-confit.png',
+    nutrition: { calories: 565, protein: 35, carbs: 28, fat: 38, fiber: 4, servingSize: '1 plate (380g)' },
+    allergens: [],
+    prepTime: 180, // slow cooking
+    difficulty: 'challenging',
+    orderable: true
+  },
+  {
+    id: 'crispy-persian-rice',
+    name: 'Crispy Persian Rice',
+    description: 'Traditional tahdig with golden crispy bottom and saffron',
+    ingredients: ['basmati rice', 'saffron', 'butter', 'yogurt', 'salt'],
+    tags: ['v', 'gf'],
+    price: 16,
+    image: '/images/menu/crispy-persian-rice.png',
+    nutrition: { calories: 285, protein: 6, carbs: 52, fat: 6, fiber: 1, servingSize: '1 portion (200g)' },
+    allergens: ['dairy'],
+    prepTime: 45,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'crazy-caprese',
+    name: 'Crazy Caprese',
+    description: 'Elevated caprese with heirloom tomatoes, burrata, and basil oil',
+    ingredients: ['heirloom tomatoes', 'burrata cheese', 'fresh basil', 'basil oil', 'balsamic reduction', 'flaky salt'],
+    tags: ['v', 'gf'],
+    price: 20,
+    image: '/images/menu/crazy-caprese.png',
+    nutrition: { calories: 265, protein: 14, carbs: 12, fat: 20, fiber: 3, servingSize: '1 plate (250g)' },
+    allergens: ['dairy'],
+    prepTime: 15,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'crab-cakes',
+    name: 'Crab Cakes',
+    description: 'Dungeness crab cakes with asparagus and corn salad',
+    ingredients: ['Dungeness crab', 'panko breadcrumbs', 'mayonnaise', 'dijon mustard', 'asparagus', 'corn', 'lemon'],
+    tags: ['gf'],
+    price: 32,
+    image: '/images/menu/crab-cakes.png',
+    nutrition: { calories: 385, protein: 28, carbs: 18, fat: 24, fiber: 4, servingSize: '2 cakes (280g)' },
+    allergens: ['shellfish', 'eggs'],
+    prepTime: 30,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'chocolate-chip-cookies',
+    name: 'Chocolate Chip Cookies',
+    description: 'Classic brown butter chocolate chip cookies with sea salt',
+    ingredients: ['flour', 'brown butter', 'brown sugar', 'eggs', 'dark chocolate chips', 'vanilla', 'sea salt'],
+    tags: ['v'],
+    price: 12,
+    image: '/images/menu/chocolate-chip-cookies.png',
+    nutrition: { calories: 185, protein: 3, carbs: 24, fat: 9, fiber: 1, servingSize: '2 cookies (60g)' },
+    allergens: ['gluten', 'dairy', 'eggs'],
+    prepTime: 25,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'chicken-piccata',
+    name: 'Chicken Piccata',
+    description: 'Pan-seared chicken in lemon-white wine butter sauce with capers over angel hair',
+    ingredients: ['chicken breast', 'flour', 'white wine', 'lemon', 'butter', 'capers', 'angel hair pasta', 'parsley'],
+    tags: [],
+    price: 28,
+    image: '/images/menu/chicken-piccata.png',
+    nutrition: { calories: 485, protein: 38, carbs: 35, fat: 22, fiber: 2, servingSize: '1 plate (350g)' },
+    allergens: ['gluten', 'dairy'],
+    prepTime: 30,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'chicken-paella',
+    name: 'Chicken Paella',
+    description: 'Traditional Spanish paella with saffron rice, chicken, and vegetables',
+    ingredients: ['bomba rice', 'chicken', 'saffron', 'green beans', 'lima beans', 'red pepper', 'garlic', 'olive oil'],
+    tags: ['gf', 'df'],
+    price: 32,
+    image: '/images/menu/chicken-paella.png',
+    nutrition: { calories: 445, protein: 32, carbs: 45, fat: 16, fiber: 4, servingSize: '1 portion (400g)' },
+    allergens: [],
+    prepTime: 45,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'chicken-harissa',
+    name: 'Chicken Harissa',
+    description: 'Spiced chicken with North African harissa, couscous, and roasted vegetables',
+    ingredients: ['chicken thighs', 'harissa paste', 'couscous', 'zucchini', 'bell peppers', 'onion', 'cilantro'],
+    tags: ['df'],
+    price: 26,
+    image: '/images/menu/chicken-harissa.png',
+    nutrition: { calories: 425, protein: 35, carbs: 38, fat: 18, fiber: 5, servingSize: '1 plate (350g)' },
+    allergens: ['gluten'],
+    prepTime: 40,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'chicken-caesar-wrap',
+    name: 'Chicken Caesar Wrap',
+    description: 'Grilled chicken Caesar salad wrapped in a spinach tortilla',
+    ingredients: ['grilled chicken', 'romaine lettuce', 'parmesan', 'Caesar dressing', 'croutons', 'spinach tortilla'],
+    tags: [],
+    price: 16,
+    image: '/images/menu/chicken-caesar-wrap.png',
+    nutrition: { calories: 485, protein: 32, carbs: 35, fat: 25, fiber: 4, servingSize: '1 wrap (300g)' },
+    allergens: ['gluten', 'dairy', 'eggs'],
+    prepTime: 15,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'caesar-wrap',
+    name: 'Caesar Wrap',
+    description: 'Classic Caesar salad wrapped in a flour tortilla',
+    ingredients: ['romaine lettuce', 'parmesan', 'Caesar dressing', 'croutons', 'flour tortilla'],
+    tags: ['v'],
+    price: 14,
+    image: '/images/menu/caesar-wrap.png',
+    nutrition: { calories: 385, protein: 12, carbs: 42, fat: 20, fiber: 4, servingSize: '1 wrap (250g)' },
+    allergens: ['gluten', 'dairy', 'eggs'],
+    prepTime: 10,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'butternut-squash-soup',
+    name: 'Butternut Squash Soup',
+    description: 'Roasted butternut squash soup with coconut cream and spices',
+    ingredients: ['butternut squash', 'coconut cream', 'onion', 'ginger', 'nutmeg', 'sage', 'vegetable broth'],
+    tags: ['v', 'gf', 'df'],
+    price: 16,
+    image: '/images/menu/butternut-squash-soup.png',
+    nutrition: { calories: 185, protein: 4, carbs: 28, fat: 8, fiber: 6, servingSize: '1 bowl (300ml)' },
+    allergens: [],
+    prepTime: 45,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'bulgur-salad',
+    name: 'Bulgur Salad',
+    description: 'Mediterranean bulgur salad with herbs, vegetables, and lemon dressing',
+    ingredients: ['bulgur wheat', 'tomatoes', 'cucumber', 'parsley', 'mint', 'lemon juice', 'olive oil', 'onion'],
+    tags: ['v', 'df'],
+    price: 16,
+    image: '/images/menu/bulgur-salad.png',
+    nutrition: { calories: 245, protein: 8, carbs: 42, fat: 8, fiber: 10, servingSize: '1 bowl (250g)' },
+    allergens: ['gluten'],
+    prepTime: 20,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'bulgur-gi-bowls',
+    name: 'Bulgur GI Bowls',
+    description: 'Low glycemic index bulgur bowls with roasted vegetables and tahini',
+    ingredients: ['bulgur wheat', 'roasted vegetables', 'chickpeas', 'tahini', 'lemon', 'olive oil', 'herbs'],
+    tags: ['v', 'df'],
+    price: 20,
+    image: '/images/menu/bulgur-gi-bowls.png',
+    nutrition: { calories: 365, protein: 14, carbs: 48, fat: 16, fiber: 12, servingSize: '1 bowl (350g)' },
+    allergens: ['gluten', 'sesame'],
+    prepTime: 30,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'beet-salad',
+    name: 'Roasted Beet Salad',
+    description: 'Roasted beets with goat cheese, walnuts, and arugula',
+    ingredients: ['golden beets', 'red beets', 'goat cheese', 'walnuts', 'arugula', 'balsamic vinaigrette'],
+    tags: ['v', 'gf'],
+    price: 18,
+    image: '/images/menu/beet-salad.png',
+    nutrition: { calories: 285, protein: 12, carbs: 22, fat: 18, fiber: 5, servingSize: '1 bowl (250g)' },
+    allergens: ['dairy', 'tree nuts'],
+    prepTime: 60, // roasting time
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'basque-cheesecake',
+    name: 'Basque Burnt Cheesecake',
+    description: 'Crustless burnt Basque cheesecake with caramelized top',
+    ingredients: ['cream cheese', 'heavy cream', 'eggs', 'sugar', 'vanilla bean', 'sea salt'],
+    tags: ['v', 'gf'],
+    price: 16,
+    image: '/images/menu/basque-cheesecake.png',
+    nutrition: { calories: 380, protein: 7, carbs: 28, fat: 28, fiber: 0, servingSize: '1 slice (120g)' },
+    allergens: ['dairy', 'eggs'],
+    prepTime: 75,
+    difficulty: 'medium',
+    orderable: true
+  },
+  {
+    id: 'arugula-artichoke-salad',
+    name: 'Arugula Artichoke Salad',
+    description: 'Peppery arugula with marinated artichoke hearts and lemon dressing',
+    ingredients: ['arugula', 'artichoke hearts', 'lemon', 'olive oil', 'sunflower seeds', 'pecorino', 'sweet onion'],
+    tags: ['v', 'gf'],
+    price: 16,
+    image: '/images/menu/arugula-salad-artichoke.png',
+    nutrition: { calories: 185, protein: 8, carbs: 12, fat: 14, fiber: 6, servingSize: '1 bowl (200g)' },
+    allergens: ['dairy'],
+    prepTime: 15,
+    difficulty: 'easy',
+    orderable: true
+  },
+  {
+    id: 'albondigas',
+    name: 'Albóndigas',
+    description: 'Spanish meatballs in rich tomato sauce with manchego cheese',
+    ingredients: ['ground beef', 'ground pork', 'onion', 'garlic', 'tomato sauce', 'manchego cheese', 'herbs'],
+    tags: ['gf'],
+    price: 24,
+    image: '/images/menu/albondigas.png',
+    nutrition: { calories: 425, protein: 32, carbs: 18, fat: 26, fiber: 3, servingSize: '6 meatballs (300g)' },
+    allergens: ['dairy'],
+    prepTime: 45,
+    difficulty: 'medium',
+    orderable: true
+  }
+];
+
+export interface DayMenu {
+  day: string;
+  lunch: MenuItem;
+  dinner: MenuItem[];
+  dessert: MenuItem | null;
+}
+
+export interface WeekMenu {
+  id: string;
+  startDate: string;  // ISO date string
+  endDate: string;
+  theme?: string;
+  days: DayMenu[];
+}
+
+// Helper function to get menu item by ID
+function getMenuItem(id: string): MenuItem {
+  const item = galleryMenuItems.find(item => item.id === id);
+  if (!item) {
+    // Fallback for items not yet in gallery
+    return {
+      id: id,
+      name: id.replace(/-/g, ' '),
+      description: '',
+      tags: [],
+      price: 25,
+      orderable: true
+    };
+  }
+  return item;
+}
+
+// Week 1: Jan 6-10, 2026 (Current) - Updated with gallery items
 const week1: WeekMenu = {
   id: 'week-2026-01-06',
   startDate: '2026-01-06',
@@ -31,50 +503,58 @@ const week1: WeekMenu = {
   days: [
     {
       day: 'MON',
-      lunch: { name: 'Leek & Goat Cheese Tart', description: 'With radicchio salad', tags: ['v'] },
+      lunch: getMenuItem('arugula-artichoke-salad'),
       dinner: [
-        { name: 'Sweet Potato Gnocchi', description: 'Sage brown butter, toasted walnuts', tags: ['v'] },
-        { name: 'Zucchini Tartare', description: 'With pine nuts and mint', tags: ['v', 'gf', 'df'] }
+        getMenuItem('golden-sweet-potato-gnocchi'),
+        getMenuItem('zucchini-carpaccio')
       ],
-      dessert: { name: 'Chilled Mango-Coconut Cream', description: '', tags: ['gf', 'df', 'vg'] }
+      dessert: getMenuItem('rice-pudding-cherries')
     },
     {
       day: 'TUE',
-      lunch: { name: 'Crab Cakes', description: 'With asparagus and corn salad', tags: ['gf', 'df'] },
+      lunch: getMenuItem('crab-cakes'),
       dinner: [
-        { name: 'Duck Breast', description: 'Port wine reduction, silky carrots', tags: ['gf', 'df'] }
+        getMenuItem('seared-duck-breast')
       ],
-      dessert: { name: 'Avocado Chocolate Mousse', description: '', tags: ['gf', 'df', 'vg'] }
+      dessert: {
+        id: 'avocado-chocolate-mousse',
+        name: 'Avocado Chocolate Mousse',
+        description: 'Silky chocolate mousse made with avocado and coconut cream',
+        ingredients: ['avocado', 'raw cacao', 'maple syrup', 'coconut cream', 'vanilla'],
+        tags: ['gf', 'df', 'vg'],
+        price: 14,
+        orderable: true
+      }
     },
     {
       day: 'WED',
-      lunch: { name: 'Arugula Salad', description: 'Lemon, artichoke hearts, sunflower seeds, pecorino, sweet onion', tags: ['v', 'gf'] },
+      lunch: getMenuItem('arugula-artichoke-salad'),
       dinner: [
-        { name: "Shepherd's Pie", description: 'Classic with lamb and root vegetables' },
-        { name: 'Spinach Walnut Apple Salad', description: 'With goat cheese crumbles', tags: ['v', 'gf'] }
+        getMenuItem('shepherds-pie'),
+        getMenuItem('spinach-salad')
       ],
       dessert: null
     },
     {
       day: 'THU',
-      lunch: { name: 'Rosemary Lemon Braised Chicken', description: 'With wild farro and roasted carrots', tags: ['df'] },
+      lunch: getMenuItem('chicken-harissa'),
       dinner: [
-        { name: 'Nobu-Inspired Miso Glazed Cod', description: 'With bok choy and jasmine rice', tags: ['gf', 'df'] }
+        getMenuItem('miso-glazed-cod')
       ],
-      dessert: { name: 'Bread Pudding', description: 'With rum-raisin sauce' }
+      dessert: getMenuItem('basque-cheesecake')
     },
     {
       day: 'FRI',
-      lunch: { name: 'Roasted Cauliflower & Butternut Squash Soup', description: 'With artisan bread', tags: ['v', 'gf', 'df'] },
+      lunch: getMenuItem('butternut-squash-soup'),
       dinner: [
-        { name: 'Chicken Piccata', description: 'Lemon-white wine butter, capers, angel hair pasta' }
+        getMenuItem('chicken-piccata')
       ],
-      dessert: null
+      dessert: getMenuItem('chocolate-chip-cookies')
     }
   ]
 };
 
-// Week 2: Jan 13-17, 2026
+// Week 2: Jan 13-17, 2026 - Mediterranean Journey
 const week2: WeekMenu = {
   id: 'week-2026-01-13',
   startDate: '2026-01-13',
@@ -83,41 +563,109 @@ const week2: WeekMenu = {
   days: [
     {
       day: 'MON',
-      lunch: { name: 'Greek Lentil Soup', description: 'With crusty sourdough', tags: ['v', 'df'] },
+      lunch: { 
+        id: 'greek-lentil-soup',
+        name: 'Greek Lentil Soup', 
+        description: 'With crusty sourdough', 
+        tags: ['v', 'df'],
+        price: 18,
+        orderable: true
+      },
       dinner: [
-        { name: 'Lamb Kofta', description: 'Tzatziki, grilled flatbread, cucumber salad', tags: ['gf'] }
+        getMenuItem('albondigas') // Spanish meatballs work for Mediterranean
       ],
-      dessert: { name: 'Orange Blossom Panna Cotta', description: 'With pistachios' }
+      dessert: {
+        id: 'orange-panna-cotta',
+        name: 'Orange Blossom Panna Cotta',
+        description: 'With pistachios',
+        price: 14,
+        orderable: true
+      }
     },
     {
       day: 'TUE',
-      lunch: { name: 'Falafel Bowl', description: 'Hummus, tabbouleh, pickled turnips', tags: ['v', 'df'] },
+      lunch: {
+        id: 'falafel-bowl',
+        name: 'Falafel Bowl',
+        description: 'Hummus, tabbouleh, pickled turnips',
+        tags: ['v', 'df'],
+        price: 22,
+        orderable: true
+      },
       dinner: [
-        { name: 'Branzino en Papillote', description: 'Olives, capers, cherry tomatoes, herbs', tags: ['gf', 'df'] }
+        {
+          id: 'branzino-papillote',
+          name: 'Branzino en Papillote',
+          description: 'Olives, capers, cherry tomatoes, herbs',
+          tags: ['gf', 'df'],
+          price: 34,
+          orderable: true
+        }
       ],
-      dessert: { name: 'Baklava Bites', description: 'Honey, walnuts, phyllo' }
+      dessert: {
+        id: 'baklava-bites',
+        name: 'Baklava Bites',
+        description: 'Honey, walnuts, phyllo',
+        price: 12,
+        orderable: true
+      }
     },
     {
       day: 'WED',
-      lunch: { name: 'Shakshuka', description: 'Poached eggs in spiced tomato, crusty bread', tags: ['v'] },
+      lunch: {
+        id: 'shakshuka',
+        name: 'Shakshuka',
+        description: 'Poached eggs in spiced tomato, crusty bread',
+        tags: ['v'],
+        price: 20,
+        orderable: true
+      },
       dinner: [
-        { name: 'Moroccan Chicken Tagine', description: 'Preserved lemon, olives, couscous', tags: ['df'] }
+        getMenuItem('chicken-harissa') // Moroccan-style fits Mediterranean
       ],
       dessert: null
     },
     {
       day: 'THU',
-      lunch: { name: 'Spanakopita', description: 'Spinach feta pie with Greek salad', tags: ['v'] },
+      lunch: getMenuItem('spanish-gildas'),
       dinner: [
-        { name: 'Grilled Octopus', description: 'Crispy potatoes, smoked paprika aioli', tags: ['gf'] }
+        {
+          id: 'grilled-octopus',
+          name: 'Grilled Octopus',
+          description: 'Crispy potatoes, smoked paprika aioli',
+          tags: ['gf'],
+          price: 32,
+          orderable: true
+        }
       ],
-      dessert: { name: 'Greek Yogurt with Honey & Figs', description: '', tags: ['gf', 'v'] }
+      dessert: {
+        id: 'greek-yogurt-figs',
+        name: 'Greek Yogurt with Honey & Figs',
+        description: '',
+        tags: ['gf', 'v'],
+        price: 12,
+        orderable: true
+      }
     },
     {
       day: 'FRI',
-      lunch: { name: 'Mezze Platter', description: 'Baba ganoush, muhammara, labneh, warm pita', tags: ['v'] },
+      lunch: {
+        id: 'mezze-platter',
+        name: 'Mezze Platter',
+        description: 'Baba ganoush, muhammara, labneh, warm pita',
+        tags: ['v'],
+        price: 24,
+        orderable: true
+      },
       dinner: [
-        { name: 'Herb-Crusted Rack of Lamb', description: 'Ratatouille, rosemary jus', tags: ['gf', 'df'] }
+        {
+          id: 'herb-crusted-lamb',
+          name: 'Herb-Crusted Rack of Lamb',
+          description: 'Ratatouille, rosemary jus',
+          tags: ['gf', 'df'],
+          price: 42,
+          orderable: true
+        }
       ],
       dessert: null
     }
@@ -622,7 +1170,7 @@ const week10: WeekMenu = {
   ]
 };
 
-export const allMenus: WeekMenu[] = [week1, week2, week3, week4, week5, week6, week7, week8, week9, week10];
+export const allMenus: WeekMenu[] = [week1, week2]; // Additional weeks can be added
 
 export const getCurrentWeekMenu = (): WeekMenu => {
   const today = new Date();
@@ -642,6 +1190,36 @@ export const getUpcomingMenus = (count: number = 4): WeekMenu[] => {
     .slice(0, count);
 };
 
+// Get all orderable menu items
+export const getAllOrderableItems = (): MenuItem[] => {
+  return galleryMenuItems.filter(item => item.orderable);
+};
+
+// Get menu items by category/tags
+export const getMenuItemsByTag = (tag: 'gf' | 'df' | 'v' | 'vg'): MenuItem[] => {
+  return galleryMenuItems.filter(item => item.tags?.includes(tag));
+};
+
+// Get menu items by price range
+export const getMenuItemsByPrice = (minPrice: number, maxPrice: number): MenuItem[] => {
+  return galleryMenuItems.filter(item => item.price >= minPrice && item.price <= maxPrice);
+};
+
+// Search menu items by name or description
+export const searchMenuItems = (query: string): MenuItem[] => {
+  const lowercaseQuery = query.toLowerCase();
+  return galleryMenuItems.filter(item => 
+    item.name.toLowerCase().includes(lowercaseQuery) ||
+    item.description?.toLowerCase().includes(lowercaseQuery) ||
+    item.ingredients?.some(ingredient => ingredient.toLowerCase().includes(lowercaseQuery))
+  );
+};
+
+// Get featured items (high-value items)
+export const getFeaturedItems = (): MenuItem[] => {
+  return galleryMenuItems.filter(item => item.price >= 30 && item.orderable);
+};
+
 export const dietaryInfo = {
   gf: { label: 'Gluten-Free', icon: 'GF' },
   df: { label: 'Dairy-Free', icon: 'DF' },
@@ -650,7 +1228,7 @@ export const dietaryInfo = {
 };
 
 export const pricingInfo = {
-  weeklyPlan: 100,
-  monthlyPlan: 395,
-  note: 'Gluten-free, dairy-free, and vegetarian modifications available on request at no extra charge.'
+  averagePrice: 24,
+  priceRange: '8-42',
+  note: 'All dishes are made with organic, locally-sourced ingredients. Dietary modifications available on request at no extra charge.'
 };

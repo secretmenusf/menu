@@ -53,15 +53,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          light: "hsl(var(--gold-light))",
-          dark: "hsl(var(--gold-dark))",
+        mystical: {
+          DEFAULT: "hsl(var(--mystical))",
+          foreground: "hsl(var(--mystical-foreground))",
         },
-        obsidian: "hsl(var(--obsidian))",
-        void: "hsl(var(--void))",
-        crimson: "hsl(var(--crimson))",
-        ancient: "hsl(var(--ancient))",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import SeedOfLife3D from './SeedOfLife3D';
 import ConnectWallet from './ConnectWallet';
 import { UserMenu } from './auth/UserMenu';
+import { ThemeToggle } from './theme-toggle';
 import { Search, Menu } from 'lucide-react';
 
 const Header = () => {
@@ -127,6 +128,7 @@ const Header = () => {
             <Search size={14} />
             <span className="font-body text-xs text-muted-foreground/70">⌘K</span>
           </button>
+          <ThemeToggle />
           <UserMenu />
         </div>
 
