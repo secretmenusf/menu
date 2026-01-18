@@ -99,9 +99,25 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
     "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^7.3.1"
-  }
+  },
+  "description": "Chef-crafted meals delivered weekly to your door. San Francisco Bay Area.",
+  "main": "eslint.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sfsecretmenu/sfsecretmenu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sfsecretmenu/sfsecretmenu/issues"
+  },
+  "homepage": "https://github.com/sfsecretmenu/sfsecretmenu#readme"
 }
