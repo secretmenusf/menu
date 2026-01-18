@@ -18,9 +18,7 @@ import {
   HelpCircle, 
   Loader2,
   Bot,
-  ChatBubbleIcon,
-  ExternalLink,
-  CheckCircle
+  Send
 } from 'lucide-react';
 
 const Support = () => {
@@ -31,20 +29,9 @@ const Support = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showAiChat, setShowAiChat] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
   const [aiQuestion, setAiQuestion] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const { toast } = useToast();
-
-const Support = () => {
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -132,9 +119,9 @@ const Support = () => {
     {
       icon: Mail,
       title: 'Email Support',
-      description: 'hello@sfsecretmenu.com',
+      description: 'support@sfsecretmenu.com',
       action: 'Send Email',
-      href: 'mailto:hello@sfsecretmenu.com',
+      href: 'mailto:support@sfsecretmenu.com',
     },
     {
       icon: Phone,
@@ -555,7 +542,7 @@ const Support = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button asChild size="lg" className="font-display tracking-wider">
-                    <a href="mailto:hello@sfsecretmenu.com">
+                    <a href="mailto:support@sfsecretmenu.com">
                       <Mail className="mr-2 h-5 w-5" />
                       EMAIL CONCIERGE
                     </a>
