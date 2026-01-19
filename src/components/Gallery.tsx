@@ -84,9 +84,8 @@ const Gallery = () => {
   useEffect(() => {
     if (!hasAnimated) return;
 
-    // Only animate items up to visibleCount
     for (let index = 0; index < visibleCount; index++) {
-      if (visibleImages[index]) continue; // Skip already animated
+      if (visibleImages[index]) continue;
       const timeoutId = window.setTimeout(() => {
         setVisibleImages(prev => {
           const newState = [...prev];
@@ -103,13 +102,11 @@ const Gallery = () => {
     };
   }, [hasAnimated, visibleCount]);
 
-  // Load more items
   const loadMore = () => {
     const newCount = Math.min(visibleCount + ITEMS_PER_PAGE, shuffledItems.length);
     setVisibleCount(newCount);
   };
 
-  // Get items to display
   const displayedItems = shuffledItems.slice(0, visibleCount);
   const hasMore = visibleCount < shuffledItems.length;
 
@@ -133,11 +130,9 @@ const Gallery = () => {
     }
   }, [selectedIndex, shuffledItems.length]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedIndex === null) return;
-
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') goPrev();
       if (e.key === 'ArrowRight') goNext();
@@ -147,7 +142,6 @@ const Gallery = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedIndex, goNext, goPrev]);
 
-  // Prevent body scroll when lightbox is open
   useEffect(() => {
     if (selectedIndex !== null) {
       document.body.style.overflow = 'hidden';
@@ -162,46 +156,53 @@ const Gallery = () => {
   return (
     <>
       {/* Gallery Grid */}
-      <section id="gallery" ref={sectionRef} className="py-20 bg-background" data-testid="gallery">
+      <section id="gallery" ref={sectionRef} className="py-20 bg-neutral-950" data-testid="gallery">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="font-display text-3xl tracking-[0.2em] text-mystical">
+            <p className="text-xs tracking-[0.4em] text-neutral-500 mb-3 uppercase">
+              Chef-Crafted Dishes
+            </p>
+            <h2 className="font-display text-3xl tracking-[0.2em] text-white">
               THE GALLERY
             </h2>
           </div>
 
-          {/* Responsive grid: 1 col mobile, 2 col tablet, 3 col desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+          {/* Grid with dark cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {displayedItems.map((item, index) => (
               <button
                 key={index}
                 onClick={() => openLightbox(index)}
-                className={`group relative aspect-[4/3] overflow-visible rounded-2xl cursor-pointer transition-all duration-700 ease-out ${
+                className={`group relative aspect-square overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 ease-out bg-neutral-900 ${
                   visibleImages[index]
                     ? 'opacity-100 translate-y-0 scale-100'
                     : 'opacity-0 translate-y-8 scale-95'
                 }`}
                 style={{ transitionDelay: `${(index % ITEMS_PER_PAGE) * 80}ms` }}
                 data-testid={`gallery-item-${index}`}
-                data-visible={visibleImages[index] ? 'true' : 'false'}
               >
-                {/* Subtle backglow for PNG transparency */}
-                <div className="absolute inset-0 -m-2 bg-foreground/3 blur-xl rounded-3xl opacity-40 group-hover:opacity-60 group-hover:bg-foreground/5 transition-all duration-500" />
+                {/* Dark vignette overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 z-10 pointer-events-none" />
 
-                {/* Image container - larger with better presentation */}
-                <div className="relative w-full h-full bg-card/30 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src={item.src}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
-                  />
-                  {/* Title overlay - always visible on larger cards */}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent p-4 sm:p-5">
-                    <p className="font-display text-sm sm:text-base tracking-[0.15em] text-foreground text-center">
-                      {item.title.toUpperCase()}
-                    </p>
-                  </div>
+                {/* Corner vignette for better blending */}
+                <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.5)] z-10 pointer-events-none" />
+
+                {/* Image */}
+                <img
+                  src={item.src}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+
+                {/* Title overlay */}
+                <div className="absolute inset-x-0 bottom-0 z-20 p-5">
+                  <p className="font-display text-sm tracking-[0.15em] text-white text-center drop-shadow-lg">
+                    {item.title.toUpperCase()}
+                  </p>
                 </div>
+
+                {/* Hover glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-amber-500/10 to-transparent z-[5]" />
               </button>
             ))}
           </div>
@@ -211,7 +212,7 @@ const Gallery = () => {
             <div className="flex justify-center mt-12">
               <button
                 onClick={loadMore}
-                className="px-8 py-3 font-display text-sm tracking-[0.2em] border border-border rounded-full hover:bg-muted/50 transition-colors"
+                className="px-8 py-3 font-display text-sm tracking-[0.2em] text-neutral-300 border border-neutral-700 rounded-full hover:bg-neutral-800 hover:border-neutral-600 transition-colors"
               >
                 LOAD MORE
               </button>
@@ -220,58 +221,49 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* Fullscreen Lightbox Overlay */}
+      {/* Fullscreen Lightbox */}
       {selectedIndex !== null && (
         <div
-          className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex items-center justify-center animate-fade-in"
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center animate-fade-in"
           onClick={closeLightbox}
         >
-          {/* Close button */}
           <button
             onClick={closeLightbox}
-            className="absolute top-6 right-6 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-card border border-border text-foreground hover:bg-accent transition-colors"
+            className="absolute top-6 right-6 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-neutral-900 border border-neutral-700 text-white hover:bg-neutral-800 transition-colors"
           >
             <X size={24} />
           </button>
 
-          {/* Previous button */}
           <button
             onClick={(e) => { e.stopPropagation(); goPrev(); }}
-            className="absolute left-4 md:left-8 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-card border border-border text-foreground hover:bg-accent transition-colors"
+            className="absolute left-4 md:left-8 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-neutral-900 border border-neutral-700 text-white hover:bg-neutral-800 transition-colors"
           >
             <ChevronLeft size={24} />
           </button>
 
-          {/* Next button */}
           <button
             onClick={(e) => { e.stopPropagation(); goNext(); }}
-            className="absolute right-4 md:right-8 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-card border border-border text-foreground hover:bg-accent transition-colors"
+            className="absolute right-4 md:right-8 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-neutral-900 border border-neutral-700 text-white hover:bg-neutral-800 transition-colors"
           >
             <ChevronRight size={24} />
           </button>
 
-          {/* Image container with backglow */}
           <div
             className="relative max-w-[90vw] max-h-[80vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Backglow effect for fullscreen */}
-            <div className="absolute inset-0 -m-4 bg-foreground/5 blur-2xl rounded-3xl" />
-
             <img
               src={shuffledItems[selectedIndex].src}
               alt={shuffledItems[selectedIndex].title}
-              className="relative max-w-full max-h-[75vh] object-contain drop-shadow-2xl"
+              className="max-w-full max-h-[75vh] object-contain rounded-lg"
             />
 
-            {/* Title below image */}
-            <p className="relative mt-6 font-display text-lg tracking-[0.2em] text-foreground">
+            <p className="mt-6 font-display text-lg tracking-[0.2em] text-white">
               {shuffledItems[selectedIndex].title.toUpperCase()}
             </p>
           </div>
 
-          {/* Image counter */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 font-display text-sm tracking-[0.2em] text-muted-foreground">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 font-display text-sm tracking-[0.2em] text-neutral-500">
             {selectedIndex + 1} / {shuffledItems.length}
           </div>
         </div>
