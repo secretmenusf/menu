@@ -1,29 +1,41 @@
-import { createContext, useContext, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+
+type Theme = 'dark' | 'light'
 
 type ThemeProviderProps = {
   children: ReactNode
+  defaultTheme?: Theme
+  storageKey?: string
 }
 
 type ThemeProviderState = {
-  theme: 'dark'
+  theme: Theme
+  setTheme: (theme: Theme) => void
 }
 
 const initialState: ThemeProviderState = {
   theme: 'dark',
+  setTheme: () => null,
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  // Always force dark mode
+export function ThemeProvider({ children, defaultTheme = 'dark' }: ThemeProviderProps) {
+  const [theme, setTheme] = useState<Theme>(defaultTheme)
+
   useEffect(() => {
     const root = window.document.documentElement
-    root.classList.remove('light')
-    root.classList.add('dark')
-  }, [])
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
+  }, [theme])
+
+  const value = {
+    theme,
+    setTheme,
+  }
 
   return (
-    <ThemeProviderContext.Provider value={{ theme: 'dark' }}>
+    <ThemeProviderContext.Provider value={value}>
       {children}
     </ThemeProviderContext.Provider>
   )
