@@ -4,7 +4,7 @@ import { useOrder } from '@/contexts/OrderContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import SquarePayment from '@/components/payment/SquarePayment';
+import StripePayment from '@/components/payment/StripePayment';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -408,7 +408,7 @@ ${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`;
                   </div>
 
                   {paymentMethod === 'card' ? (
-                    <SquarePayment
+                    <StripePayment
                       amount={total}
                       onPaymentSuccess={handlePaymentSuccess}
                       onPaymentError={handlePaymentError}
