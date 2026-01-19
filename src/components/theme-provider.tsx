@@ -1,62 +1,29 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-
-type Theme = 'dark' | 'light'
+import { createContext, useContext, useEffect, ReactNode } from 'react'
 
 type ThemeProviderProps = {
   children: ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
 }
 
 type ThemeProviderState = {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-  toggleTheme: () => void
+  theme: 'dark'
 }
 
 const initialState: ThemeProviderState = {
   theme: 'dark',
-  setTheme: () => null,
-  toggleTheme: () => null,
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-export function ThemeProvider({
-  children,
-  defaultTheme = 'dark',
-  storageKey = 'sfsecretmenu-ui-theme',
-  ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  )
-
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  // Always force dark mode
   useEffect(() => {
     const root = window.document.documentElement
-
-    root.classList.remove('light', 'dark')
-
-    if (theme === 'dark') {
-      root.classList.add('dark')
-    }
-  }, [theme])
-
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
-    toggleTheme: () => {
-      const newTheme = theme === 'dark' ? 'light' : 'dark'
-      localStorage.setItem(storageKey, newTheme)
-      setTheme(newTheme)
-    },
-  }
+    root.classList.remove('light')
+    root.classList.add('dark')
+  }, [])
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider value={{ theme: 'dark' }}>
       {children}
     </ThemeProviderContext.Provider>
   )
