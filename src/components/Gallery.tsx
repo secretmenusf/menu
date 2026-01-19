@@ -187,11 +187,11 @@ const Gallery = () => {
                 {/* Corner vignette for better blending */}
                 <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.5)] z-10 pointer-events-none" />
 
-                {/* Image */}
+                {/* Image - object-contain to show full bowl without cropping */}
                 <img
                   src={item.src}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 p-2"
                 />
 
                 {/* Title overlay */}
