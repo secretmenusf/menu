@@ -1,49 +1,34 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Import gallery images
-import spanishgildas from '@/assets/gallery/spanishgildas.png';
-import spanishchickenpaella from '@/assets/gallery/spanishchickenpaella.png';
-import spaininspireddinner from '@/assets/gallery/spaininspireddinner.png';
-import roastbeef from '@/assets/gallery/roastbeef.png';
-import ricepudding from '@/assets/gallery/ricepudding.png';
-import mixedgreens from '@/assets/gallery/mixedgreens.png';
-import mixedbeetsalad from '@/assets/gallery/mixedbeetsalad.png';
-import kalechickenwrap from '@/assets/gallery/kalechickenwrap.png';
-import grilledcheese from '@/assets/gallery/grilledcheese.png';
-import falafelpita from '@/assets/gallery/falafelpita.png';
-import fennelbulgursalad from '@/assets/gallery/fennelbulgursalad.png';
-import duckconfit from '@/assets/gallery/duckconfit.png';
-import persianrice from '@/assets/gallery/persianrice.png';
-import colossalcookies from '@/assets/gallery/colossalcookies.png';
-import classicdinner from '@/assets/gallery/classicdinner.png';
-import capresepanini from '@/assets/gallery/capresepanini.png';
-import basquecheesecake from '@/assets/gallery/basquecheesecake.png';
-import padronpeppers from '@/assets/gallery/padronpeppers.png';
-import beefbulgogi from '@/assets/gallery/beefbulgogi.png';
-import saffronalbondigas from '@/assets/gallery/saffronalbondigas.png';
-
+// Gallery items using new menu images from public folder
 const galleryItems = [
-  { src: spanishgildas, title: 'Spanish Gildas' },
-  { src: spanishchickenpaella, title: 'Spanish Chicken Paella' },
-  { src: spaininspireddinner, title: 'Spain Inspired Dinner' },
-  { src: roastbeef, title: 'Roast Beef' },
-  { src: ricepudding, title: 'Rice Pudding' },
-  { src: mixedgreens, title: 'Mixed Greens' },
-  { src: mixedbeetsalad, title: 'Mixed Beet Salad' },
-  { src: kalechickenwrap, title: 'Kale Chicken Wrap' },
-  { src: grilledcheese, title: 'Grilled Cheese' },
-  { src: falafelpita, title: 'Falafel Pita' },
-  { src: fennelbulgursalad, title: 'Fennel Bulgur Salad' },
-  { src: duckconfit, title: 'Duck Confit' },
-  { src: persianrice, title: 'Persian Rice' },
-  { src: colossalcookies, title: 'Colossal Cookies' },
-  { src: classicdinner, title: 'Classic Dinner' },
-  { src: capresepanini, title: 'Caprese Panini' },
-  { src: basquecheesecake, title: 'Basque Cheesecake' },
-  { src: padronpeppers, title: 'Padrón Peppers' },
-  { src: beefbulgogi, title: 'Beef Bulgogi Bowl' },
-  { src: saffronalbondigas, title: 'Saffron Albondigas' },
+  { src: '/images/menu/arugula-salad-artichoke.png', title: 'Arugula Salad with Artichoke' },
+  { src: '/images/menu/basque-cheesecake.png', title: 'Basque Cheesecake' },
+  { src: '/images/menu/beet-salad.png', title: 'Beet Salad' },
+  { src: '/images/menu/bulgur-salad.png', title: 'Bulgur Salad' },
+  { src: '/images/menu/butternut-squash-soup.png', title: 'Butternut Squash Soup' },
+  { src: '/images/menu/chicken-caesar-wrap.png', title: 'Chicken Caesar Wrap' },
+  { src: '/images/menu/chicken-harissa.png', title: 'Chicken Harissa' },
+  { src: '/images/menu/chicken-paella.png', title: 'Chicken Paella' },
+  { src: '/images/menu/chicken-piccata.png', title: 'Chicken Piccata' },
+  { src: '/images/menu/chocolate-chip-cookies.png', title: 'Chocolate Chip Cookies' },
+  { src: '/images/menu/crab-cakes.png', title: 'Crab Cakes' },
+  { src: '/images/menu/crazy-caprese.png', title: 'Crazy Caprese' },
+  { src: '/images/menu/crispy-persian-rice.png', title: 'Crispy Persian Rice' },
+  { src: '/images/menu/duck-confit.png', title: 'Duck Confit' },
+  { src: '/images/menu/garlic-noodles.png', title: 'Garlic Noodles' },
+  { src: '/images/menu/golden-sweet-potato-gnocchi.png', title: 'Golden Sweet Potato Gnocchi' },
+  { src: '/images/menu/grilled-cheese-tomato-soup.png', title: 'Grilled Cheese & Tomato Soup' },
+  { src: '/images/menu/miso-glazed-cod.png', title: 'Miso Glazed Cod' },
+  { src: '/images/menu/padron-peppers.png', title: 'Padrón Peppers' },
+  { src: '/images/menu/rice-pudding-candied-cherries.png', title: 'Rice Pudding with Candied Cherries' },
+  { src: '/images/menu/seared-duck-breast.png', title: 'Seared Duck Breast' },
+  { src: '/images/menu/shepherds-pie.png', title: "Shepherd's Pie" },
+  { src: '/images/menu/spanish-gildas.png', title: 'Spanish Gildas' },
+  { src: '/images/menu/spinach-salad.png', title: 'Spinach Salad' },
+  { src: '/images/menu/sunday-roast.png', title: 'Sunday Roast' },
+  { src: '/images/menu/zucchini-carpaccio.png', title: 'Zucchini Carpaccio' },
 ];
 
 // Shuffle array with a seed for consistent random order per session
@@ -51,14 +36,14 @@ const shuffleArray = <T,>(array: T[], seed: number): T[] => {
   const shuffled = [...array];
   let currentIndex = shuffled.length;
   let randomValue = seed;
-  
+
   while (currentIndex !== 0) {
     randomValue = (randomValue * 9301 + 49297) % 233280;
     const randomIndex = Math.floor((randomValue / 233280) * currentIndex);
     currentIndex--;
     [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
   }
-  
+
   return shuffled;
 };
 
@@ -71,7 +56,7 @@ const Gallery = () => {
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const sectionRef = useRef<HTMLElement | null>(null);
   const timeoutsRef = useRef<number[]>([]);
-  
+
   // Generate a random starting seed once per session
   const shuffledItems = useMemo(() => {
     const seed = Math.floor(Math.random() * 1000000);
@@ -152,7 +137,7 @@ const Gallery = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedIndex === null) return;
-      
+
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') goPrev();
       if (e.key === 'ArrowRight') goNext();
@@ -237,7 +222,7 @@ const Gallery = () => {
 
       {/* Fullscreen Lightbox Overlay */}
       {selectedIndex !== null && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex items-center justify-center animate-fade-in"
           onClick={closeLightbox}
         >
@@ -266,19 +251,19 @@ const Gallery = () => {
           </button>
 
           {/* Image container with backglow */}
-          <div 
+          <div
             className="relative max-w-[90vw] max-h-[80vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Backglow effect for fullscreen */}
             <div className="absolute inset-0 -m-4 bg-foreground/5 blur-2xl rounded-3xl" />
-            
+
             <img
               src={shuffledItems[selectedIndex].src}
               alt={shuffledItems[selectedIndex].title}
               className="relative max-w-full max-h-[75vh] object-contain drop-shadow-2xl"
             />
-            
+
             {/* Title below image */}
             <p className="relative mt-6 font-display text-lg tracking-[0.2em] text-foreground">
               {shuffledItems[selectedIndex].title.toUpperCase()}
