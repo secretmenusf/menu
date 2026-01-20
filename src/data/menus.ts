@@ -15,11 +15,19 @@ export interface MenuItemOption {
 export const vegetarianCustomizations: MenuItemOption[] = [
   { id: 'add-chicken', name: 'Add Grilled Free-Range Organic Chicken', priceModifier: 8, category: 'protein', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-steak', name: 'Add Grilled Grass-Fed Sirloin Steak', priceModifier: 12, category: 'protein', allowMultiple: true, maxQuantity: 5 },
+  { id: 'add-salmon', name: 'Add Pan-Seared Wild Caught Salmon', priceModifier: 10, category: 'protein', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-tofu', name: 'Add Marinated Teriyaki Tofu', priceModifier: 5, category: 'protein', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-sweet-potatoes', name: 'Add Sweet Potatoes', priceModifier: 2, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-artichoke-hearts', name: 'Add Artichoke Hearts', priceModifier: 2, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-avocado', name: 'Add Avocado', priceModifier: 3, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-artisan-bread', name: 'Add Artisan Bread Slice', priceModifier: 2, category: 'side', allowMultiple: true, maxQuantity: 10 }
+];
+
+// Standard potato substitution options for dishes with mashed potatoes
+export const potatoSubstitutions: MenuItemOption[] = [
+  { id: 'sub-roasted-potatoes', name: 'Sub for Roasted Rosemary Garlic Potatoes', priceModifier: 2, category: 'side' },
+  { id: 'sub-fingerling-potatoes', name: 'Sub for Crispy Fingerling Potatoes', priceModifier: 2, category: 'side' },
+  { id: 'sub-polenta', name: 'Sub for Creamy Polenta', priceModifier: 2, category: 'side' }
 ];
 
 export interface MenuItem {
@@ -192,6 +200,8 @@ export const galleryMenuItems: MenuItem[] = [
       { id: 'yorkshire-pudding', name: 'Add Yorkshire Pudding', priceModifier: 12, category: 'add-on', image: '/images/menu/plated/yorkshirepudding.png' },
       { id: 'extra-gravy', name: 'Extra Gravy', priceModifier: 3, category: 'add-on' },
       { id: 'sub-mashed-potatoes', name: 'Substitute Smashed Potatoes for Mashed Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-fingerling-potatoes', name: 'Substitute Smashed Potatoes for Crispy Fingerling Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-polenta', name: 'Substitute Smashed Potatoes for Creamy Polenta', priceModifier: 2, category: 'side' },
       { id: 'half-portion', name: '1/2 Portion of Meat', priceModifier: -8, category: 'portion' },
       { id: 'double-portion', name: 'Double Portion of Meat', priceModifier: 16, category: 'portion' },
       { id: 'artisan-bread', name: 'Add Artisan Bread Slice', priceModifier: 2, category: 'side' }
@@ -667,7 +677,9 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       { id: 'sub-veal', name: 'Sub Veal for Ground Pork', priceModifier: 5, category: 'protein' },
-      { id: 'sub-mashed-potatoes', name: 'Sub Fingerling Potatoes to Mashed Potatoes', priceModifier: 3, category: 'side' },
+      { id: 'sub-mashed-potatoes', name: 'Sub Fingerling Potatoes for Mashed Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-roasted-potatoes', name: 'Sub Fingerling Potatoes for Roasted Rosemary Garlic Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-polenta', name: 'Sub Fingerling Potatoes for Creamy Polenta', priceModifier: 2, category: 'side' },
       { id: 'add-zucchini-carpaccio', name: 'Add Zucchini Carpaccio Side', priceModifier: 9, category: 'side' },
       { id: 'add-roasted-veggies', name: 'Add Mixed Roasted Veggies', priceModifier: 8, category: 'side' },
       { id: 'add-garden-salad', name: 'Add Garden Salad', priceModifier: 9, category: 'side' }
@@ -969,6 +981,8 @@ export const galleryMenuItems: MenuItem[] = [
       { id: 'double-meat', name: 'Double Meat', priceModifier: 16, category: 'protein' },
       { id: 'extra-gremolata', name: 'Extra Gremolata', priceModifier: 3, category: 'add-on' },
       { id: 'sub-roasted-potatoes', name: 'Sub Polenta for Roasted Rosemary Garlic Potatoes', priceModifier: 0, category: 'side' },
+      { id: 'sub-mashed-potatoes', name: 'Sub Polenta for Mashed Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-fingerling-potatoes', name: 'Sub Polenta for Crispy Fingerling Potatoes', priceModifier: 2, category: 'side' },
       { id: 'sub-garden-salad', name: 'Sub Polenta for Garden Salad', priceModifier: 0, category: 'side' },
       { id: 'add-garden-salad', name: 'Add Garden Salad', priceModifier: 8, category: 'side' },
       { id: 'add-roasted-veggies', name: 'Add Roasted Veggies', priceModifier: 9, category: 'side' },
@@ -1014,6 +1028,8 @@ export const galleryMenuItems: MenuItem[] = [
       { id: 'double-meat', name: 'Double Meat', priceModifier: 16, category: 'protein' },
       { id: 'sub-roasted-veggies', name: 'Sub Mashed Potatoes for Roasted Veggies', priceModifier: 0, category: 'side' },
       { id: 'sub-smashed-potatoes', name: 'Sub Mashed Potatoes for Smashed Rosemary Garlic Potatoes', priceModifier: 0, category: 'side' },
+      { id: 'sub-fingerling-potatoes', name: 'Sub Mashed Potatoes for Crispy Fingerling Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-polenta', name: 'Sub Mashed Potatoes for Creamy Polenta', priceModifier: 2, category: 'side' },
       { id: 'add-beet-salad', name: 'Side of Beet Salad', priceModifier: 9, category: 'side' },
       { id: 'add-garden-salad', name: 'Garden Salad', priceModifier: 8, category: 'side' }
     ]

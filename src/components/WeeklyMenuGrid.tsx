@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Leaf, X } from 'lucide-react';
-import { galleryMenuItems, type MenuItem, dietaryInfo } from '@/data/menus';
+import { Leaf, X, Plus, Minus, Check, MessageSquare } from 'lucide-react';
+import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
 
@@ -17,10 +17,194 @@ const filters: { id: FilterType; label: string }[] = [
   { id: 'pescatarian', label: 'Pescatarian' },
 ];
 
+// Quantity Stepper Component (Uber Eats style)
+const QuantityStepper = ({
+  value,
+  onChange,
+  min = 0,
+  max = 10
+}: {
+  value: number;
+  onChange: (val: number) => void;
+  min?: number;
+  max?: number;
+}) => (
+  <div className="flex items-center gap-2">
+    <button
+      onClick={(e) => { e.stopPropagation(); onChange(Math.max(min, value - 1)); }}
+      disabled={value <= min}
+      className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-foreground disabled:opacity-30 disabled:cursor-not-allowed hover:bg-muted/80 transition-colors"
+    >
+      <Minus size={16} />
+    </button>
+    <span className="w-8 text-center font-semibold text-foreground">{value}</span>
+    <button
+      onClick={(e) => { e.stopPropagation(); onChange(Math.min(max, value + 1)); }}
+      disabled={value >= max}
+      className="w-8 h-8 rounded-full bg-foreground flex items-center justify-center text-background disabled:opacity-30 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
+    >
+      <Plus size={16} />
+    </button>
+  </div>
+);
+
+// Checkbox Option Component
+const CheckboxOption = ({
+  option,
+  checked,
+  onChange
+}: {
+  option: MenuItemOption;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) => (
+  <button
+    onClick={() => onChange(!checked)}
+    className={`w-full flex items-center justify-between p-4 rounded-xl transition-all border-2 ${
+      checked
+        ? 'bg-emerald-500/10 border-emerald-500/50'
+        : 'bg-muted/50 border-transparent hover:bg-muted'
+    }`}
+  >
+    <div className="flex items-center gap-3">
+      <div className={`w-6 h-6 rounded-md flex items-center justify-center transition-all ${
+        checked
+          ? 'bg-emerald-500 text-white'
+          : 'bg-background border-2 border-border'
+      }`}>
+        {checked && <Check size={14} strokeWidth={3} />}
+      </div>
+      <span className="text-sm text-foreground">{option.name}</span>
+    </div>
+    <span className={`text-sm font-medium ${
+      option.priceModifier > 0 ? 'text-foreground' :
+      option.priceModifier < 0 ? 'text-emerald-500' :
+      'text-muted-foreground'
+    }`}>
+      {option.priceModifier > 0 ? `+$${option.priceModifier.toFixed(2)}` :
+       option.priceModifier < 0 ? `-$${Math.abs(option.priceModifier).toFixed(2)}` :
+       'Free'}
+    </span>
+  </button>
+);
+
+// Quantity Option Component (for items that allow multiple)
+const QuantityOption = ({
+  option,
+  quantity,
+  onChange
+}: {
+  option: MenuItemOption;
+  quantity: number;
+  onChange: (qty: number) => void;
+}) => (
+  <div className={`flex items-center justify-between p-4 rounded-xl transition-all border-2 ${
+    quantity > 0
+      ? 'bg-emerald-500/10 border-emerald-500/50'
+      : 'bg-muted/50 border-transparent'
+  }`}>
+    <div className="flex-1">
+      <span className="text-sm text-foreground">{option.name}</span>
+      <span className={`text-sm font-medium ml-2 ${
+        option.priceModifier > 0 ? 'text-muted-foreground' :
+        option.priceModifier < 0 ? 'text-emerald-500' :
+        'text-muted-foreground'
+      }`}>
+        {option.priceModifier > 0 ? `+$${option.priceModifier.toFixed(2)} each` :
+         option.priceModifier < 0 ? `-$${Math.abs(option.priceModifier).toFixed(2)} each` :
+         ''}
+      </span>
+    </div>
+    <QuantityStepper
+      value={quantity}
+      onChange={onChange}
+      min={0}
+      max={option.maxQuantity || 10}
+    />
+  </div>
+);
+
 // Detail Modal Component
 const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => void }) => {
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
+  const [specialInstructions, setSpecialInstructions] = useState('');
+  const [quantity, setQuantity] = useState(1);
+
   const isVegetarian = item.tags?.includes('v') || item.tags?.includes('vg');
   const isVegan = item.tags?.includes('vg');
+
+  // Group options by category
+  const groupedOptions = useMemo(() => {
+    if (!item.options) return {};
+    return item.options.reduce((acc, opt) => {
+      const category = opt.category || 'other';
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(opt);
+      return acc;
+    }, {} as Record<string, MenuItemOption[]>);
+  }, [item.options]);
+
+  const categoryLabels: Record<string, string> = {
+    protein: '🥩 Add Protein',
+    side: '🥗 Sides',
+    'add-on': '✨ Add-ons',
+    portion: '📏 Portion Size',
+    extra: '➕ Extras',
+    dietary: '🌱 Dietary Options',
+    other: 'Other Options'
+  };
+
+  const updateOption = (optionId: string, value: number) => {
+    setSelectedOptions(prev => ({ ...prev, [optionId]: value }));
+  };
+
+  const calculateTotal = () => {
+    let total = item.price * quantity;
+    if (item.options) {
+      item.options.forEach(opt => {
+        const qty = selectedOptions[opt.id] || 0;
+        total += opt.priceModifier * qty * quantity;
+      });
+    }
+    return total;
+  };
+
+  const handleAddToOrder = () => {
+    const orderSummary = {
+      item: item.name,
+      basePrice: item.price,
+      quantity,
+      customizations: item.options?.filter(opt => selectedOptions[opt.id] > 0).map(opt => ({
+        name: opt.name,
+        quantity: selectedOptions[opt.id],
+        price: opt.priceModifier
+      })) || [],
+      specialInstructions,
+      total: calculateTotal()
+    };
+
+    // Build WhatsApp message
+    let message = `Hi! I'd like to order:\n\n`;
+    message += `*${quantity}x ${item.name}* - $${item.price.toFixed(2)}\n`;
+
+    const selectedCustomizations = item.options?.filter(opt => selectedOptions[opt.id] > 0);
+    if (selectedCustomizations && selectedCustomizations.length > 0) {
+      message += `\nCustomizations:\n`;
+      selectedCustomizations.forEach(opt => {
+        const qty = selectedOptions[opt.id];
+        const price = opt.priceModifier * qty;
+        message += `• ${qty > 1 ? `${qty}x ` : ''}${opt.name}${price !== 0 ? ` (+$${price.toFixed(2)})` : ''}\n`;
+      });
+    }
+
+    if (specialInstructions) {
+      message += `\nSpecial Instructions: ${specialInstructions}\n`;
+    }
+
+    message += `\n*Total: $${calculateTotal().toFixed(2)}*`;
+
+    window.open(`https://wa.me/14153732496?text=${encodeURIComponent(message)}`, '_blank');
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={onClose}>
@@ -125,63 +309,81 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
             </div>
           )}
 
-          {/* Customization Options */}
+          {/* Customization Options - Grouped by Category */}
           {item.options && item.options.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Customize Your Order</h3>
-              <div className="space-y-2">
-                {item.options.map((option) => (
-                  <div
-                    key={option.id}
-                    className="flex items-center justify-between p-3 bg-muted rounded-xl hover:bg-muted/80 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      {option.category && (
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium uppercase ${
-                          option.category === 'protein' ? 'bg-red-500/20 text-red-400' :
-                          option.category === 'side' ? 'bg-emerald-500/20 text-emerald-400' :
-                          option.category === 'add-on' ? 'bg-amber-500/20 text-amber-400' :
-                          option.category === 'portion' ? 'bg-blue-500/20 text-blue-400' :
-                          option.category === 'extra' ? 'bg-purple-500/20 text-purple-400' :
-                          'bg-muted-foreground/20 text-muted-foreground'
-                        }`}>
-                          {option.category}
-                        </span>
-                      )}
-                      <span className="text-sm text-foreground">{option.name}</span>
-                    </div>
-                    <span className={`text-sm font-medium ${
-                      option.priceModifier > 0 ? 'text-foreground' :
-                      option.priceModifier < 0 ? 'text-emerald-500' :
-                      'text-muted-foreground'
-                    }`}>
-                      {option.priceModifier > 0 ? `+$${option.priceModifier}` :
-                       option.priceModifier < 0 ? `-$${Math.abs(option.priceModifier)}` :
-                       'Free'}
-                    </span>
+            <div className="mb-6 space-y-6">
+              {Object.entries(groupedOptions).map(([category, options]) => (
+                <div key={category}>
+                  <h3 className="text-sm font-medium text-foreground mb-3">
+                    {categoryLabels[category] || category}
+                  </h3>
+                  <div className="space-y-2">
+                    {options.map((option) => (
+                      option.allowMultiple ? (
+                        <QuantityOption
+                          key={option.id}
+                          option={option}
+                          quantity={selectedOptions[option.id] || 0}
+                          onChange={(qty) => updateOption(option.id, qty)}
+                        />
+                      ) : (
+                        <CheckboxOption
+                          key={option.id}
+                          option={option}
+                          checked={(selectedOptions[option.id] || 0) > 0}
+                          onChange={(checked) => updateOption(option.id, checked ? 1 : 0)}
+                        />
+                      )
+                    ))}
                   </div>
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground mt-3">
-                Select customizations when placing your order via WhatsApp or phone.
-              </p>
+                </div>
+              ))}
             </div>
           )}
 
-          {/* Price and CTA */}
-          <div className="flex items-center justify-between pt-4 border-t border-border">
-            <div>
-              <span className="text-2xl font-semibold text-foreground">${item.price}</span>
+          {/* Special Instructions */}
+          <div className="mb-6">
+            <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+              <MessageSquare size={16} />
+              Special Instructions
+            </h3>
+            <textarea
+              value={specialInstructions}
+              onChange={(e) => setSpecialInstructions(e.target.value)}
+              placeholder="Any allergies, preferences, or special requests..."
+              className="w-full p-4 bg-muted/50 border-2 border-transparent rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:border-foreground/20 focus:outline-none resize-none"
+              rows={3}
+            />
+          </div>
+
+          {/* Quantity Selector */}
+          <div className="mb-6 flex items-center justify-between p-4 bg-muted/50 rounded-xl">
+            <span className="text-sm font-medium text-foreground">Quantity</span>
+            <QuantityStepper
+              value={quantity}
+              onChange={setQuantity}
+              min={1}
+              max={20}
+            />
+          </div>
+
+          {/* Price and CTA - Sticky at bottom */}
+          <div className="sticky bottom-0 bg-card pt-4 border-t border-border -mx-6 px-6 -mb-6 pb-6 md:static md:mx-0 md:px-0 md:mb-0 md:pb-0">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-sm text-muted-foreground">Total</span>
+                <div className="text-2xl font-semibold text-foreground">${calculateTotal().toFixed(2)}</div>
+              </div>
               {item.prepTime && (
-                <span className="text-sm text-muted-foreground ml-2">• {item.prepTime} min prep</span>
+                <span className="text-sm text-muted-foreground">~{item.prepTime} min prep</span>
               )}
             </div>
-            <a
-              href="/order"
-              className="px-6 py-3 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-opacity"
+            <button
+              onClick={handleAddToOrder}
+              className="w-full py-4 bg-foreground text-background rounded-full font-semibold text-lg hover:opacity-90 transition-opacity"
             >
-              Order Now
-            </a>
+              Add to Order via WhatsApp
+            </button>
           </div>
         </div>
       </div>
