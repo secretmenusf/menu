@@ -14,7 +14,6 @@ import {
   X,
   Send,
   User,
-  Bot,
   Mail,
   Phone,
   ExternalLink,
@@ -350,11 +349,13 @@ export function EnhancedOrderingChat() {
                     )}
                   >
                     {message.role !== 'user' && (
-                      <div className="w-8 h-8 rounded-full bg-mystical/20 flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-foreground/10">
                         {message.role === 'assistant' ? (
-                          <Bot className="w-4 h-4 text-mystical" />
+                          <img src={chefAntje} alt="Chef Antje" className="w-full h-full object-cover" />
                         ) : (
-                          <AlertCircle className="w-4 h-4 text-muted-foreground" />
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <AlertCircle className="w-4 h-4 text-muted-foreground" />
+                          </div>
                         )}
                       </div>
                     )}
@@ -402,8 +403,8 @@ export function EnhancedOrderingChat() {
 
                 {isTyping && (
                   <div className="flex gap-3 justify-start">
-                    <div className="w-8 h-8 rounded-full bg-mystical/20 flex items-center justify-center">
-                      <Bot className="w-4 h-4 text-mystical" />
+                    <div className="w-8 h-8 rounded-full overflow-hidden ring-1 ring-foreground/10">
+                      <img src={chefAntje} alt="Chef Antje" className="w-full h-full object-cover" />
                     </div>
                     <div className="bg-muted/80 rounded-2xl px-4 py-2">
                       <div className="flex space-x-1">

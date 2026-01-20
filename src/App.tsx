@@ -59,6 +59,7 @@ import CommandPalette from '@/components/CommandPalette';
 import Analytics from '@/components/Analytics';
 import { EnhancedOrderingChat } from '@/components/chat/EnhancedOrderingChat';
 import { MobileStickyCTA } from '@/components/MobileStickyCTA';
+import { StickyToolbar } from '@/components/StickyToolbar';
 
 const queryClient = new QueryClient();
 
@@ -164,6 +165,7 @@ const App = () => (
                     <CommandPalette />
                     <EnhancedOrderingChat />
                     <MobileStickyCTA />
+                    <StickyToolbar />
                     <AppRoutes />
                   </BrowserRouter>
                 </ThemeTransition>

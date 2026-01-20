@@ -7,87 +7,100 @@ import {
   Container,
   Fish,
   Wheat,
-  MapPin,
-  Check,
 } from 'lucide-react';
 import { suppliers, certifications } from '@/data/suppliers';
 import { supplierLogos, certificationLogos } from '@/components/supplier-logos';
 import { cn } from '@/lib/utils';
 
-// Our standards data
-const standards = [
-  {
-    icon: Beef,
-    value: '40–60g',
-    label: 'Quality Protein',
-    color: 'text-red-400',
-  },
-  {
-    icon: Leaf,
-    value: '100%',
-    label: 'Organic Produce',
-    color: 'text-emerald-400',
-  },
-  {
-    icon: Ban,
-    value: 'Zero',
-    label: 'Processed Foods',
-    color: 'text-amber-400',
-  },
-  {
-    icon: Droplet,
-    value: 'No',
-    label: 'Seed Oils',
-    color: 'text-blue-400',
-  },
-  {
-    icon: ShieldX,
-    value: '60+',
-    label: 'Banned Ingredients',
-    color: 'text-purple-400',
-  },
-  {
-    icon: Container,
-    value: 'Glass',
-    label: 'Reusable Jars',
-    color: 'text-cyan-400',
-  },
-  {
-    icon: Fish,
-    value: 'Wild',
-    label: 'Caught Seafood',
-    color: 'text-sky-400',
-  },
-  {
-    icon: Wheat,
-    value: '8g+',
-    label: 'Fiber Per Meal',
-    color: 'text-yellow-400',
-  },
-];
+// Bento card component
+const BentoCard = ({
+  icon: Icon,
+  value,
+  label,
+  color,
+  className,
+  size = 'default',
+}: {
+  icon: React.ElementType;
+  value: string;
+  label: string;
+  color: string;
+  className?: string;
+  size?: 'default' | 'large' | 'wide';
+}) => {
+  const isLarge = size === 'large';
+  const isWide = size === 'wide';
 
-// Standard item - clean minimal design
-const StandardItem = ({ standard }: { standard: typeof standards[0] }) => {
-  const Icon = standard.icon;
   return (
-    <div className="flex flex-col items-center text-center group">
-      <div className={cn(
-        'w-12 h-12 rounded-full flex items-center justify-center mb-3',
-        'bg-card/50 border border-border/50 group-hover:border-border transition-colors'
-      )}>
-        <Icon className={cn('w-5 h-5', standard.color)} />
+    <div
+      className={cn(
+        'relative rounded-3xl border border-border/50 bg-card/30 backdrop-blur-sm p-6',
+        'hover:border-border hover:bg-card/50 transition-all duration-300',
+        'flex flex-col',
+        isLarge && 'row-span-2',
+        isWide && 'col-span-2',
+        className
+      )}
+    >
+      <div
+        className={cn(
+          'w-12 h-12 rounded-2xl flex items-center justify-center mb-4',
+          'bg-foreground/5 border border-border/30'
+        )}
+      >
+        <Icon className={cn('w-6 h-6', color)} />
       </div>
-      <span className="font-display text-xl tracking-wide text-foreground">
-        {standard.value}
+      <div className="mt-auto">
+        <span
+          className={cn(
+            'font-display tracking-wide text-foreground block',
+            isLarge ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'
+          )}
+        >
+          {value}
+        </span>
+        <span className="text-sm text-muted-foreground tracking-wider uppercase mt-2 block">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+// Certification bento card
+const CertificationCard = ({
+  certId,
+  label,
+  sublabel,
+  className,
+}: {
+  certId: string;
+  label: string;
+  sublabel: string;
+  className?: string;
+}) => {
+  const Logo = certificationLogos[certId];
+  return (
+    <div
+      className={cn(
+        'relative rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-6',
+        'hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all duration-300',
+        'flex flex-col items-center justify-center text-center',
+        className
+      )}
+    >
+      {Logo && <Logo className="h-10 w-10 text-emerald-500 mb-3" />}
+      <span className="font-display text-lg tracking-wide text-foreground">
+        {label}
       </span>
       <span className="text-xs text-muted-foreground tracking-wider uppercase mt-1">
-        {standard.label}
+        {sublabel}
       </span>
     </div>
   );
 };
 
-// Supplier logo item - simplified
+// Supplier logo item
 const SupplierLogo = ({ supplier }: { supplier: typeof suppliers[0] }) => {
   const Logo = supplierLogos[supplier.id];
 
@@ -112,11 +125,11 @@ const SupplierLogo = ({ supplier }: { supplier: typeof suppliers[0] }) => {
   );
 };
 
-// Main Standards Section - cleaner design
+// Main Standards Section - Bento Grid Design
 const StandardsSection = () => {
   return (
     <section className="py-24 bg-background">
-      <div className="container mx-auto px-6 max-w-5xl">
+      <div className="container mx-auto px-6 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-xs tracking-[0.4em] text-muted-foreground mb-4 uppercase">
@@ -134,29 +147,92 @@ const StandardsSection = () => {
           </p>
         </div>
 
-        {/* Standards Grid - 4x2 on desktop, 2x4 on mobile */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-20">
-          {standards.map((standard, idx) => (
-            <StandardItem key={idx} standard={standard} />
-          ))}
+        {/* Bento Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+          {/* Row 1 */}
+          <BentoCard
+            icon={Beef}
+            value="40–60g"
+            label="Quality Protein"
+            color="text-red-400"
+            size="large"
+            className="min-h-[200px]"
+          />
+          <BentoCard
+            icon={Leaf}
+            value="100%"
+            label="Organic Produce"
+            color="text-emerald-400"
+            className="min-h-[140px]"
+          />
+          <BentoCard
+            icon={Ban}
+            value="Zero"
+            label="Processed Foods"
+            color="text-amber-400"
+            className="min-h-[140px]"
+          />
+          <BentoCard
+            icon={Fish}
+            value="Wild"
+            label="Caught Seafood"
+            color="text-sky-400"
+            size="large"
+            className="min-h-[200px]"
+          />
+
+          {/* Row 2 */}
+          <BentoCard
+            icon={Droplet}
+            value="No"
+            label="Seed Oils"
+            color="text-blue-400"
+            className="min-h-[140px]"
+          />
+          <BentoCard
+            icon={ShieldX}
+            value="60+"
+            label="Banned Ingredients"
+            color="text-purple-400"
+            className="min-h-[140px]"
+          />
+
+          {/* Row 3 - Wide cards */}
+          <BentoCard
+            icon={Wheat}
+            value="8g+"
+            label="Fiber Per Meal"
+            color="text-yellow-400"
+            size="wide"
+            className="min-h-[140px]"
+          />
+          <BentoCard
+            icon={Container}
+            value="Glass"
+            label="Reusable Jars"
+            color="text-cyan-400"
+            size="wide"
+            className="min-h-[140px]"
+          />
         </div>
 
-        {/* Certifications - horizontal row */}
-        <div className="flex flex-wrap justify-center gap-4 mb-20">
-          {certifications.map((cert) => {
-            const Logo = certificationLogos[cert.id];
-            return (
-              <div
-                key={cert.id}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5"
-              >
-                {Logo && <Logo className="h-6 w-6 text-emerald-500" />}
-                <span className="text-xs tracking-wider text-foreground">
-                  {cert.name}
-                </span>
-              </div>
-            );
-          })}
+        {/* Certifications Bento Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-20">
+          <CertificationCard
+            certId="usda-organic"
+            label="USDA"
+            sublabel="Organic Certified"
+          />
+          <CertificationCard
+            certId="certified-humane"
+            label="Certified"
+            sublabel="Humane Raised"
+          />
+          <CertificationCard
+            certId="grass-fed"
+            label="100%"
+            sublabel="Grass-Fed Beef"
+          />
         </div>
 
         {/* Divider */}
@@ -174,7 +250,7 @@ const StandardsSection = () => {
           local organic producers in California.
         </p>
 
-        {/* Supplier logos grid - clean monochrome */}
+        {/* Supplier logos grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 items-center justify-items-center">
           {suppliers.map((supplier) => (
             <SupplierLogo key={supplier.id} supplier={supplier} />
