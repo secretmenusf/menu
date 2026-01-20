@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // Prevent theme flash - set theme before render
+      (function() {
+        const stored = localStorage.getItem('sfsecretmenu-ui-theme');
+        const theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+        document.documentElement.classList.add(theme);
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SF Secret Menu | Chef-Crafted Meals Delivered</title>

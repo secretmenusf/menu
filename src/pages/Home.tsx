@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import WeeklyMenuGrid from '@/components/WeeklyMenuGrid';
+import HomeMenuPreview from '@/components/HomeMenuPreview';
 import ReviewsSection from '@/components/reviews/ReviewsSection';
 import MenuSection from '@/components/MenuSection';
 import AboutSection from '@/components/AboutSection';
@@ -31,8 +31,8 @@ const Home = () => {
         {/* Trust Badges - Organic, Local, Fresh, Certified */}
         <TrustBadgesSection />
 
-        {/* Weekly Menu Grid - Shoplocale style */}
-        <WeeklyMenuGrid />
+        {/* Menu Preview - condensed view */}
+        <HomeMenuPreview />
 
         {/* Stats - Rating, Meals Delivered, Happy Members */}
         <StatsSection />

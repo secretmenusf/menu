@@ -2,6 +2,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
 import { useRef, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
+import { useTheme } from '@/components/theme-provider';
 
 interface SeedOfLife3DProps {
   size?: number;
@@ -95,7 +96,115 @@ const SeedOfLifeGeometry = () => {
   );
 };
 
+// Dark geometry with subtle backlight for light mode
+const SeedOfLifeGeometryDark = () => {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const PHI = 1.618033988749;
+
+    if (groupRef.current) {
+      groupRef.current.rotation.y = t * 0.5;
+      groupRef.current.rotation.z = Math.sin(t * PHI * 0.3) * 0.02;
+      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.015;
+      groupRef.current.scale.setScalar(breathe);
+    }
+  });
+
+  const r = 0.35;
+  const tubeRadius = 0.028;
+
+  const positions: [number, number, number][] = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * 60 - 90) * (Math.PI / 180);
+    positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
+  }
+
+  // Matte black material
+  const darkMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      color: '#1a1a1a',
+      emissive: '#000000',
+      emissiveIntensity: 0,
+      metalness: 0.1,
+      roughness: 0.8,
+      toneMapped: true,
+    });
+  }, []);
+
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <torusGeometry args={[r, tubeRadius, 32, 100]} />
+        <primitive object={darkMaterial} attach="material" />
+      </mesh>
+      {positions.map((pos, i) => (
+        <mesh key={i} position={pos}>
+          <torusGeometry args={[r, tubeRadius, 32, 100]} />
+          <primitive object={darkMaterial} attach="material" />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
 const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
+  const { theme } = useTheme();
+
+  // In light mode, show 3D black version with subtle backlight
+  if (theme === 'light') {
+    return (
+      <div
+        className={`${className}`}
+        style={{
+          width: size,
+          height: size,
+          position: 'relative',
+        }}
+      >
+        {/* Subtle shadow/ambient layer */}
+        <div
+          className="absolute"
+          style={{
+            inset: '-10%',
+            filter: 'blur(8px)',
+            opacity: 0.15,
+          }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, 2.5], fov: 40 }}
+            gl={{ alpha: true, antialias: true }}
+            frameloop="always"
+            dpr={[1, 1]}
+          >
+            <ambientLight intensity={0.3} />
+            <Center>
+              <SeedOfLifeGeometryDark />
+            </Center>
+          </Canvas>
+        </div>
+        {/* Main layer */}
+        <div style={{ position: 'absolute', inset: 0 }}>
+          <Canvas
+            camera={{ position: [0, 0, 2.5], fov: 40 }}
+            gl={{ alpha: true, antialias: true }}
+            frameloop="always"
+            dpr={[1, 2]}
+          >
+            <ambientLight intensity={0.8} />
+            <pointLight position={[0, 0, 4]} intensity={1.0} color="#ffffff" />
+            <pointLight position={[-2, -2, 3]} intensity={0.5} color="#e0e0e0" />
+            <Center>
+              <SeedOfLifeGeometryDark />
+            </Center>
+          </Canvas>
+        </div>
+      </div>
+    );
+  }
+
+  // In dark mode, show 3D animated version with glow
   return (
     <div
       className={`${className}`}
