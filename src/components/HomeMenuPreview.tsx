@@ -111,6 +111,49 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
             </div>
           )}
 
+          {/* Customization Options */}
+          {item.options && item.options.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Customize Your Order</h3>
+              <div className="space-y-2">
+                {item.options.map((option) => (
+                  <div
+                    key={option.id}
+                    className="flex items-center justify-between p-3 bg-muted rounded-xl hover:bg-muted/80 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      {option.category && (
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium uppercase ${
+                          option.category === 'protein' ? 'bg-red-500/20 text-red-400' :
+                          option.category === 'side' ? 'bg-emerald-500/20 text-emerald-400' :
+                          option.category === 'add-on' ? 'bg-amber-500/20 text-amber-400' :
+                          option.category === 'portion' ? 'bg-blue-500/20 text-blue-400' :
+                          option.category === 'extra' ? 'bg-purple-500/20 text-purple-400' :
+                          'bg-muted-foreground/20 text-muted-foreground'
+                        }`}>
+                          {option.category}
+                        </span>
+                      )}
+                      <span className="text-sm text-foreground">{option.name}</span>
+                    </div>
+                    <span className={`text-sm font-medium ${
+                      option.priceModifier > 0 ? 'text-foreground' :
+                      option.priceModifier < 0 ? 'text-emerald-500' :
+                      'text-muted-foreground'
+                    }`}>
+                      {option.priceModifier > 0 ? `+$${option.priceModifier}` :
+                       option.priceModifier < 0 ? `-$${Math.abs(option.priceModifier)}` :
+                       'Free'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                Select customizations when placing your order via WhatsApp or phone.
+              </p>
+            </div>
+          )}
+
           {/* Price and CTA */}
           <div className="flex items-center justify-between pt-4 border-t border-border">
             <div>
