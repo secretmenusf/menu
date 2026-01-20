@@ -87,7 +87,7 @@ export function EnhancedOrderingChat() {
         {
           id: generateId(),
           role: 'assistant',
-          content: "Hi! I'm Chef Antje's AI assistant. I can help you explore our menu, answer questions, or connect you with our support team. What can I help you with today?",
+          content: "Hi! I'm Antje, Secret Menu's founder. I can help you explore our menu, answer questions, or connect you with our support team. What can I help you with today?",
           timestamp: new Date(),
         },
       ]);
@@ -202,7 +202,7 @@ export function EnhancedOrderingChat() {
 
   // Send chat conversation to support
   const handleSendChatToSupport = async () => {
-    const customerEmail = user?.email || contactForm.email || 'anonymous@sfsecretmenu.com';
+    const customerEmail = user?.email || contactForm.email || 'anonymous@secretmenusf.com';
     const customerName = user?.user_metadata?.name || contactForm.name || 'Anonymous';
     
     const conversation = messages
@@ -271,7 +271,7 @@ export function EnhancedOrderingChat() {
       console.error('Contact form error:', error);
       toast({
         title: 'Unable to send message',
-        description: 'Please try again or contact us directly at support@sfsecretmenu.com',
+        description: 'Please try again or contact us directly at support@secretmenusf.com',
         variant: 'destructive',
       });
     } finally {
@@ -304,15 +304,12 @@ export function EnhancedOrderingChat() {
         <div className="fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)] h-[650px] max-h-[calc(100vh-100px)] bg-background border border-border/50 rounded-2xl shadow-2xl shadow-black/20 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-border/30 bg-gradient-to-r from-mystical/10 to-mystical/5">
-            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-mystical/30">
-              <img src={chefAntje} alt="Chef Antje" className="w-full h-full object-cover" />
-            </div>
             <div className="flex-1">
               <h3 className="font-display text-sm tracking-wider text-foreground">
-                {currentView === 'chat' ? 'AI ASSISTANT' : 'SUPPORT'}
+                {currentView === 'chat' ? 'SECRET AI' : 'SUPPORT'}
               </h3>
               <p className="text-xs text-muted-foreground">
-                {currentView === 'chat' ? 'Powered by Chef Antje' : 'Human support team'}
+                {currentView === 'chat' ? 'How can I help?' : 'Human support team'}
               </p>
             </div>
             <div className="flex gap-2">

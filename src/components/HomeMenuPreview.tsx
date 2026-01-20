@@ -1,17 +1,147 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Leaf, ChevronLeft, ChevronRight, ArrowRight, X } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
 
-const MenuCard = ({ item }: { item: MenuItem }) => {
+// Detail Modal Component
+const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="relative bg-card border border-border w-full h-full md:h-auto md:max-h-[95vh] md:max-w-2xl md:mx-4 md:rounded-3xl overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center text-foreground hover:bg-accent transition-colors"
+        >
+          <X size={20} />
+        </button>
+
+        {/* Hero image */}
+        <div className="relative h-72 md:h-64 bg-muted md:rounded-t-3xl overflow-hidden">
+          {item.image ? (
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <SeedOfLife size={80} className="text-muted-foreground/30" />
+            </div>
+          )}
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+
+          {/* Dietary badges */}
+          <div className="absolute bottom-4 left-4 flex gap-2">
+            {item.tags?.map(tag => (
+              <span key={tag} className="px-3 py-1 bg-foreground text-background rounded-full text-xs font-medium uppercase">
+                {dietaryInfo[tag]?.label || tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 md:p-6 pb-20 md:pb-6">
+          <h2 className="text-2xl font-semibold text-foreground mb-2">{item.name}</h2>
+          <p className="text-muted-foreground mb-6">{item.description}</p>
+
+          {/* Nutrition Grid */}
+          {item.nutrition && (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Nutrition Facts</h3>
+              <div className="grid grid-cols-5 gap-3">
+                <div className="bg-muted rounded-xl p-3 text-center">
+                  <div className="text-xl font-semibold text-foreground">{item.nutrition.calories}</div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Calories</div>
+                </div>
+                <div className="bg-muted rounded-xl p-3 text-center">
+                  <div className="text-xl font-semibold text-foreground">{item.nutrition.protein}g</div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Protein</div>
+                </div>
+                <div className="bg-muted rounded-xl p-3 text-center">
+                  <div className="text-xl font-semibold text-foreground">{item.nutrition.carbs}g</div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Carbs</div>
+                </div>
+                <div className="bg-muted rounded-xl p-3 text-center">
+                  <div className="text-xl font-semibold text-foreground">{item.nutrition.fat}g</div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Fat</div>
+                </div>
+                <div className="bg-muted rounded-xl p-3 text-center">
+                  <div className="text-xl font-semibold text-foreground">{item.nutrition.fiber}g</div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Fiber</div>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Serving size: {item.nutrition.servingSize}</p>
+            </div>
+          )}
+
+          {/* Ingredients */}
+          {item.ingredients && item.ingredients.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Ingredients</h3>
+              <div className="flex flex-wrap gap-2">
+                {item.ingredients.map((ingredient, i) => (
+                  <span key={i} className="px-3 py-1.5 bg-muted rounded-full text-sm text-foreground">
+                    {ingredient}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Allergens */}
+          {item.allergens && item.allergens.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Allergens</h3>
+              <div className="flex flex-wrap gap-2">
+                {item.allergens.map((allergen, i) => (
+                  <span key={i} className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full text-sm text-amber-600 dark:text-amber-400">
+                    {allergen}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Price and CTA */}
+          <div className="flex items-center justify-between pt-4 border-t border-border">
+            <div>
+              <span className="text-2xl font-semibold text-foreground">${item.price}</span>
+              {item.prepTime && (
+                <span className="text-sm text-muted-foreground ml-2">• {item.prepTime} min prep</span>
+              )}
+            </div>
+            <Link
+              to="/order"
+              className="px-6 py-3 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-opacity"
+            >
+              Order Now
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) => {
   const isVegetarian = item.tags?.includes('v') || item.tags?.includes('vg');
   const isVegan = item.tags?.includes('vg');
   const hasFish = item.allergens?.includes('fish') || item.allergens?.includes('shellfish');
 
   return (
-    <div className="flex-shrink-0 w-[320px] bg-card border border-border rounded-2xl overflow-hidden flex flex-col">
+    <div
+      className="flex-shrink-0 w-[320px] bg-card border border-border rounded-2xl overflow-hidden flex flex-col cursor-pointer hover:border-foreground/30 hover:-translate-y-1 transition-all duration-300"
+      onClick={onClick}
+    >
       {/* Image container */}
       <div className="relative p-6 pb-2">
         {/* Dietary badges */}
@@ -82,6 +212,7 @@ const MenuCard = ({ item }: { item: MenuItem }) => {
 
 const HomeMenuPreview = () => {
   const [scrollIndex, setScrollIndex] = useState(0);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const itemsToShow = 4;
   const maxIndex = Math.max(0, galleryMenuItems.length - itemsToShow);
 
@@ -97,12 +228,12 @@ const HomeMenuPreview = () => {
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-6 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-10">
-          <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">
+        <div className="text-center mb-14">
+          <p className="text-xs tracking-[0.3em] text-muted-foreground uppercase mb-6">
             Selection
           </p>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-6 leading-tight">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium text-foreground mb-8 leading-[1.1] tracking-tight">
             30+ rotating high<br />protein meals
           </h2>
 
@@ -135,7 +266,7 @@ const HomeMenuPreview = () => {
               style={{ transform: `translateX(-${scrollIndex * 340}px)` }}
             >
               {galleryMenuItems.map(item => (
-                <MenuCard key={item.id} item={item} />
+                <MenuCard key={item.id} item={item} onClick={() => setSelectedItem(item)} />
               ))}
             </div>
           </div>
@@ -159,6 +290,12 @@ const HomeMenuPreview = () => {
           </button>
         </div>
       </div>
+
+      {/* Detail Modal - rendered via portal to escape parent containers */}
+      {selectedItem && createPortal(
+        <MenuDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />,
+        document.body
+      )}
     </section>
   );
 };

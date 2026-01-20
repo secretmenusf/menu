@@ -209,7 +209,7 @@ class StripeService {
       customerEmail,
       metadata: {
         planId,
-        source: 'sfsecretmenu',
+        source: 'secretmenusf',
       },
     });
 

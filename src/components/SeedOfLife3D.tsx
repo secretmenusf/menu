@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Center } from '@react-three/drei';
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useTheme } from '@/components/theme-provider';
 
@@ -51,7 +51,7 @@ const SeedOfLifeGeometry = () => {
   });
 
   const r = 0.35;
-  const tubeRadius = 0.025;
+  const tubeRadius = 0.025; // Thinner lines for more elegant look
 
   const positions: [number, number, number][] = [];
   for (let i = 0; i < 6; i++) {
@@ -96,24 +96,27 @@ const SeedOfLifeGeometry = () => {
   );
 };
 
-// Dark geometry with subtle backlight for light mode
+// Dark geometry with subtle backlight for light mode - NO ROTATION
 const SeedOfLifeGeometryDark = () => {
   const groupRef = useRef<THREE.Group>(null);
 
+  // Light mode: no rotation, just subtle breathing
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const PHI = 1.618033988749;
 
     if (groupRef.current) {
-      groupRef.current.rotation.y = t * 0.5;
-      groupRef.current.rotation.z = Math.sin(t * PHI * 0.3) * 0.02;
-      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.015;
+      // No rotation in light mode - static logo
+      groupRef.current.rotation.y = 0;
+      groupRef.current.rotation.z = 0;
+      // Very subtle breathing
+      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.01;
       groupRef.current.scale.setScalar(breathe);
     }
   });
 
   const r = 0.35;
-  const tubeRadius = 0.028;
+  const tubeRadius = 0.028; // Thinner lines for more elegant look
 
   const positions: [number, number, number][] = [];
   for (let i = 0; i < 6; i++) {
@@ -151,9 +154,29 @@ const SeedOfLifeGeometryDark = () => {
 
 const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
   const { theme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Check if we're in dark mode (either via theme context or dark class on document)
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const hasDarkClass = document.documentElement.classList.contains('dark') ||
+        document.body.classList.contains('dark') ||
+        !!document.querySelector('.dark');
+      setIsDarkMode(theme === 'dark' || hasDarkClass);
+    };
+
+    checkDarkMode();
+
+    // Observe class changes on document
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    return () => observer.disconnect();
+  }, [theme]);
 
   // In light mode, show 3D black version with subtle backlight
-  if (theme === 'light') {
+  if (!isDarkMode) {
     return (
       <div
         className={`${className}`}

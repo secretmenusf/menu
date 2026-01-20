@@ -58,7 +58,7 @@ const faqCategories = [
     questions: [
       {
         q: 'What payment methods do you accept?',
-        a: 'We accept cryptocurrency (ETH, USDC, USDT on Base and Ethereum), Zelle (pay@sfsecretmenu.com), Venmo (@sfsecretmenu), and CashApp ($sfsecretmenu).',
+        a: 'We accept cryptocurrency (ETH, USDC, USDT on Base and Ethereum), Zelle (pay@secretmenusf.com), Venmo (@secretmenusf), and CashApp ($secretmenusf).',
       },
       {
         q: 'Is gratuity included?',

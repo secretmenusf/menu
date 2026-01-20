@@ -96,7 +96,7 @@ export const comparisonCategories = [
     icon: 'Leaf',
     features: [
       {
-        name: '100% Organic Ingredients',
+        name: '98% Organic Ingredients',
         secretMenu: true,
         competitors: {
           'ubereats': false,
@@ -510,37 +510,43 @@ export const valueProps = [
     title: 'Personal Chef, Not a Factory',
     description: 'Your meals are crafted by a trained chef who knows your preferences, not assembled on a production line.',
     icon: 'ChefHat',
+    image: '/images/chef-kitchen.jpeg',
   },
   {
     title: 'Ingredients That Heal',
     description: 'Every ingredient is chosen for both flavor and nutritional benefit. Food as medicine, food as art.',
     icon: 'Heart',
+    image: '/images/ingredients-heal.jpg',
   },
   {
-    title: 'Never Frozen, Never Compromised',
+    title: 'Never Compromised',
     description: 'Made fresh daily and delivered same-day. No microwave required, no freezer burn, no compromises.',
     icon: 'Flame',
+    image: '/images/fresh-meat.jpg',
   },
   {
     title: 'Know Your Farmer',
     description: 'We source from local Bay Area farms and producers we personally know and trust.',
     icon: 'Leaf',
+    image: '/images/know-your-farmer.jpg',
   },
   {
     title: 'Transparent Nutrition',
     description: 'Full nutrition facts and health scores for every dish. Know exactly what you\'re eating.',
     icon: 'Search',
+    image: '/images/transparent-nutrition.jpg',
   },
   {
     title: 'Flexibility Without Commitment',
     description: 'No subscriptions required. Order when you want, skip when you don\'t. Your schedule, your rules.',
     icon: 'Calendar',
+    image: '/images/flexibility.jpg',
   },
 ];
 
 // Quick comparison stats
 export const quickStats = [
-  { label: 'Organic', secretMenu: '100%', average: '~15%' },
+  { label: 'Organic', secretMenu: '98%', average: '~15%' },
   { label: 'Local Sourcing', secretMenu: '90%+', average: '~5%' },
   { label: 'Made Fresh', secretMenu: 'Daily', average: 'Weekly/Frozen' },
   { label: 'Chef Prepared', secretMenu: 'Always', average: 'Rarely' },

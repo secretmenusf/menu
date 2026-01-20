@@ -24,7 +24,7 @@ export const ShareButton = ({
   title,
   text,
   url,
-  hashtags = ['SFSecretMenu'],
+  hashtags = ['SecretMenuSF'],
   variant = 'outline',
   size = 'sm',
   className = '',

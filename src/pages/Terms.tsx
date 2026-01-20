@@ -95,8 +95,8 @@ const Terms = () => {
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">9. CONTACT</h2>
               <p className="font-body text-muted-foreground">
                 For questions about these terms, contact us at{' '}
-                <a href="mailto:legal@sfsecretmenu.com" className="text-foreground hover:underline">
-                  legal@sfsecretmenu.com
+                <a href="mailto:legal@secretmenusf.com" className="text-foreground hover:underline">
+                  legal@secretmenusf.com
                 </a>
               </p>
             </section>

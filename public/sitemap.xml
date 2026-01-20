@@ -4,7 +4,7 @@
 
   <!-- Homepage -->
   <url>
-    <loc>https://sfsecretmenu.com/</loc>
+    <loc>https://secretmenusf.com/</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -12,28 +12,28 @@
 
   <!-- Core Pages -->
   <url>
-    <loc>https://sfsecretmenu.com/menu</loc>
+    <loc>https://secretmenusf.com/menu</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/order</loc>
+    <loc>https://secretmenusf.com/order</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/pricing</loc>
+    <loc>https://secretmenusf.com/pricing</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/compare</loc>
+    <loc>https://secretmenusf.com/compare</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -41,21 +41,21 @@
 
   <!-- About Pages -->
   <url>
-    <loc>https://sfsecretmenu.com/chef</loc>
+    <loc>https://secretmenusf.com/chef</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/about</loc>
+    <loc>https://secretmenusf.com/about</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/reviews</loc>
+    <loc>https://secretmenusf.com/reviews</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -63,14 +63,14 @@
 
   <!-- Support Pages -->
   <url>
-    <loc>https://sfsecretmenu.com/support</loc>
+    <loc>https://secretmenusf.com/support</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/faq</loc>
+    <loc>https://secretmenusf.com/faq</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -78,14 +78,14 @@
 
   <!-- Gift & Referral -->
   <url>
-    <loc>https://sfsecretmenu.com/gift-cards</loc>
+    <loc>https://secretmenusf.com/gift-cards</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/gift-meal-plan</loc>
+    <loc>https://secretmenusf.com/gift-meal-plan</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -93,21 +93,21 @@
 
   <!-- Legal Pages -->
   <url>
-    <loc>https://sfsecretmenu.com/privacy</loc>
+    <loc>https://secretmenusf.com/privacy</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/terms</loc>
+    <loc>https://secretmenusf.com/terms</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/refund</loc>
+    <loc>https://secretmenusf.com/refund</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
@@ -115,14 +115,14 @@
 
   <!-- Auth Pages (lower priority) -->
   <url>
-    <loc>https://sfsecretmenu.com/login</loc>
+    <loc>https://secretmenusf.com/login</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://sfsecretmenu.com/signup</loc>
+    <loc>https://secretmenusf.com/signup</loc>
     <lastmod>2026-01-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>

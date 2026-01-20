@@ -7,15 +7,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import SeedOfLife3D from './SeedOfLife3D';
 import ConnectWallet from './ConnectWallet';
 import { UserMenu } from './auth/UserMenu';
-import { Search, Menu } from 'lucide-react';
+import { useTheme } from '@/components/theme-provider';
+import { Search, Menu, Moon, Sun, Info, Palette, Mail, FileText, Users } from 'lucide-react';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,92 +49,144 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-background/95 backdrop-blur-sm border-b border-border' : 'bg-transparent'
+        scrolled ? 'bg-background/95 backdrop-blur-sm border-b border-border' : ''
       }`}
     >
-      <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
-        {/* Logo with dropdown menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="group flex items-center gap-3 focus:outline-none">
-              {/* 3D Seed of Life logo */}
-              <div className="transition-transform duration-300 group-hover:scale-110 group-data-[state=open]:scale-110">
-                <SeedOfLife3D size={48} />
-              </div>
-              {/* Brand text that appears on hover */}
-              <span className="font-display text-sm tracking-[0.3em] text-foreground overflow-hidden transition-all duration-300 max-w-0 group-hover:max-w-[200px] group-data-[state=open]:max-w-[200px] whitespace-nowrap">
-                SECRET MENU
-              </span>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent 
-            align="start" 
-            className="w-56 bg-card border-border"
-          >
-            <DropdownMenuItem
-              onClick={() => navigate('/')}
+      {/* Subtle header bar background like Locale */}
+      <div className={`mx-4 mt-4 rounded-2xl transition-all duration-500 ${
+        scrolled ? 'bg-transparent mx-0 mt-0 rounded-none' : 'bg-muted/80 backdrop-blur-sm'
+      }`}>
+      <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo with dropdown menu (left-click) and context menu (right-click) */}
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="group flex items-center gap-3 focus:outline-none">
+                  {/* 3D Seed of Life logo */}
+                  <div className="transition-transform duration-300 group-hover:scale-110 group-data-[state=open]:scale-110">
+                    <SeedOfLife3D size={48} />
+                  </div>
+                  {/* Brand text that appears on hover */}
+                  <span className="font-display font-semibold text-sm tracking-[0.3em] text-foreground overflow-hidden transition-all duration-300 max-w-0 group-hover:max-w-[200px] group-data-[state=open]:max-w-[200px] whitespace-nowrap">
+                    SECRET MENU
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-56 bg-card border-border"
+              >
+                <DropdownMenuItem
+                  onClick={() => navigate('/')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  HOME
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem
+                  onClick={() => navigate('/menu')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  WEEKLY MENU
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => scrollToSection('about')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  CHEF
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={goToOrder}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  ORDER
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/invite')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  SHARE
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </ContextMenuTrigger>
+          <ContextMenuContent className="w-56 bg-card border-border">
+            <ContextMenuItem
+              onClick={toggleTheme}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              HOME
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-border" />
-            <DropdownMenuItem 
-              onClick={() => scrollToSection('menu')}
+              {theme === 'dark' ? (
+                <><Sun size={14} className="mr-2" /> LIGHT MODE</>
+              ) : (
+                <><Moon size={14} className="mr-2" /> DARK MODE</>
+              )}
+            </ContextMenuItem>
+            <ContextMenuSeparator className="bg-border" />
+            <ContextMenuItem
+              onClick={() => navigate('/about')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              THE OFFERINGS
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={() => scrollToSection('about')}
+              <Info size={14} className="mr-2" /> ABOUT
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={() => navigate('/brand')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              CHEF
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={goToOrder}
+              <Palette size={14} className="mr-2" /> BRAND
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={() => navigate('/press')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              ORDER
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => navigate('/gift-cards')}
+              <FileText size={14} className="mr-2" /> PRESS
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={() => navigate('/contact')}
               className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
             >
-              GIFT
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <Mail size={14} className="mr-2" /> CONTACT
+            </ContextMenuItem>
+            <ContextMenuSeparator className="bg-border" />
+            <ContextMenuItem
+              onClick={() => navigate('/invite')}
+              className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+            >
+              <Users size={14} className="mr-2" /> INVITE FRIENDS
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
         
         {/* Desktop navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-2">
           <button
             onClick={() => scrollToSection('about')}
-            className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             CHEF
           </button>
           <button
             onClick={goToOrder}
-            className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             ORDER
           </button>
           <Link
-            to="/gift-cards"
-            className="font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+            to="/invite"
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
-            GIFT
+            SHARE
           </Link>
           <button
             onClick={() => {
               const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
               document.dispatchEvent(event);
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-muted-foreground hover:text-foreground transition-colors border border-border/50 rounded-full hover:bg-accent"
+            className={`flex items-center gap-1.5 px-3 py-2 text-foreground/70 hover:text-foreground transition-colors rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
             title="Quick search (⌘K)"
           >
             <Search size={14} />
-            <span className="font-body text-xs text-muted-foreground/70">⌘K</span>
+            <span className="font-body text-xs text-foreground/50">⌘K</span>
           </button>
           <UserMenu />
         </div>
@@ -153,10 +214,10 @@ const Header = () => {
                   ORDER
                 </button>
                 <Link
-                  to="/gift-cards"
+                  to="/invite"
                   className="font-display text-sm tracking-[0.2em] text-foreground"
                 >
-                  GIFT
+                  SHARE
                 </Link>
                 <button
                   onClick={() => {
@@ -177,6 +238,7 @@ const Header = () => {
           </Sheet>
         </div>
       </nav>
+      </div>
     </header>
   );
 };

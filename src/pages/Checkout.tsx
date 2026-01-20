@@ -27,9 +27,9 @@ import {
 import { cn } from '@/lib/utils';
 
 const PAYMENT_ADDRESSES = {
-  zelle: 'pay@sfsecretmenu.com',
-  venmo: '@sfsecretmenu',
-  cashapp: '$sfsecretmenu',
+  zelle: 'pay@secretmenusf.com',
+  venmo: '@secretmenusf',
+  cashapp: '$secretmenusf',
 };
 
 type Step = 'contact' | 'delivery' | 'payment';

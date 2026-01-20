@@ -8,9 +8,9 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
 
 export const SocialLinks = () => {
   const socials = [
-    { icon: Instagram, href: 'https://instagram.com/sfsecretmenu', label: 'Instagram' },
-    { icon: Twitter, href: 'https://twitter.com/sfsecretmenu', label: 'Twitter' },
-    { icon: TikTokIcon, href: 'https://tiktok.com/@sfsecretmenu', label: 'TikTok' },
+    { icon: Instagram, href: 'https://instagram.com/secretmenusf', label: 'Instagram' },
+    { icon: Twitter, href: 'https://twitter.com/secretmenusf', label: 'Twitter' },
+    { icon: TikTokIcon, href: 'https://tiktok.com/@secretmenusf', label: 'TikTok' },
   ];
 
   return (

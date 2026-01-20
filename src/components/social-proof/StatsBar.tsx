@@ -50,18 +50,18 @@ const extendedStats: Stat[] = [
 export function StatsBarCompact({ className }: { className?: string }) {
   return (
     <div className={cn(
-      'flex items-center justify-center gap-6 py-2 px-4 bg-amber-500/5 border-b border-amber-500/10',
+      'flex items-center justify-center gap-6 py-2 px-4 bg-foreground/5 border-b border-foreground/10',
       className
     )}>
       {stats.slice(0, 3).map((stat) => (
         <div key={stat.label} className="flex items-center gap-1.5">
           <stat.icon className={cn(
             'h-3.5 w-3.5',
-            stat.highlight ? 'text-amber-500 fill-amber-500' : 'text-muted-foreground'
+            stat.highlight ? 'text-foreground fill-foreground' : 'text-muted-foreground'
           )} />
           <span className={cn(
             'font-display text-xs tracking-wider',
-            stat.highlight ? 'text-amber-400' : 'text-foreground'
+            stat.highlight ? 'text-foreground' : 'text-foreground'
           )}>
             {stat.value}
           </span>
@@ -79,11 +79,11 @@ export function StatsSection({ className }: { className?: string }) {
   return (
     <section className={cn('py-16 bg-gradient-to-b from-background to-card/50', className)}>
       <div className="container mx-auto px-6">
-        <div className="text-center mb-10">
-          <p className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">
+        <div className="text-center mb-14">
+          <p className="font-display text-xs tracking-[0.4em] text-muted-foreground mb-4">
             TRUSTED BY BAY AREA FOOD LOVERS
           </p>
-          <h2 className="font-display text-2xl md:text-3xl tracking-[0.15em] text-foreground">
+          <h2 className="font-display text-3xl md:text-4xl tracking-[0.1em] text-foreground">
             THE NUMBERS SPEAK
           </h2>
         </div>
@@ -92,22 +92,22 @@ export function StatsSection({ className }: { className?: string }) {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="text-center p-6 border border-border/30 rounded-xl bg-card/30 hover:border-amber-500/30 transition-colors"
+              className="text-center p-6 border border-border/30 rounded-xl bg-card/30 hover:border-foreground/30 transition-colors"
             >
               <div className={cn(
                 'w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center',
                 stat.highlight
-                  ? 'bg-amber-500/10 border border-amber-500/30'
-                  : 'bg-zinc-800/50 border border-zinc-700/50'
+                  ? 'bg-foreground/10 border border-foreground/30'
+                  : 'bg-muted border border-border'
               )}>
                 <stat.icon className={cn(
                   'h-7 w-7',
-                  stat.highlight ? 'text-amber-500 fill-amber-500' : 'text-zinc-400'
+                  stat.highlight ? 'text-foreground fill-foreground' : 'text-muted-foreground'
                 )} />
               </div>
               <p className={cn(
                 'font-display text-3xl md:text-4xl tracking-wide mb-1',
-                stat.highlight ? 'text-amber-400' : 'text-foreground'
+                stat.highlight ? 'text-foreground' : 'text-foreground'
               )}>
                 {stat.value}
               </p>
@@ -130,12 +130,12 @@ export function StatsInline({ className }: { className?: string }) {
         <div key={stat.label} className="flex items-center gap-2">
           <stat.icon className={cn(
             'h-5 w-5',
-            stat.highlight ? 'text-amber-500 fill-amber-500' : 'text-muted-foreground'
+            stat.highlight ? 'text-foreground fill-foreground' : 'text-muted-foreground'
           )} />
           <div className="text-left">
             <p className={cn(
               'font-display text-lg tracking-wider leading-none',
-              stat.highlight ? 'text-amber-400' : 'text-foreground'
+              stat.highlight ? 'text-foreground' : 'text-foreground'
             )}>
               {stat.value}
             </p>
@@ -154,11 +154,11 @@ export function RatingBadge({ className }: { className?: string }) {
   return (
     <div className={cn(
       'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full',
-      'bg-amber-500/10 border border-amber-500/30',
+      'bg-foreground/10 border border-foreground/30',
       className
     )}>
-      <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-      <span className="font-display text-sm text-amber-400">4.9</span>
+      <Star className="h-4 w-4 text-foreground fill-foreground" />
+      <span className="font-display text-sm text-foreground">4.9</span>
       <span className="text-xs text-muted-foreground">(127 reviews)</span>
     </div>
   );

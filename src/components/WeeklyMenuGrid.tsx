@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import { Leaf, X } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
@@ -21,9 +23,9 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
   const isVegan = item.tags?.includes('vg');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="relative bg-card border border-border rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="relative bg-card border border-border w-full h-full md:h-auto md:max-h-[95vh] md:max-w-2xl md:mx-4 md:rounded-3xl overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -35,7 +37,7 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
         </button>
 
         {/* Hero image */}
-        <div className="relative h-64 bg-muted rounded-t-3xl overflow-hidden">
+        <div className="relative h-72 md:h-64 bg-muted md:rounded-t-3xl overflow-hidden">
           {item.image ? (
             <img
               src={item.image}
@@ -61,7 +63,7 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 md:p-6 pb-20 md:pb-6">
           <h2 className="text-2xl font-semibold text-foreground mb-2">{item.name}</h2>
           <p className="text-muted-foreground mb-6">{item.description}</p>
 
@@ -307,9 +309,10 @@ const WeeklyMenuGrid = () => {
         )}
       </div>
 
-      {/* Detail Modal */}
-      {selectedItem && (
-        <MenuDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+      {/* Detail Modal - rendered via portal to escape parent containers */}
+      {selectedItem && createPortal(
+        <MenuDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />,
+        document.body
       )}
     </section>
   );

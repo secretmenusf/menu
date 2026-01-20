@@ -1,5 +1,3 @@
-import chefPortrait from '@/assets/chef-antje.jpg';
-
 const AboutSection = () => {
   return (
     <section id="about" className="relative py-32 bg-card sacred-geometry">
@@ -16,7 +14,7 @@ const AboutSection = () => {
               {/* Image container */}
               <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-border">
                 <img
-                  src={chefPortrait}
+                  src="/images/antje-chef.jpg"
                   alt="Chef Antje"
                   className="w-full h-full object-cover"
                 />

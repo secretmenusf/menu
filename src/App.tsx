@@ -23,6 +23,9 @@ import NotFound from "./pages/NotFound";
 const Chef = lazy(() => import("./pages/Chef"));
 const Entry = lazy(() => import("./pages/Entry"));
 const About = lazy(() => import("./pages/About"));
+const Brand = lazy(() => import("./pages/Brand"));
+const Press = lazy(() => import("./pages/Press"));
+const Contact = lazy(() => import("./pages/Contact"));
 const Support = lazy(() => import("./pages/Support"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -32,6 +35,7 @@ const Reviews = lazy(() => import("./pages/Reviews"));
 const Compare = lazy(() => import("./pages/Compare"));
 const GiftCards = lazy(() => import("./pages/GiftCards"));
 const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
+const Invite = lazy(() => import("./pages/Invite"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -59,7 +63,7 @@ import CommandPalette from '@/components/CommandPalette';
 import Analytics from '@/components/Analytics';
 import { EnhancedOrderingChat } from '@/components/chat/EnhancedOrderingChat';
 import { MobileStickyCTA } from '@/components/MobileStickyCTA';
-import { StickyToolbar } from '@/components/StickyToolbar';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const queryClient = new QueryClient();
 
@@ -105,6 +109,9 @@ const AppRoutes = () => (
       <Route path="/entry" element={<Entry />} />
       <Route path="/order" element={<Order />} />
       <Route path="/about" element={<About />} />
+      <Route path="/brand" element={<Brand />} />
+      <Route path="/press" element={<Press />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/support" element={<Support />} />
       <Route path="/supprt" element={<Navigate to="/support" replace />} />
@@ -119,6 +126,7 @@ const AppRoutes = () => (
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/gift-cards" element={<GiftCards />} />
       <Route path="/gift-meal-plan" element={<GiftMealPlan />} />
+      <Route path="/invite" element={<Invite />} />
 
       {/* Protected user routes */}
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
@@ -161,11 +169,11 @@ const App = () => (
                 <Sonner />
                 <ThemeTransition>
                   <BrowserRouter>
+                    <ScrollToTop />
                     <Analytics />
                     <CommandPalette />
                     <EnhancedOrderingChat />
                     <MobileStickyCTA />
-                    <StickyToolbar />
                     <AppRoutes />
                   </BrowserRouter>
                 </ThemeTransition>

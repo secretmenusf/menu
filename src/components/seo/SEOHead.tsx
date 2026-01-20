@@ -13,17 +13,17 @@ interface SEOHeadProps {
 
 const defaultMeta = {
   title: 'SF Secret Menu | Premium Organic Meal Delivery in San Francisco',
-  description: 'Chef-crafted organic meals delivered fresh daily. 100% organic, locally-sourced ingredients. Healing food as medicine. Bay Area\'s premier private chef experience.',
+  description: 'Chef-crafted organic meals delivered fresh daily. 98% organic, locally-sourced ingredients. Healing food as medicine. Bay Area\'s premier private chef experience.',
   keywords: 'meal delivery san francisco, organic meal delivery, private chef sf, healthy meal prep, luxury meal service, bay area food delivery, farm to table delivery',
-  image: 'https://sfsecretmenu.com/og-image.png',
-  url: 'https://sfsecretmenu.com',
+  image: 'https://secretmenusf.com/og-image.png',
+  url: 'https://secretmenusf.com',
 };
 
 // Page-specific SEO configurations
 export const pageSEO: Record<string, SEOHeadProps> = {
   home: {
     title: 'SF Secret Menu | Premium Organic Meal Delivery San Francisco',
-    description: 'San Francisco\'s premier private chef experience. 100% organic, locally-sourced meals delivered fresh daily. Nourishing body, mind, and soul. Join the Bay Area\'s most exclusive meal service.',
+    description: 'San Francisco\'s premier private chef experience. 98% organic, locally-sourced meals delivered fresh daily. Nourishing body, mind, and soul. Join the Bay Area\'s most exclusive meal service.',
     keywords: 'meal delivery san francisco, organic meal delivery sf, private chef bay area, healthy meal prep, luxury meal service, farm to table delivery, chef prepared meals',
   },
   menu: {
@@ -33,7 +33,7 @@ export const pageSEO: Record<string, SEOHeadProps> = {
   },
   order: {
     title: 'Order Meals | SF Secret Menu',
-    description: 'Start your culinary journey. Choose from Essential, Standard, or Premium meal plans. Flexible scheduling, same-day delivery available. 100% organic, chef-prepared meals.',
+    description: 'Start your culinary journey. Choose from Essential, Standard, or Premium meal plans. Flexible scheduling, same-day delivery available. 98% organic, chef-prepared meals.',
     keywords: 'order meals san francisco, meal subscription sf, organic meal plan, healthy food delivery, weekly meal delivery',
   },
   pricing: {
@@ -43,7 +43,7 @@ export const pageSEO: Record<string, SEOHeadProps> = {
   },
   compare: {
     title: 'Compare Meal Services | SF Secret Menu vs Competitors',
-    description: 'See how SF Secret Menu compares to HelloFresh, Factor, Sakara, and other meal services. 100% organic, chef-prepared, never frozen. The premium alternative to meal kits.',
+    description: 'See how SF Secret Menu compares to HelloFresh, Factor, Sakara, and other meal services. 98% organic, chef-prepared, never frozen. The premium alternative to meal kits.',
     keywords: 'meal delivery comparison, hellofresh alternative, factor alternative, best meal delivery san francisco, organic vs meal kits',
   },
   chef: {
@@ -140,11 +140,11 @@ export const schemas = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'SF Secret Menu',
-    url: 'https://sfsecretmenu.com',
-    logo: 'https://sfsecretmenu.com/logo.svg',
+    url: 'https://secretmenusf.com',
+    logo: 'https://secretmenusf.com/logo.svg',
     sameAs: [
-      'https://instagram.com/sfsecretmenu',
-      'https://x.com/sfsecretmenu',
+      'https://instagram.com/secretmenusf',
+      'https://x.com/secretmenusf',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
@@ -159,9 +159,9 @@ export const schemas = {
     '@type': 'FoodService',
     name: 'SF Secret Menu',
     description: 'Premium organic meal delivery service in San Francisco',
-    url: 'https://sfsecretmenu.com',
+    url: 'https://secretmenusf.com',
     telephone: '+1-415-373-2496',
-    email: 'hello@sfsecretmenu.com',
+    email: 'hello@secretmenusf.com',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'San Francisco',

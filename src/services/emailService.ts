@@ -29,8 +29,8 @@ interface SupportTicketData {
 }
 
 class EmailService {
-  private readonly SUPPORT_EMAIL = 'support@sfsecretmenu.com';
-  private readonly FROM_EMAIL = 'hello@sfsecretmenu.com';
+  private readonly SUPPORT_EMAIL = 'support@secretmenusf.com';
+  private readonly FROM_EMAIL = 'hello@secretmenusf.com';
   
   // EmailJS configuration - should be in environment variables
   private readonly EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_sfsm2026';
@@ -106,7 +106,7 @@ class EmailService {
   ): Promise<boolean> {
     const ticketData: SupportTicketData = {
       name: userName || 'Anonymous',
-      email: userEmail || 'no-email@sfsecretmenu.com',
+      email: userEmail || 'no-email@secretmenusf.com',
       subject: `AI Assistance Request - ${issue}`,
       message: `AI assistant needs human support:\n\nIssue: ${issue}\n\nContext: ${context}`,
       source: 'chat',
@@ -261,7 +261,7 @@ class EmailService {
         </div>
 
         <div class="footer">
-          <p>SF Secret Menu Support System • support@sfsecretmenu.com</p>
+          <p>SF Secret Menu Support System • support@secretmenusf.com</p>
         </div>
       </body>
       </html>

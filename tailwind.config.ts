@@ -16,7 +16,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Geist', 'system-ui', 'sans-serif'],
-        display: ['Geist', 'system-ui', 'sans-serif'],
+        display: ['"Zalando Sans Expanded"', 'system-ui', 'sans-serif'],
         body: ['Geist', 'system-ui', 'sans-serif'],
       },
       colors: {

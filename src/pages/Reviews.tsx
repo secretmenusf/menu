@@ -91,10 +91,10 @@ const Reviews = () => {
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
         {...pageSEO.reviews}
-        url="https://sfsecretmenu.com/reviews"
+        url="https://secretmenusf.com/reviews"
         schema={schemas.breadcrumb([
-          { name: 'Home', url: 'https://sfsecretmenu.com' },
-          { name: 'Reviews', url: 'https://sfsecretmenu.com/reviews' },
+          { name: 'Home', url: 'https://secretmenusf.com' },
+          { name: 'Reviews', url: 'https://secretmenusf.com/reviews' },
         ])}
       />
 
@@ -230,7 +230,7 @@ const Reviews = () => {
                       <ShareButton
                         title={`Review from ${review.name}`}
                         text={`"${review.text.substring(0, 100)}${review.text.length > 100 ? '...' : ''}" - ${review.name} on SF Secret Menu`}
-                        url={`https://sfsecretmenu.com/reviews#${review.id}`}
+                        url={`https://secretmenusf.com/reviews#${review.id}`}
                         hashtags={['SFSecretMenu', 'FoodDelivery', 'SanFrancisco']}
                         variant="ghost"
                         size="icon"
@@ -346,7 +346,7 @@ const Reviews = () => {
             </p>
             <div className="flex justify-center gap-4">
               <a
-                href="https://instagram.com/sfsecretmenu"
+                href="https://instagram.com/secretmenusf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-6 py-3 rounded-full border border-border/50 text-muted-foreground hover:text-pink-400 hover:border-pink-400/50 transition-colors"
@@ -355,7 +355,7 @@ const Reviews = () => {
                 <span className="font-display text-xs tracking-wider">INSTAGRAM</span>
               </a>
               <a
-                href="https://x.com/sfsecretmenu"
+                href="https://x.com/secretmenusf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-6 py-3 rounded-full border border-border/50 text-muted-foreground hover:text-sky-400 hover:border-sky-400/50 transition-colors"

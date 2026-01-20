@@ -12,10 +12,10 @@ const Pricing = () => {
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
         {...pageSEO.pricing}
-        url="https://sfsecretmenu.com/pricing"
+        url="https://secretmenusf.com/pricing"
         schema={schemas.breadcrumb([
-          { name: 'Home', url: 'https://sfsecretmenu.com' },
-          { name: 'Pricing', url: 'https://sfsecretmenu.com/pricing' },
+          { name: 'Home', url: 'https://secretmenusf.com' },
+          { name: 'Pricing', url: 'https://secretmenusf.com/pricing' },
         ])}
       />
 

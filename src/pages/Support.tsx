@@ -59,7 +59,7 @@ const Support = () => {
       console.error('Contact form error:', error);
       toast({
         title: "Unable to send message",
-        description: "Please try again or email us directly at support@sfsecretmenu.com",
+        description: "Please try again or email us directly at support@secretmenusf.com",
         variant: "destructive",
       });
     } finally {
@@ -80,7 +80,7 @@ const Support = () => {
         "delivery": "We deliver throughout the SF Bay Area from 8am-1am daily. Most orders arrive within 45-90 minutes. Would you like to check if we deliver to your area?",
         "payment": "We accept credit cards (preferred), Zelle, Venmo, CashApp. All payments are secure and processed instantly.",
         "subscription": "Our meal plans range from $89-299/week. Essential (2 meals), Standard (3 meals), or Premium (5 meals). Cancel anytime!",
-        "default": "I'd be happy to help! For detailed assistance, I can connect you with our support team at support@sfsecretmenu.com or you can start a live chat."
+        "default": "I'd be happy to help! For detailed assistance, I can connect you with our support team at support@secretmenusf.com or you can start a live chat."
       };
       
       const keyword = aiQuestion.toLowerCase().includes('menu') ? 'menu' :
@@ -94,14 +94,14 @@ const Support = () => {
       // Auto-send email to support with the question
       await emailService.sendContactForm(
         'AI Chat User',
-        'ai-chat@sfsecretmenu.com',
+        'ai-chat@secretmenusf.com',
         `AI Chat Question: ${aiQuestion}`,
         `User asked: "${aiQuestion}"\n\nAI Response: "${responses[keyword]}"\n\nPlease follow up if needed.`
       );
       
     } catch (error) {
       console.error('AI Chat error:', error);
-      setAiResponse("I'm having trouble right now. Please contact our support team directly at support@sfsecretmenu.com");
+      setAiResponse("I'm having trouble right now. Please contact our support team directly at support@secretmenusf.com");
     } finally {
       setIsAiLoading(false);
     }
@@ -119,9 +119,9 @@ const Support = () => {
     {
       icon: Mail,
       title: 'Email Support',
-      description: 'support@sfsecretmenu.com',
+      description: 'support@secretmenusf.com',
       action: 'Send Email',
-      href: 'mailto:support@sfsecretmenu.com',
+      href: 'mailto:support@secretmenusf.com',
     },
     {
       icon: Phone,
@@ -492,7 +492,7 @@ const Support = () => {
                   )}
 
                   <div className="text-center text-xs text-muted-foreground font-body">
-                    AI responses are sent to our support team at support@sfsecretmenu.com for quality assurance
+                    AI responses are sent to our support team at support@secretmenusf.com for quality assurance
                   </div>
                 </div>
               </CardContent>
@@ -542,7 +542,7 @@ const Support = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button asChild size="lg" className="font-display tracking-wider">
-                    <a href="mailto:support@sfsecretmenu.com">
+                    <a href="mailto:support@secretmenusf.com">
                       <Mail className="mr-2 h-5 w-5" />
                       EMAIL CONCIERGE
                     </a>

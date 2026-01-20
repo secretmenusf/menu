@@ -11,7 +11,7 @@ interface TrustBadge {
 const trustBadges: TrustBadge[] = [
   {
     icon: Leaf,
-    label: '100% Organic',
+    label: '98% Organic',
     sublabel: 'USDA Certified',
     color: 'text-emerald-500',
   },
@@ -25,7 +25,7 @@ const trustBadges: TrustBadge[] = [
     icon: Clock,
     label: 'Made Fresh Daily',
     sublabel: 'Never Frozen',
-    color: 'text-amber-500',
+    color: 'text-orange-500',
   },
   {
     icon: ShieldCheck,
@@ -39,7 +39,7 @@ const certifications = [
   { label: 'USDA Organic', color: 'border-emerald-500/30 text-emerald-400' },
   { label: 'Non-GMO', color: 'border-teal-500/30 text-teal-400' },
   { label: 'Sustainable', color: 'border-blue-500/30 text-blue-400' },
-  { label: 'Local First', color: 'border-amber-500/30 text-amber-400' },
+  { label: 'Local First', color: 'border-orange-500/30 text-orange-400' },
 ];
 
 // Compact inline badges for headers/hero
@@ -66,7 +66,7 @@ export function TrustBadgesSection({ className }: { className?: string }) {
             <div key={badge.label} className="text-center">
               <div className={cn(
                 'w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center',
-                'bg-gradient-to-br from-zinc-800 to-zinc-900 border border-zinc-700/50'
+                'bg-muted border border-border'
               )}>
                 <badge.icon className={cn('h-6 w-6', badge.color)} />
               </div>
@@ -119,9 +119,9 @@ export function GuaranteeBadges({ className }: { className?: string }) {
       {guarantees.map((item) => (
         <div
           key={item.label}
-          className="p-4 text-center border border-border/30 rounded-lg bg-card/30 hover:border-amber-500/30 transition-colors"
+          className="p-4 text-center border border-border/30 rounded-lg bg-card/30 hover:border-foreground/20 transition-colors"
         >
-          <item.icon className="h-6 w-6 mx-auto mb-2 text-amber-500" />
+          <item.icon className="h-6 w-6 mx-auto mb-2 text-foreground" />
           <p className="font-display text-xs tracking-wider text-foreground mb-1">
             {item.label}
           </p>

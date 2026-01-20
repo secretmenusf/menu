@@ -81,8 +81,8 @@ const Privacy = () => {
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">6. CONTACT US</h2>
               <p className="font-body text-muted-foreground">
                 For privacy-related inquiries, contact us at{' '}
-                <a href="mailto:privacy@sfsecretmenu.com" className="text-foreground hover:underline">
-                  privacy@sfsecretmenu.com
+                <a href="mailto:privacy@secretmenusf.com" className="text-foreground hover:underline">
+                  privacy@secretmenusf.com
                 </a>
               </p>
             </section>

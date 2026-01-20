@@ -85,8 +85,8 @@ export function HowItWorksCompact({ className }: { className?: string }) {
         {steps.slice(0, 4).map((step, index) => (
           <div key={step.number} className="flex items-center">
             <div className="flex flex-col items-center text-center px-4">
-              <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-2">
-                <step.icon className="h-6 w-6 text-amber-500" />
+              <div className="w-12 h-12 rounded-full bg-foreground/10 border border-foreground/30 flex items-center justify-center mb-2">
+                <step.icon className="h-6 w-6 text-foreground" />
               </div>
               <p className="font-display text-xs tracking-wider text-foreground">
                 {step.title}
@@ -108,14 +108,14 @@ export function HowItWorksSection({ className }: { className?: string }) {
     <section className={cn('py-20 bg-background', className)}>
       <div className="container mx-auto px-6 max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-16">
-          <p className="font-display text-xs tracking-[0.3em] text-amber-500 mb-3">
+        <div className="text-center mb-20">
+          <p className="font-display text-xs tracking-[0.4em] text-muted-foreground mb-6">
             SIMPLE & SEAMLESS
           </p>
-          <h2 className="font-display text-3xl md:text-4xl tracking-[0.15em] text-foreground mb-4">
+          <h2 className="font-display text-4xl md:text-5xl tracking-[0.08em] text-foreground mb-6">
             HOW IT WORKS
           </h2>
-          <p className="font-body text-muted-foreground max-w-xl mx-auto">
+          <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
             From farm to your table in five simple steps. Experience the ease of having
             a personal chef without the complexity.
           </p>
@@ -124,7 +124,7 @@ export function HowItWorksSection({ className }: { className?: string }) {
         {/* Steps Timeline */}
         <div className="relative">
           {/* Connecting line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-amber-500/50 via-amber-500/20 to-transparent hidden lg:block" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-foreground/50 via-foreground/20 to-transparent hidden lg:block" />
 
           <div className="space-y-12 lg:space-y-0">
             {steps.map((step, index) => (
@@ -142,14 +142,14 @@ export function HowItWorksSection({ className }: { className?: string }) {
                 )}>
                   <div className={cn(
                     'p-6 border border-border/30 rounded-xl bg-card/30',
-                    'hover:border-amber-500/30 transition-all duration-300',
+                    'hover:border-foreground/30 transition-all duration-300',
                     'lg:mb-0 mb-4'
                   )}>
                     <div className={cn(
                       'flex items-center gap-4 mb-4',
                       index % 2 === 1 ? 'lg:flex-row' : 'lg:flex-row-reverse'
                     )}>
-                      <span className="font-display text-4xl text-amber-500/30">
+                      <span className="font-display text-4xl text-foreground/30">
                         {step.number}
                       </span>
                       <div className="flex-1">
@@ -186,18 +186,18 @@ export function HowItWorksSection({ className }: { className?: string }) {
                 <div className={cn(
                   'hidden lg:flex absolute left-1/2 -translate-x-1/2',
                   'w-16 h-16 rounded-full',
-                  'bg-gradient-to-br from-amber-500/20 to-amber-600/10',
-                  'border border-amber-500/30',
+                  'bg-gradient-to-br from-foreground/20 to-muted-foreground/10',
+                  'border border-foreground/30',
                   'items-center justify-center',
                   'z-10'
                 )}>
-                  <step.icon className="h-8 w-8 text-amber-500" />
+                  <step.icon className="h-8 w-8 text-foreground" />
                 </div>
 
                 {/* Mobile Icon */}
                 <div className="lg:hidden flex justify-center mb-4">
-                  <div className="w-14 h-14 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-                    <step.icon className="h-7 w-7 text-amber-500" />
+                  <div className="w-14 h-14 rounded-full bg-foreground/10 border border-foreground/30 flex items-center justify-center">
+                    <step.icon className="h-7 w-7 text-foreground" />
                   </div>
                 </div>
 

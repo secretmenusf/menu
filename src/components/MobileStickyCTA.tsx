@@ -84,7 +84,7 @@ export function MobileStickyCTA({ className }: MobileStickyCTAProps) {
 
         {/* Subtext */}
         <p className="text-center text-[10px] text-muted-foreground mt-2">
-          Free delivery • 100% organic • Made fresh daily
+          Free delivery • 98% organic • Made fresh daily
         </p>
       </div>
     </div>
