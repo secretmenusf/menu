@@ -262,7 +262,7 @@ const Order = () => {
           </div>
 
           {/* Simple Rule */}
-          <div className="text-center max-w-2xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mt-8 mb-8">
             <div className="border border-border/50 rounded-2xl p-8 bg-card/20">
               <h3 className="font-display text-lg tracking-wider text-foreground mb-4">
                 ONE SIMPLE RULE
