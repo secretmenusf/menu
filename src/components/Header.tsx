@@ -91,7 +91,7 @@ const Header = () => {
                   WEEKLY MENU
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => scrollToSection('about')}
+                  onClick={() => navigate('/chef')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
                   CHEF
@@ -160,7 +160,7 @@ const Header = () => {
         {/* Desktop navigation */}
         <div className="hidden md:flex items-center gap-2">
           <button
-            onClick={() => scrollToSection('about')}
+            onClick={() => navigate('/chef')}
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             CHEF
@@ -213,7 +213,7 @@ const Header = () => {
             <SheetContent side="right" className="w-72 bg-background border-border">
               <div className="flex flex-col gap-6 mt-8">
                 <button
-                  onClick={() => scrollToSection('about')}
+                  onClick={() => navigate('/chef')}
                   className="font-display text-sm tracking-[0.2em] text-foreground text-left"
                 >
                   CHEF
