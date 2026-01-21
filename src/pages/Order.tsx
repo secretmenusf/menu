@@ -135,11 +135,17 @@ const Order = () => {
             {plans.map((plan) => (
               <div
                 key={plan.id}
+                onClick={() => {
+                  const url = plan.customPricing
+                    ? plan.ctaLink
+                    : `/checkout?plan=${plan.id}&billing=${billingCycle}`;
+                  navigate(url);
+                }}
                 className={cn(
-                  'relative rounded-3xl border p-8 transition-all duration-300',
+                  'relative rounded-3xl border p-8 transition-all duration-300 cursor-pointer',
                   plan.highlighted
                     ? 'border-foreground bg-foreground/5 scale-[1.02]'
-                    : 'border-border/50 bg-card/30 hover:border-border'
+                    : 'border-border/50 bg-card/30 hover:border-border hover:bg-card/50'
                 )}
               >
                 {plan.highlighted && (
