@@ -200,6 +200,9 @@ const Chef = () => {
           {/* Closing CTA */}
           <section className="text-center">
             <div className="p-12 border border-foreground/10 rounded-3xl bg-gradient-to-b from-card/50 to-transparent">
+              <div className="flex justify-center mb-6">
+                <SeedOfLife3D size={48} />
+              </div>
               <h2 className="font-display font-semibold text-2xl tracking-[0.1em] mb-4">
                 Ready for a chef-crafted experience designed just for you?
               </h2>
