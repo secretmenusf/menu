@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, ReactNode } from 'react'
 
 type Theme = 'dark' | 'light'
 
@@ -44,21 +44,24 @@ export function ThemeProvider({
     root.classList.add(theme)
   }, [theme])
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = useCallback((newTheme: Theme) => {
     localStorage.setItem(storageKey, newTheme)
     setThemeState(newTheme)
-  }
+  }, [storageKey])
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(newTheme)
-  }
+  const toggleTheme = useCallback(() => {
+    setThemeState(prev => {
+      const newTheme = prev === 'dark' ? 'light' : 'dark'
+      localStorage.setItem(storageKey, newTheme)
+      return newTheme
+    })
+  }, [storageKey])
 
-  const value = {
+  const value = useMemo(() => ({
     theme,
     setTheme,
     toggleTheme,
-  }
+  }), [theme, setTheme, toggleTheme])
 
   return (
     <ThemeProviderContext.Provider value={value}>

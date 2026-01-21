@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTheme } from '@/components/theme-provider';
 
 interface ThemeTransitionProps {
@@ -8,15 +8,20 @@ interface ThemeTransitionProps {
 
 export function ThemeTransition({ children, onComplete }: ThemeTransitionProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
+  const hasRunRef = useRef(false);
 
   useEffect(() => {
+    // Only run once on mount
+    if (hasRunRef.current) return;
+    hasRunRef.current = true;
+
     // Start with dark theme, then transition to light after password gate
     const savedTheme = localStorage.getItem('sfsecretmenu-ui-theme');
     const hasAccess = sessionStorage.getItem('secretmenu_access');
-    
-    if (hasAccess === 'true' && (!savedTheme || savedTheme === 'dark')) {
-      // Trigger transition to light mode after successful login
+
+    if (hasAccess === 'true' && !savedTheme) {
+      // Only auto-transition if no theme preference is saved
       setTimeout(() => {
         setIsTransitioning(true);
         setTimeout(() => {

@@ -189,7 +189,11 @@ const Header = () => {
             <span className="font-body text-xs text-foreground/50">⌘K</span>
           </button>
           <button
-            onClick={toggleTheme}
+            type="button"
+            onClick={() => {
+              console.log('Theme toggle clicked, current theme:', theme);
+              toggleTheme();
+            }}
             className={`flex items-center justify-center w-9 h-9 text-foreground/70 hover:text-foreground transition-colors rounded-full ${scrolled ? 'hover:bg-foreground/5' : 'hover:bg-foreground/10'}`}
             title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
@@ -238,7 +242,11 @@ const Header = () => {
                   <span className="font-body text-xs text-muted-foreground ml-auto">⌘K</span>
                 </button>
                 <button
-                  onClick={toggleTheme}
+                  type="button"
+                  onClick={() => {
+                    console.log('Mobile theme toggle clicked, current theme:', theme);
+                    toggleTheme();
+                  }}
                   className="flex items-center gap-2 font-display text-sm tracking-[0.2em] text-foreground text-left"
                 >
                   {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
