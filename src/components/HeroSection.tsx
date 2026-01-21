@@ -37,7 +37,7 @@ const HeroSection = () => {
             </h1>
 
             <p className="font-body text-xl md:text-2xl text-muted-foreground max-w-lg mb-3 leading-relaxed">
-              Chef-crafted organic meals delivered to your doorstep.
+              Chef-crafted organic meals made to order and delivered straight to your door.
             </p>
             <p className="font-body text-xl md:text-2xl text-foreground font-medium mb-10">
               Food that nourishes the body, mind, and soul.
