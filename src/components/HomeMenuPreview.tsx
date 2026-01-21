@@ -712,7 +712,7 @@ const HomeMenuPreview = () => {
           </p>
 
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-medium text-foreground mb-8 leading-[1.1] tracking-tight">
-            30+ rotating high<br />protein meals
+            55+ rotating<br />gourmet meals
           </h2>
 
           {/* Badges */}

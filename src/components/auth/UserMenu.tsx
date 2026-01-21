@@ -35,13 +35,11 @@ export function UserMenu() {
   };
 
   const openLogin = () => {
-    setAuthView('login');
-    setShowAuthModal(true);
+    navigate('/login');
   };
 
   const openSignUp = () => {
-    setAuthView('signup');
-    setShowAuthModal(true);
+    navigate('/signup');
   };
 
   // Get initials for avatar fallback

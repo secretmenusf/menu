@@ -143,14 +143,14 @@ const StandardsSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
           {/* Row 1 */}
           <BentoCard
-            value="40–60g"
+            value="40–100g"
             label="Quality Protein"
             image="/images/menu/plated/proteins.jpg"
             size="large"
             className="min-h-[200px]"
           />
           <BentoCard
-            value="100%"
+            value="98%"
             label="Organic Produce"
             image="/images/menu/plated/organicproduce.jpg"
             className="min-h-[140px]"
@@ -185,7 +185,7 @@ const StandardsSection = () => {
 
           {/* Row 3 - Wide cards */}
           <BentoCard
-            value="8g+"
+            value="Heirloom Grade"
             label="Fiber Per Meal"
             image="/images/menu/plated/fibermaxxing.jpg"
             size="wide"

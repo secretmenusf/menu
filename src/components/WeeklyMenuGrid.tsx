@@ -681,7 +681,7 @@ const WeeklyMenuGrid = () => {
             Menu for week of {dayOfWeek}, {month}/{day}
           </h2>
           <p className="text-sm text-muted-foreground mb-8">
-            {galleryMenuItems.length}+ rotating high protein meals to choose from
+            55+ rotating gourmet meals to choose from
           </p>
 
           {/* Filter buttons */}
