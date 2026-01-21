@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -80,6 +80,7 @@ const plans = [
 
 const Order = () => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
@@ -231,20 +232,19 @@ const Order = () => {
                 </div>
 
                 {/* CTA */}
-                <Link to={plan.ctaLink}>
-                  <Button
-                    className={cn(
-                      'w-full font-display tracking-wider',
-                      plan.highlighted
-                        ? 'bg-foreground text-background hover:bg-foreground/90'
-                        : ''
-                    )}
-                    variant={plan.highlighted ? 'default' : 'outline'}
-                  >
-                    {plan.ctaText}
-                    <ArrowRight size={16} className="ml-2" />
-                  </Button>
-                </Link>
+                <Button
+                  onClick={() => navigate(plan.ctaLink)}
+                  className={cn(
+                    'w-full font-display tracking-wider',
+                    plan.highlighted
+                      ? 'bg-foreground text-background hover:bg-foreground/90'
+                      : ''
+                  )}
+                  variant={plan.highlighted ? 'default' : 'outline'}
+                >
+                  {plan.ctaText}
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
               </div>
             ))}
           </div>

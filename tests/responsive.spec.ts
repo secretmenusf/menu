@@ -34,9 +34,6 @@ PAGES.forEach((pageDef) => {
       // Wait for page to load
       await page.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
 
-      // Allow animations to complete
-      await page.waitForTimeout(300);
-
       // Take screenshot
       const screenshot = await page.screenshot({ fullPage: true });
 

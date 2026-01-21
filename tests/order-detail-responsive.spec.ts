@@ -2,11 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Order Detail View - Responsive Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/menu');
-    // Wait for menu items to load with longer timeout
+    await page.goto('/menu', { waitUntil: 'networkidle' });
+    // Wait for menu items to load
     await page.waitForSelector('[class*="rounded-2xl"][class*="cursor-pointer"]', { timeout: 15000 });
-    // Additional wait for any animations
-    await page.waitForTimeout(500);
   });
 
   test('should open order detail modal when clicking a food item', async ({ page }) => {
@@ -58,9 +56,6 @@ test.describe('Order Detail View - Responsive Tests', () => {
     await scrollableContent.evaluate((el) => {
       el.scrollTop = el.scrollHeight;
     });
-
-    // Wait a moment for any animations
-    await page.waitForTimeout(300);
 
     // Add to Order button should still be visible
     const addToOrderButton = page.getByRole('button', { name: /add to order/i });
@@ -147,7 +142,7 @@ test.describe('Order Detail View - Responsive Tests', () => {
     await page.waitForSelector('[class*="fixed"][class*="inset-0"][class*="z-50"][class*="bg-background"]', { timeout: 10000 });
 
     // Wait for images to load
-    await page.waitForTimeout(1000);
+    await page.locator('img[class*="object-cover"]').first().waitFor({ state: 'visible' });
 
     // Take screenshot
     await page.screenshot({
@@ -168,8 +163,6 @@ test.describe('Order Detail View - Responsive Tests', () => {
       el.scrollTop = el.scrollHeight / 2;
     });
 
-    await page.waitForTimeout(500);
-
     // Take screenshot showing the fixed CTA is still visible
     await page.screenshot({
       path: `test-results/order-detail-scrolled-${testInfo.project.name}.png`,
@@ -180,9 +173,8 @@ test.describe('Order Detail View - Responsive Tests', () => {
 
 test.describe('Order Detail View - Layout Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/menu');
+    await page.goto('/menu', { waitUntil: 'networkidle' });
     await page.waitForSelector('[class*="rounded-2xl"][class*="cursor-pointer"]', { timeout: 15000 });
-    await page.waitForTimeout(500);
   });
 
   test('should have proper layout based on viewport', async ({ page }, testInfo) => {

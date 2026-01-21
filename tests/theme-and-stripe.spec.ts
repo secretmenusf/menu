@@ -28,10 +28,10 @@ test.describe('Theme System', () => {
     if (await passwordInput.isVisible()) {
       await passwordInput.fill('secret'); // Adjust based on your password
       await passwordInput.press('Enter');
-      
+
       // Wait for transition to light mode
-      await page.waitForTimeout(2000);
-      
+      await page.waitForLoadState('networkidle');
+
       // Should now be in light mode
       const lightBackground = await page.evaluate(() => {
         return window.getComputedStyle(document.documentElement).getPropertyValue('--background');
@@ -48,9 +48,9 @@ test.describe('Theme System', () => {
     if (await passwordInput.isVisible()) {
       await passwordInput.fill('secret');
       await passwordInput.press('Enter');
-      await page.waitForTimeout(1000);
+      await page.waitForLoadState('networkidle');
     }
-    
+
     // Find and click theme toggle
     const themeToggle = page.getByRole('button', { name: /toggle theme/i });
     await expect(themeToggle).toBeVisible();
@@ -60,15 +60,13 @@ test.describe('Theme System', () => {
     
     // Click toggle
     await themeToggle.click();
-    await page.waitForTimeout(500);
-    
+
     // Verify theme changed
     const newTheme = await page.locator('html').getAttribute('class');
     expect(newTheme).not.toBe(initialTheme);
-    
+
     // Click again to toggle back
     await themeToggle.click();
-    await page.waitForTimeout(500);
     
     const finalTheme = await page.locator('html').getAttribute('class');
     expect(finalTheme).toBe(initialTheme);
@@ -76,25 +74,24 @@ test.describe('Theme System', () => {
 
   test('theme preference should persist across page loads', async ({ page }) => {
     await page.goto('/');
-    
+
     // Skip password gate if present
     const passwordInput = page.getByPlaceholder(/password/i);
     if (await passwordInput.isVisible()) {
       await passwordInput.fill('secret');
       await passwordInput.press('Enter');
-      await page.waitForTimeout(1000);
+      await page.waitForLoadState('networkidle');
     }
-    
+
     // Toggle to specific theme
     const themeToggle = page.getByRole('button', { name: /toggle theme/i });
     await themeToggle.click();
-    await page.waitForTimeout(500);
-    
+
     const selectedTheme = await page.locator('html').getAttribute('class');
-    
+
     // Reload page
     await page.reload();
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('networkidle');
     
     // Theme should persist
     const persistedTheme = await page.locator('html').getAttribute('class');
@@ -111,9 +108,9 @@ test.describe('Light Mode Visual Tests', () => {
     if (await passwordInput.isVisible()) {
       await passwordInput.fill('secret');
       await passwordInput.press('Enter');
-      await page.waitForTimeout(2000);
+      await page.waitForLoadState('networkidle');
     }
-    
+
     // Ensure light mode
     await page.evaluate(() => {
       document.documentElement.classList.remove('dark');
@@ -122,9 +119,8 @@ test.describe('Light Mode Visual Tests', () => {
   });
 
   test('homepage should look stunning in light mode', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForTimeout(1000);
-    
+    await page.goto('/', { waitUntil: 'networkidle' });
+
     // Check hero section
     const hero = page.locator('[data-testid="hero"]').first();
     if (await hero.isVisible()) {
@@ -139,8 +135,7 @@ test.describe('Light Mode Visual Tests', () => {
   });
 
   test('menu gallery should display transparently in light mode', async ({ page }) => {
-    await page.goto('/menu');
-    await page.waitForTimeout(2000);
+    await page.goto('/menu', { waitUntil: 'networkidle' });
     
     // Check gallery items are visible and transparent
     const galleryItems = page.locator('[data-testid="menu-item"]');
@@ -165,8 +160,7 @@ test.describe('Light Mode Visual Tests', () => {
   });
 
   test('pricing page should look professional in light mode', async ({ page }) => {
-    await page.goto('/pricing');
-    await page.waitForTimeout(1000);
+    await page.goto('/pricing', { waitUntil: 'networkidle' });
     
     // Check plan cards
     const planCards = page.locator('[data-testid="plan-card"]');
@@ -196,9 +190,8 @@ test.describe('Dark Mode Visual Tests', () => {
   });
 
   test('homepage should look stunning in dark mode', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForTimeout(1000);
-    
+    await page.goto('/', { waitUntil: 'networkidle' });
+
     // Take screenshot
     await expect(page).toHaveScreenshot('homepage-dark-mode.png', {
       fullPage: true,
@@ -207,9 +200,8 @@ test.describe('Dark Mode Visual Tests', () => {
   });
 
   test('menu gallery should display transparently in dark mode', async ({ page }) => {
-    await page.goto('/menu');
-    await page.waitForTimeout(2000);
-    
+    await page.goto('/menu', { waitUntil: 'networkidle' });
+
     await expect(page).toHaveScreenshot('menu-gallery-dark-mode.png', {
       fullPage: true,
       threshold: 0.2,
@@ -239,7 +231,7 @@ test.describe('Stripe Integration', () => {
       if (await emailInput.isVisible()) {
         await emailInput.fill('test@example.com');
         await page.getByRole('button', { name: /sign in/i }).click();
-        await page.waitForTimeout(2000);
+        await page.waitForLoadState('networkidle');
       }
     }
     

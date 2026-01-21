@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:fast": "playwright test --project=Fast",
+    "test:desktop": "playwright test --project=Desktop",
+    "test:mobile": "playwright test --project=Mobile"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

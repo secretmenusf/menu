@@ -32,10 +32,8 @@ test.describe('Theme and Core Functionality', () => {
     });
     
     await page.reload();
-    
-    // Wait for transition to complete
-    await page.waitForTimeout(2000);
-    
+    await page.waitForLoadState('networkidle');
+
     // Check theme toggle button exists
     await expect(page.locator('[data-testid="theme-toggle"]')).toBeVisible();
   });
@@ -149,8 +147,7 @@ test.describe('Support Page with AI Chat', () => {
     await page.click('button:has(svg)'); // Send button with icon
     
     // Should show loading state then response
-    await page.waitForTimeout(1500); // Wait for simulated AI response
-    await expect(page.locator('text=Our current weekly menu features')).toBeVisible();
+    await expect(page.locator('text=Our current weekly menu features')).toBeVisible({ timeout: 5000 });
   });
 
   test('should have working contact methods', async ({ page }) => {

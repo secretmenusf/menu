@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test('landing page shows password gate', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(500);
 
   // Should show password gate for unauthenticated users
+  await expect(page.locator('body')).not.toBeEmpty();
   const hasContent = await page.locator('body').evaluate(el => el.children.length > 0);
   expect(hasContent).toBe(true);
 
@@ -21,8 +21,8 @@ test('authenticated user sees home page', async ({ page }) => {
   });
 
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(500);
 
+  await expect(page.locator('body')).not.toBeEmpty();
   const hasContent = await page.locator('body').evaluate(el => el.children.length > 0);
   expect(hasContent).toBe(true);
 

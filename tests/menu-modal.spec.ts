@@ -95,7 +95,7 @@ test.describe('Menu Item Modal', () => {
     await menuCard.click();
 
     // Wait for modal to fully render
-    await page.waitForTimeout(500);
+    await page.locator('[class*="fixed inset-0"]').waitFor({ state: 'visible' });
 
     // Take screenshot
     await page.screenshot({

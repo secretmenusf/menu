@@ -14,14 +14,10 @@ test.describe('SF Secret Menu - Complete Flow Tests', () => {
     await expect(page.locator('text=SECRET MENU')).toBeVisible();
     
     // Wait for auto-typed password (should auto-fill "ilovesecrets")
-    await page.waitForTimeout(5000);
-    
-    // Check that password was auto-filled
     const passwordInput = page.locator('input[type="text"]');
-    await expect(passwordInput).toHaveValue('ilovesecrets');
-    
+    await expect(passwordInput).toHaveValue('ilovesecrets', { timeout: 10000 });
+
     // Should automatically transition to light theme and proceed
-    await page.waitForTimeout(2000);
     
     // Should be on login page now
     await expect(page.locator('text=ENTER')).toBeVisible();
@@ -31,13 +27,10 @@ test.describe('SF Secret Menu - Complete Flow Tests', () => {
   test('Login flow prioritizes user-friendly options over crypto', async ({ page }) => {
     // Navigate to login
     await page.goto('http://localhost:5173/login');
-    
-    // Wait for password gate to complete
-    await page.waitForTimeout(6000);
-    
-    // Check that email/password is at the top
+
+    // Wait for password gate to complete and email input to be visible
     const emailInput = page.locator('input[type="email"]');
-    await expect(emailInput).toBeVisible();
+    await expect(emailInput).toBeVisible({ timeout: 10000 });
     
     // Check that magic link comes before crypto options
     const magicLinkButton = page.locator('text=MAGIC LINK');
@@ -120,14 +113,10 @@ test.describe('SF Secret Menu - Complete Flow Tests', () => {
     
     // Click theme toggle
     await themeToggle.click();
-    
-    // Check that theme changed (body or html should have class change)
-    await page.waitForTimeout(500);
-    
+
     // Toggle back
     await themeToggle.click();
-    await page.waitForTimeout(500);
-    
+
     // Should work without errors
     expect(true).toBe(true); // If we get here, theme toggle works
   });
@@ -154,15 +143,12 @@ test.describe('SF Secret Menu - Complete Flow Tests', () => {
     
     // Since we're not logged in, should redirect to login
     await page.waitForURL('**/login**');
-    
-    // Wait for password gate to complete
-    await page.waitForTimeout(6000);
-    
+
     // For now, just verify checkout exists and has payment methods
     await page.goto('http://localhost:5173/checkout');
-    
+
     // Should show empty cart since we're not logged in properly
-    await expect(page.locator('text=CART EMPTY')).toBeVisible();
+    await expect(page.locator('text=CART EMPTY')).toBeVisible({ timeout: 10000 });
   });
 
   test('Menu items are orderable and have nutrition info', async ({ page }) => {
@@ -185,9 +171,6 @@ test.describe('SF Secret Menu - Complete Flow Tests', () => {
     await page.goto('http://localhost:5173/');
     await page.waitForLoadState('networkidle');
     
-    // Wait for any animations to complete
-    await page.waitForTimeout(1000);
-    
     // Take screenshot of dark mode
     await page.screenshot({ 
       path: 'tests/screenshots/homepage-dark.png',
@@ -197,8 +180,7 @@ test.describe('SF Secret Menu - Complete Flow Tests', () => {
     // Toggle to light mode
     const themeToggle = page.locator('button[aria-label="Toggle theme"], button:has(svg)').first();
     await themeToggle.click();
-    await page.waitForTimeout(1000);
-    
+
     // Take screenshot of light mode
     await page.screenshot({ 
       path: 'tests/screenshots/homepage-light.png',
