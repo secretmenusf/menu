@@ -337,7 +337,7 @@ const Compare = () => {
             THE DIFFERENCE
           </h1>
           <p className="font-body text-xl text-white/90 max-w-2xl mx-auto mb-4">
-            Not all meal delivery is created equal.
+            Not all meals are created the same.
           </p>
           <p className="font-body text-lg text-white/70 max-w-2xl mx-auto">
             See how SF Secret Menu compares to meal kits, delivery apps, and premium wellness services.
@@ -465,7 +465,9 @@ const Compare = () => {
         </div>
       </main>
 
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </div>
   );
 };
