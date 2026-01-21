@@ -80,6 +80,7 @@ const plans = [
 
 const Order = () => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+  const [selectedPlan, setSelectedPlan] = useState<string | null>('house'); // Default to most popular
   const navigate = useNavigate();
 
   return (
@@ -132,18 +133,15 @@ const Order = () => {
 
           {/* Plans Grid */}
           <div className="grid md:grid-cols-3 gap-6 mb-16">
-            {plans.map((plan) => (
+            {plans.map((plan) => {
+              const isSelected = selectedPlan === plan.id;
+              return (
               <div
                 key={plan.id}
-                onClick={() => {
-                  const url = plan.customPricing
-                    ? plan.ctaLink
-                    : `/checkout?plan=${plan.id}&billing=${billingCycle}`;
-                  navigate(url);
-                }}
+                onClick={() => setSelectedPlan(plan.id)}
                 className={cn(
                   'relative rounded-3xl border p-8 transition-all duration-300 cursor-pointer',
-                  plan.highlighted
+                  isSelected
                     ? 'border-foreground bg-foreground/5 scale-[1.02]'
                     : 'border-border/50 bg-card/30 hover:border-border hover:bg-card/50'
                 )}
@@ -240,7 +238,8 @@ const Order = () => {
                 {/* CTA */}
                 <Button
                   type="button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card click
                     const url = plan.customPricing
                       ? plan.ctaLink
                       : `/checkout?plan=${plan.id}&billing=${billingCycle}`;
@@ -248,17 +247,18 @@ const Order = () => {
                   }}
                   className={cn(
                     'w-full font-display tracking-wider relative z-10',
-                    plan.highlighted
+                    isSelected
                       ? 'bg-foreground text-background hover:bg-foreground/90'
                       : ''
                   )}
-                  variant={plan.highlighted ? 'default' : 'outline'}
+                  variant={isSelected ? 'default' : 'outline'}
                 >
                   {plan.ctaText}
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
               </div>
-            ))}
+            );
+            })}
           </div>
 
           {/* Simple Rule */}
