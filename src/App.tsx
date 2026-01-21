@@ -48,6 +48,7 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const Orders = lazy(() => import("./pages/Orders"));
 const OrderDetails = lazy(() => import("./pages/OrderDetails"));
 const Referrals = lazy(() => import("./pages/Referrals"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminOrders = lazy(() => import("./pages/admin/Orders"));
 const AdminOrganizations = lazy(() => import("./pages/admin/Organizations"));
@@ -107,6 +108,7 @@ const AppRoutes = () => (
       {/* Public routes */}
       <Route path="/" element={<Index />} />
       <Route path="/menu" element={<Menu />} />
+      <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/chef" element={<Chef />} />
       <Route path="/entry" element={<Entry />} />
       <Route path="/order" element={<Order />} />
