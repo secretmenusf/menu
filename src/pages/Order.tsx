@@ -212,7 +212,7 @@ const Order = () => {
 
           {/* Plan Details - Shows based on selection */}
           {selectedPlan && (
-            <div className="max-w-4xl mx-auto mb-16">
+            <div className="mb-16">
               {plans.filter(p => p.id === selectedPlan).map((plan) => (
                 <div key={plan.id} className="border border-border/50 rounded-2xl p-8 bg-card/20">
                   <div className="grid md:grid-cols-2 gap-8">
