@@ -17,7 +17,7 @@ export const vegetarianCustomizations: MenuItemOption[] = [
   { id: 'add-steak', name: 'Add Grilled Grass-Fed Sirloin Steak', priceModifier: 12, category: 'protein', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-salmon', name: 'Add Pan-Seared Wild Caught Salmon', priceModifier: 10, category: 'protein', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-tofu', name: 'Add Marinated Teriyaki Tofu', priceModifier: 5, category: 'protein', allowMultiple: true, maxQuantity: 5 },
-  { id: 'add-sweet-potatoes', name: 'Add Sweet Potatoes', priceModifier: 2, category: 'extra', allowMultiple: true, maxQuantity: 5 },
+  { id: 'add-sweet-potatoes', name: 'Add Sweet Potatoes', priceModifier: 3, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-artichoke-hearts', name: 'Add Artichoke Hearts', priceModifier: 2, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-avocado', name: 'Add Avocado', priceModifier: 3, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-artisan-bread', name: 'Add Artisan Bread Slice', priceModifier: 2, category: 'side', allowMultiple: true, maxQuantity: 10 }
