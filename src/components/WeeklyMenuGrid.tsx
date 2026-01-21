@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Leaf, X, Plus, Minus, Check, MessageSquare } from 'lucide-react';
+import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
@@ -207,183 +207,205 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-background" onClick={onClose}>
+      {/* Back button - fixed position left */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        className="fixed top-4 left-4 z-[60] w-12 h-12 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors shadow-lg"
+      >
+        <ArrowLeft size={24} />
+      </button>
+
+      {/* Close button - fixed position right */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        className="fixed top-4 right-4 z-[60] w-12 h-12 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors shadow-lg"
+      >
+        <X size={24} />
+      </button>
+
+      {/* Scrollable content area - positioned to not cover fixed CTA */}
       <div
-        className="relative bg-card border border-border w-full h-full md:h-auto md:max-h-[95vh] md:max-w-2xl md:mx-4 md:rounded-3xl overflow-y-auto"
+        className="absolute inset-0 overflow-y-auto"
+        style={{ paddingBottom: '120px' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center text-foreground hover:bg-accent transition-colors"
-        >
-          <X size={20} />
-        </button>
 
-        {/* Hero image */}
-        <div className="relative h-72 md:h-64 bg-muted md:rounded-t-3xl overflow-hidden">
-          {item.image ? (
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <SeedOfLife size={80} className="text-muted-foreground/30" />
+        {/* Two-column layout on desktop */}
+        <div className="lg:grid lg:grid-cols-2 lg:min-h-screen">
+          {/* Left column - Image (sticky on desktop) */}
+          <div className="relative h-[50vh] lg:h-auto lg:sticky lg:top-0 lg:self-start bg-muted">
+            {item.image ? (
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full lg:h-screen object-cover"
+              />
+            ) : (
+              <div className="w-full h-full lg:h-screen flex items-center justify-center">
+                <SeedOfLife size={120} className="text-muted-foreground/30" />
+              </div>
+            )}
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-background/20" />
+
+            {/* Dietary badges - bottom left on mobile, top left (below back button) on desktop */}
+            <div className="absolute bottom-6 left-6 lg:top-20 lg:bottom-auto flex flex-wrap gap-2 max-w-[calc(100%-3rem)]">
+              {item.tags?.map(tag => (
+                <span key={tag} className="px-4 py-2 bg-foreground text-background rounded-full text-sm font-medium uppercase tracking-wide">
+                  {dietaryInfo[tag]?.label || tag}
+                </span>
+              ))}
             </div>
-          )}
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
-
-          {/* Dietary badges */}
-          <div className="absolute bottom-4 left-4 flex gap-2">
-            {item.tags?.map(tag => (
-              <span key={tag} className="px-3 py-1 bg-foreground text-background rounded-full text-xs font-medium uppercase">
-                {dietaryInfo[tag]?.label || tag}
-              </span>
-            ))}
           </div>
-        </div>
 
-        {/* Content */}
-        <div className="p-6 md:p-6 pb-20 md:pb-6">
-          <h2 className="text-2xl font-semibold text-foreground mb-2">{item.name}</h2>
-          <p className="text-muted-foreground mb-6">{item.description}</p>
-
-          {/* Nutrition Grid */}
-          {item.nutrition && (
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Nutrition Facts</h3>
-              <div className="grid grid-cols-5 gap-3">
-                <div className="bg-muted rounded-xl p-3 text-center">
-                  <div className="text-xl font-semibold text-foreground">{item.nutrition.calories}</div>
-                  <div className="text-[10px] text-muted-foreground uppercase">Calories</div>
-                </div>
-                <div className="bg-muted rounded-xl p-3 text-center">
-                  <div className="text-xl font-semibold text-foreground">{item.nutrition.protein}g</div>
-                  <div className="text-[10px] text-muted-foreground uppercase">Protein</div>
-                </div>
-                <div className="bg-muted rounded-xl p-3 text-center">
-                  <div className="text-xl font-semibold text-foreground">{item.nutrition.carbs}g</div>
-                  <div className="text-[10px] text-muted-foreground uppercase">Carbs</div>
-                </div>
-                <div className="bg-muted rounded-xl p-3 text-center">
-                  <div className="text-xl font-semibold text-foreground">{item.nutrition.fat}g</div>
-                  <div className="text-[10px] text-muted-foreground uppercase">Fat</div>
-                </div>
-                <div className="bg-muted rounded-xl p-3 text-center">
-                  <div className="text-xl font-semibold text-foreground">{item.nutrition.fiber}g</div>
-                  <div className="text-[10px] text-muted-foreground uppercase">Fiber</div>
-                </div>
+          {/* Right column - Content */}
+          <div className="relative bg-background">
+            <div className="p-6 md:p-10 lg:p-12 lg:max-w-2xl">
+              {/* Header */}
+              <div className="mb-8">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-4">{item.name}</h1>
+                <p className="text-lg text-muted-foreground leading-relaxed">{item.description}</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Serving size: {item.nutrition.servingSize}</p>
-            </div>
-          )}
 
-          {/* Ingredients */}
-          {item.ingredients && item.ingredients.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Ingredients</h3>
-              <div className="flex flex-wrap gap-2">
-                {item.ingredients.map((ingredient, i) => (
-                  <span key={i} className="px-3 py-1.5 bg-muted rounded-full text-sm text-foreground">
-                    {ingredient}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+              {/* Nutrition Grid */}
+              {item.nutrition && (
+                <div className="mb-8">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-4">Nutrition Facts</h3>
+                  <div className="grid grid-cols-5 gap-2 md:gap-3">
+                    <div className="bg-muted rounded-xl p-3 md:p-4 text-center">
+                      <div className="text-xl md:text-2xl font-semibold text-foreground">{item.nutrition.calories}</div>
+                      <div className="text-[10px] md:text-xs text-muted-foreground uppercase">Calories</div>
+                    </div>
+                    <div className="bg-muted rounded-xl p-3 md:p-4 text-center">
+                      <div className="text-xl md:text-2xl font-semibold text-foreground">{item.nutrition.protein}g</div>
+                      <div className="text-[10px] md:text-xs text-muted-foreground uppercase">Protein</div>
+                    </div>
+                    <div className="bg-muted rounded-xl p-3 md:p-4 text-center">
+                      <div className="text-xl md:text-2xl font-semibold text-foreground">{item.nutrition.carbs}g</div>
+                      <div className="text-[10px] md:text-xs text-muted-foreground uppercase">Carbs</div>
+                    </div>
+                    <div className="bg-muted rounded-xl p-3 md:p-4 text-center">
+                      <div className="text-xl md:text-2xl font-semibold text-foreground">{item.nutrition.fat}g</div>
+                      <div className="text-[10px] md:text-xs text-muted-foreground uppercase">Fat</div>
+                    </div>
+                    <div className="bg-muted rounded-xl p-3 md:p-4 text-center">
+                      <div className="text-xl md:text-2xl font-semibold text-foreground">{item.nutrition.fiber}g</div>
+                      <div className="text-[10px] md:text-xs text-muted-foreground uppercase">Fiber</div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-3">Serving size: {item.nutrition.servingSize}</p>
+                </div>
+              )}
 
-          {/* Allergens */}
-          {item.allergens && item.allergens.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-3">Allergens</h3>
-              <div className="flex flex-wrap gap-2">
-                {item.allergens.map((allergen, i) => (
-                  <span key={i} className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full text-sm text-amber-600 dark:text-amber-400">
-                    {allergen}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Customization Options - Grouped by Category */}
-          {item.options && item.options.length > 0 && (
-            <div className="mb-6 space-y-6">
-              {Object.entries(groupedOptions).map(([category, options]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-medium text-foreground mb-3">
-                    {categoryLabels[category] || category}
-                  </h3>
-                  <div className="space-y-2">
-                    {options.map((option) => (
-                      option.allowMultiple ? (
-                        <QuantityOption
-                          key={option.id}
-                          option={option}
-                          quantity={selectedOptions[option.id] || 0}
-                          onChange={(qty) => updateOption(option.id, qty)}
-                        />
-                      ) : (
-                        <CheckboxOption
-                          key={option.id}
-                          option={option}
-                          checked={(selectedOptions[option.id] || 0) > 0}
-                          onChange={(checked) => updateOption(option.id, checked ? 1 : 0)}
-                        />
-                      )
+              {/* Ingredients */}
+              {item.ingredients && item.ingredients.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-4">Ingredients</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {item.ingredients.map((ingredient, i) => (
+                      <span key={i} className="px-4 py-2 bg-muted rounded-full text-sm text-foreground">
+                        {ingredient}
+                      </span>
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-
-          {/* Special Instructions */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
-              <MessageSquare size={16} />
-              Special Instructions
-            </h3>
-            <textarea
-              value={specialInstructions}
-              onChange={(e) => setSpecialInstructions(e.target.value)}
-              placeholder="Any allergies, preferences, or special requests..."
-              className="w-full p-4 bg-muted/50 border-2 border-transparent rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:border-foreground/20 focus:outline-none resize-none"
-              rows={3}
-            />
-          </div>
-
-          {/* Quantity Selector */}
-          <div className="mb-6 flex items-center justify-between p-4 bg-muted/50 rounded-xl">
-            <span className="text-sm font-medium text-foreground">Quantity</span>
-            <QuantityStepper
-              value={quantity}
-              onChange={setQuantity}
-              min={1}
-              max={20}
-            />
-          </div>
-
-          {/* Price and CTA - Sticky at bottom */}
-          <div className="sticky bottom-0 bg-card pt-4 border-t border-border -mx-6 px-6 -mb-6 pb-6 md:static md:mx-0 md:px-0 md:mb-0 md:pb-0">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <span className="text-sm text-muted-foreground">Total</span>
-                <div className="text-2xl font-semibold text-foreground">${calculateTotal().toFixed(2)}</div>
-              </div>
-              {item.prepTime && (
-                <span className="text-sm text-muted-foreground">~{item.prepTime} min prep</span>
               )}
+
+              {/* Allergens */}
+              {item.allergens && item.allergens.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide mb-4">Allergens</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {item.allergens.map((allergen, i) => (
+                      <span key={i} className="px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full text-sm text-amber-600 dark:text-amber-400">
+                        {allergen}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Customization Options - Grouped by Category */}
+              {item.options && item.options.length > 0 && (
+                <div className="mb-8 space-y-6">
+                  <h3 className="text-sm font-medium text-foreground uppercase tracking-wide">Customize Your Order</h3>
+                  {Object.entries(groupedOptions).map(([category, options]) => (
+                    <div key={category}>
+                      <h4 className="text-base font-medium text-foreground mb-3">
+                        {categoryLabels[category] || category}
+                      </h4>
+                      <div className="space-y-2">
+                        {options.map((option) => (
+                          option.allowMultiple ? (
+                            <QuantityOption
+                              key={option.id}
+                              option={option}
+                              quantity={selectedOptions[option.id] || 0}
+                              onChange={(qty) => updateOption(option.id, qty)}
+                            />
+                          ) : (
+                            <CheckboxOption
+                              key={option.id}
+                              option={option}
+                              checked={(selectedOptions[option.id] || 0) > 0}
+                              onChange={(checked) => updateOption(option.id, checked ? 1 : 0)}
+                            />
+                          )
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Special Instructions */}
+              <div className="mb-8">
+                <h3 className="text-sm font-medium text-foreground mb-4 flex items-center gap-2 uppercase tracking-wide">
+                  <MessageSquare size={16} />
+                  Special Instructions
+                </h3>
+                <textarea
+                  value={specialInstructions}
+                  onChange={(e) => setSpecialInstructions(e.target.value)}
+                  placeholder="Any allergies, preferences, or special requests..."
+                  className="w-full p-4 bg-muted/50 border-2 border-transparent rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:border-foreground/20 focus:outline-none resize-none"
+                  rows={3}
+                />
+              </div>
+
+              {/* Quantity Selector */}
+              <div className="mb-8 flex items-center justify-between p-4 bg-muted/50 rounded-xl">
+                <span className="text-sm font-medium text-foreground">Quantity</span>
+                <QuantityStepper
+                  value={quantity}
+                  onChange={setQuantity}
+                  min={1}
+                  max={20}
+                />
+              </div>
+
             </div>
-            <button
-              onClick={handleAddToOrder}
-              className="w-full py-4 bg-foreground text-background rounded-full font-semibold text-lg hover:opacity-90 transition-opacity"
-            >
-              Add to Order via WhatsApp
-            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Fixed Price and CTA - Always visible at bottom of viewport */}
+      <div className="fixed bottom-0 left-0 right-0 z-[100] bg-background border-t border-border shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
+        <div className="safe-area-bottom bg-background">
+          <div className="px-4 py-4 md:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+              <div className="flex-shrink-0">
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Total</span>
+                <div className="text-2xl md:text-3xl font-bold text-foreground">${calculateTotal().toFixed(2)}</div>
+              </div>
+              <button
+                onClick={(e) => { e.stopPropagation(); handleAddToOrder(); }}
+                className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg"
+              >
+                Add to Order
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -396,9 +418,29 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
   const isVegan = item.tags?.includes('vg');
   const hasFish = item.allergens?.includes('fish') || item.allergens?.includes('shellfish');
 
+  // State for zoom pan effect
+  const [isHovering, setIsHovering] = useState(false);
+  const [transformOrigin, setTransformOrigin] = useState('center center');
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setTransformOrigin(`${x}% ${y}%`);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setTransformOrigin('center center');
+  };
+
   return (
     <div
-      className="bg-card rounded-2xl overflow-hidden flex flex-col border border-border hover:border-foreground/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+      className="group bg-card rounded-2xl overflow-hidden flex flex-col border border-border hover:border-foreground/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
       onClick={onClick}
     >
       {/* Image container */}
@@ -419,13 +461,23 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
           )}
         </div>
 
-        {/* Food image - perfect circle */}
-        <div className="w-[160px] h-[160px] mx-auto rounded-full overflow-hidden bg-muted">
+        {/* Food image - perfect circle with zoom and pan on hover */}
+        <div
+          className="w-[160px] h-[160px] mx-auto rounded-full overflow-hidden bg-muted"
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          style={{ cursor: isHovering ? 'grab' : 'pointer' }}
+        >
           {item.image ? (
             <img
               src={item.image}
               alt={item.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-300"
+              style={{
+                transform: isHovering ? 'scale(2)' : 'scale(1)',
+                transformOrigin: transformOrigin,
+              }}
               loading="lazy"
             />
           ) : (

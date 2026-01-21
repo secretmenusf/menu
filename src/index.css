@@ -143,6 +143,11 @@
 }
 
 @layer utilities {
+  /* Safe area padding for iOS devices with home indicator */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
   .animate-pulse-slow {
     animation: pulse-slow 4s ease-in-out infinite;
   }

@@ -12,7 +12,7 @@ const About = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           {/* Hero */}
           <div className="text-center mb-24">
-            <div className="mb-8">
+            <div className="mb-8 flex justify-center">
               <SeedOfLife3D size={72} />
             </div>
             <h1 className="font-display font-semibold text-4xl md:text-5xl lg:text-6xl tracking-[0.15em] mb-6">
@@ -112,7 +112,7 @@ const About = () => {
           {/* Mission Statement */}
           <section className="mb-24 text-center">
             <div className="p-12 border border-foreground/10 rounded-3xl bg-gradient-to-b from-card/50 to-transparent">
-              <div className="mb-6">
+              <div className="mb-6 flex justify-center">
                 <SeedOfLife3D size={48} />
               </div>
               <h2 className="font-display font-semibold text-2xl tracking-[0.15em] mb-4">SECRET MENU</h2>
