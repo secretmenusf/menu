@@ -60,7 +60,7 @@ const Chef = () => {
         <div className="container mx-auto px-6 max-w-5xl">
           {/* Hero Section */}
           <div className="text-center mb-24">
-            <div className="mb-8">
+            <div className="flex justify-center mb-8">
               <SeedOfLife3D size={72} />
             </div>
             <h1 className="font-display font-semibold text-4xl md:text-5xl lg:text-6xl tracking-[0.1em] mb-6">
