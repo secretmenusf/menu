@@ -262,7 +262,8 @@ const Order = () => {
                 ONE SIMPLE RULE
               </h3>
               <p className="font-body text-lg text-foreground/80 leading-relaxed">
-                Every plan is food credits. Every dollar is usable.{' '}
+                Every plan is food credits. Every dollar is usable.
+                <br />
                 <span className="text-foreground font-medium">No contracts. No wasted spend.</span>
               </p>
             </div>
