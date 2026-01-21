@@ -550,9 +550,10 @@ const WeeklyMenuGrid = () => {
           return item.nutrition && item.nutrition.carbs < 30;
         case 'pescatarian': {
           const name = item.name.toLowerCase();
-          const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp');
-          const hasMeat = name.includes('chicken') || name.includes('beef') || name.includes('lamb') || name.includes('pork') || name.includes('duck');
-          return hasSeafood || (tags.includes('v') && !hasMeat);
+          const ingredients = item.ingredients?.map(i => i.toLowerCase()).join(' ') || '';
+          const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') ||
+            ingredients.includes('cod') || ingredients.includes('fish') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp');
+          return hasSeafood;
         }
         default:
           return true;
