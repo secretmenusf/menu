@@ -64,7 +64,6 @@ import Analytics from '@/components/Analytics';
 import { EnhancedOrderingChat } from '@/components/chat/EnhancedOrderingChat';
 import { MobileStickyCTA } from '@/components/MobileStickyCTA';
 import ScrollToTop from '@/components/ScrollToTop';
-import { FloatingThemeToggle } from '@/components/theme-toggle';
 
 const queryClient = new QueryClient();
 
@@ -175,10 +174,6 @@ const App = () => (
                     <CommandPalette />
                     <EnhancedOrderingChat />
                     <MobileStickyCTA />
-                    {/* Fixed theme toggle - bottom left corner */}
-                    <div className="fixed bottom-6 left-6 z-50">
-                      <FloatingThemeToggle />
-                    </div>
                     <AppRoutes />
                   </BrowserRouter>
                 </ThemeTransition>
