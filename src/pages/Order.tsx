@@ -148,7 +148,7 @@ const Order = () => {
               >
                 {plan.highlighted && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-foreground text-background px-4 py-1 rounded-full text-xs font-display tracking-wider">
+                    <span className="bg-background text-foreground border border-foreground px-4 py-1 rounded-full text-xs font-display tracking-wider">
                       MOST POPULAR
                     </span>
                   </div>
