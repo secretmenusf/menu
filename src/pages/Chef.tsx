@@ -22,7 +22,7 @@ const Chef = () => {
   const whoItsFor = [
     { icon: Briefcase, text: 'Professionals who want exceptional meals without the hassle' },
     { icon: Users, text: 'Families who value real, nourishing food, that is organic' },
-    { icon: Baby, text: 'New parents in need of effortless, restorative meals' },
+    { icon: Baby, text: 'New parents in need of effortless, restorative meals and postpartum nutrition' },
     { icon: Heart, text: 'Anyone managing food sensitivities or special diets' },
     { icon: Stethoscope, text: 'Clients recovering and focused on healing through nutrition' },
     { icon: Gift, text: 'Thoughtful hosts and gift-givers seeking something truly memorable' },
