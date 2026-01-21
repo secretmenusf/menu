@@ -686,7 +686,7 @@ export const galleryMenuItems: MenuItem[] = [
   {
     id: 'albondigas',
     name: 'Albóndigas',
-    description: 'Spanish meatballs in rich saffron almond cream sauce and crispy fingerling potatoes',
+    description: 'Spanish meatballs made from grass fed beef and local ground pork in rich saffron almond cream sauce and crispy fingerling potatoes',
     ingredients: ['ground beef', 'ground pork', 'onion', 'garlic', 'saffron', 'almonds', 'cream', 'fingerling potatoes', 'herbs', 'olive oil', 'butter', 'breadcrumbs', 'egg', 'salt', 'black pepper'],
     tags: [],
     price: 26,

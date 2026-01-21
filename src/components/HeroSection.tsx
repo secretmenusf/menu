@@ -33,7 +33,7 @@ const HeroSection = () => {
 
             <h1 className="font-display font-semibold text-6xl md:text-7xl lg:text-8xl tracking-[0.08em] text-foreground mb-8 leading-[0.9]">
               SECRET
-              <span className="block text-muted-foreground mt-2">MENU</span>
+              <span className="block text-muted-foreground mt-0">MENU</span>
             </h1>
 
             <p className="font-body text-xl md:text-2xl text-muted-foreground max-w-lg mb-3 leading-relaxed">
