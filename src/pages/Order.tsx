@@ -131,8 +131,8 @@ const Order = () => {
             </div>
           </div>
 
-          {/* Plans Grid */}
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
+          {/* Plans Grid - Simplified Cards */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
             {plans.map((plan) => {
               const isSelected = selectedPlan === plan.id;
               return (
@@ -165,72 +165,21 @@ const Order = () => {
                   </p>
                 </div>
 
-                {/* Best For */}
-                <div className="text-center mb-6 pb-6 border-b border-border/30">
-                  <p className="font-display text-xs tracking-wider text-muted-foreground mb-1">
-                    BEST FOR
-                  </p>
-                  <p className="font-body text-sm text-foreground">
-                    {plan.bestFor}
-                  </p>
-                </div>
-
-                {/* Features */}
-                <div className="mb-8">
-                  <p className="font-display text-xs tracking-wider text-muted-foreground mb-4">
-                    INCLUDES
-                  </p>
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                        <span className="font-body text-sm text-foreground/80">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
                 {/* Pricing */}
-                <div className="mb-6">
-                  <p className="font-display text-xs tracking-wider text-muted-foreground mb-2">
-                    PRICING
-                  </p>
+                <div className="text-center mb-6">
                   {plan.customPricing ? (
-                    <div className="space-y-2">
-                      <p className="font-body text-sm text-foreground/80">
-                        {plan.pricingNote}
-                      </p>
-                      <p className="font-body text-sm text-muted-foreground flex items-center gap-2">
-                        <Mail size={14} />
-                        Contact us to design your Luxe Secret experience.
-                      </p>
-                    </div>
+                    <p className="font-display text-2xl text-foreground">Custom</p>
                   ) : (
-                    <div className="space-y-2">
-                      <div className="flex items-baseline gap-1">
-                        {plan.pricePrefix && (
-                          <span className="font-body text-sm text-muted-foreground">{plan.pricePrefix}</span>
-                        )}
-                        <span className="font-display text-3xl text-foreground">
-                          ${billingCycle === 'weekly' ? plan.weeklyPrice?.toLocaleString() : plan.monthlyPrice?.toLocaleString()}
-                        </span>
-                        <span className="font-body text-sm text-muted-foreground">
-                          /{billingCycle === 'weekly' ? 'week' : 'month'}
-                        </span>
-                      </div>
-                      <p className="font-body text-xs text-muted-foreground">
-                        {plan.deliveryNote}
-                      </p>
-                      {billingCycle === 'monthly' && plan.monthlyBenefit && (
-                        <p className="font-body text-xs text-emerald-500">
-                          {plan.monthlyBenefit}
-                        </p>
+                    <div className="flex items-baseline justify-center gap-1">
+                      {plan.pricePrefix && (
+                        <span className="font-body text-sm text-muted-foreground">{plan.pricePrefix}</span>
                       )}
-                      {plan.footnote && (
-                        <p className="font-body text-xs text-muted-foreground/60 italic">
-                          {plan.footnote}
-                        </p>
-                      )}
+                      <span className="font-display text-3xl text-foreground">
+                        ${billingCycle === 'weekly' ? plan.weeklyPrice?.toLocaleString() : plan.monthlyPrice?.toLocaleString()}
+                      </span>
+                      <span className="font-body text-sm text-muted-foreground">
+                        /{billingCycle === 'weekly' ? 'week' : 'month'}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -239,7 +188,7 @@ const Order = () => {
                 <Button
                   type="button"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click
+                    e.stopPropagation();
                     const url = plan.customPricing
                       ? plan.ctaLink
                       : `/checkout?plan=${plan.id}&billing=${billingCycle}`;
@@ -260,6 +209,66 @@ const Order = () => {
             );
             })}
           </div>
+
+          {/* Plan Details - Shows based on selection */}
+          {selectedPlan && (
+            <div className="max-w-4xl mx-auto mb-16">
+              {plans.filter(p => p.id === selectedPlan).map((plan) => (
+                <div key={plan.id} className="border border-border/50 rounded-2xl p-8 bg-card/20">
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {/* Best For */}
+                    <div>
+                      <p className="font-display text-xs tracking-wider text-muted-foreground mb-3">
+                        BEST FOR
+                      </p>
+                      <p className="font-body text-foreground">
+                        {plan.bestFor}
+                      </p>
+                    </div>
+
+                    {/* Delivery */}
+                    <div>
+                      <p className="font-display text-xs tracking-wider text-muted-foreground mb-3">
+                        DELIVERY
+                      </p>
+                      <p className="font-body text-foreground">
+                        {plan.deliveryNote || 'Custom delivery schedule'}
+                      </p>
+                      {billingCycle === 'monthly' && plan.monthlyBenefit && (
+                        <p className="font-body text-sm text-emerald-500 mt-2">
+                          {plan.monthlyBenefit}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="mt-8 pt-8 border-t border-border/30">
+                    <p className="font-display text-xs tracking-wider text-muted-foreground mb-4">
+                      WHAT'S INCLUDED
+                    </p>
+                    <ul className="grid md:grid-cols-2 gap-3">
+                      {plan.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                          <span className="font-body text-sm text-foreground/80">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {plan.customPricing && (
+                    <div className="mt-8 pt-8 border-t border-border/30">
+                      <p className="font-body text-sm text-muted-foreground flex items-center gap-2">
+                        <Mail size={14} />
+                        {plan.pricingNote}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Simple Rule */}
           <div className="text-center max-w-2xl mx-auto mt-16 mb-16">
