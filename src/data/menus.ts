@@ -331,19 +331,19 @@ export const galleryMenuItems: MenuItem[] = [
   {
     id: 'miso-glazed-cod',
     name: 'Miso Glazed Black Cod',
-    description: 'Nobu-inspired miso glazed black cod (150-200g) with caramelized eggplant, candied carrots, and jasmine rice',
+    description: 'Nobu-inspired miso glazed black cod (250-300g) with caramelized eggplant, candied carrots, and jasmine rice',
     ingredients: ['black cod', 'white miso', 'mirin', 'sake', 'sugar', 'caramelized eggplant', 'candied carrots', 'jasmine rice', 'ginger', 'scallions', 'sesame oil', 'butter', 'salt'],
     tags: ['gf'],
     price: 48,
     sortPriority: 5,
     image: '/images/menu/plated/misoglazedcod.png',
-    nutrition: { calories: 580, protein: 30, carbs: 65, fat: 22, fiber: 6, servingSize: '1 plate (550g)' },
+    nutrition: { calories: 750, protein: 40, carbs: 65, fat: 37, fiber: 6, servingSize: '1 plate (650g)' },
     allergens: ['fish', 'soy'],
     prepTime: 30,
     difficulty: 'medium',
     orderable: true,
     options: [
-      { id: 'extra-black-cod', name: 'Extra Black Cod (150-200g)', priceModifier: 25, category: 'protein' }
+      { id: 'extra-black-cod', name: 'Extra Black Cod (250-300g)', priceModifier: 25, category: 'protein' }
     ]
   },
   {
