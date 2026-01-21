@@ -168,7 +168,7 @@ function ActionButton({
 }) {
   const config = {
     SEND_ORDER: {
-      label: 'Send Order to WhatsApp',
+      label: 'Complete Order',
       icon: MessageCircle,
       variant: 'default' as const,
       className: 'bg-green-500 hover:bg-green-600 text-white',

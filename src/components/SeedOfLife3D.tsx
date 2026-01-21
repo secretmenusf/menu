@@ -96,21 +96,24 @@ const SeedOfLifeGeometry = () => {
   );
 };
 
-// Dark geometry with subtle backlight for light mode - NO ROTATION
+// Dark geometry with subtle backlight for light mode - WITH ROTATION
 const SeedOfLifeGeometryDark = () => {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Light mode: no rotation, just subtle breathing
+  // Light mode: rotation and subtle breathing
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const PHI = 1.618033988749;
 
     if (groupRef.current) {
-      // No rotation in light mode - static logo
-      groupRef.current.rotation.y = 0;
-      groupRef.current.rotation.z = 0;
-      // Very subtle breathing
-      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.01;
+      // Continuous rotation - same speed as dark mode
+      groupRef.current.rotation.y = t * 0.8;
+
+      // Subtle golden ratio vibration on z-axis
+      groupRef.current.rotation.z = Math.sin(t * PHI * 0.3) * 0.02;
+
+      // Subtle scale breathing based on phi
+      const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.025;
       groupRef.current.scale.setScalar(breathe);
     }
   });

@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
@@ -14,12 +14,30 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { browserName: 'chromium' },
+      name: 'Mobile',
+      use: { ...devices['iPhone 14'] },
+    },
+    {
+      name: 'Tablet',
+      use: { ...devices['iPad Pro 11'] },
+    },
+    {
+      name: 'Laptop',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 1280, height: 800 },
+      },
+    },
+    {
+      name: 'Desktop',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 1920, height: 1080 },
+      },
     },
   ],
   webServer: {
-    command: 'npm run dev -- --host 127.0.0.1 --port 4173',
+    command: 'npm run preview',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
