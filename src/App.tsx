@@ -51,6 +51,7 @@ const Referrals = lazy(() => import("./pages/Referrals"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminOrders = lazy(() => import("./pages/admin/Orders"));
 const AdminOrganizations = lazy(() => import("./pages/admin/Organizations"));
+const AdminInvoices = lazy(() => import("./pages/admin/Invoices"));
 const AdminCustomers = lazy(() => import("./pages/admin/Customers"));
 const AdminDeliveries = lazy(() => import("./pages/admin/Deliveries"));
 const AdminMenus = lazy(() => import("./pages/admin/Menus"));
@@ -145,6 +146,7 @@ const AppRoutes = () => (
         <Route index element={<AdminDashboard />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="organizations" element={<AdminOrganizations />} />
+        <Route path="invoices" element={<AdminInvoices />} />
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="deliveries" element={<AdminDeliveries />} />
         <Route path="menus" element={<AdminMenus />} />

@@ -17,6 +17,7 @@ import {
   LayoutDashboard,
   ShoppingCart,
   Building2,
+  FileText,
   Users,
   Truck,
   UtensilsCrossed,
@@ -41,6 +42,11 @@ const navItems = [
     title: 'Organizations',
     icon: Building2,
     href: '/admin/organizations',
+  },
+  {
+    title: 'Invoices',
+    icon: FileText,
+    href: '/admin/invoices',
   },
   {
     title: 'Customers',
