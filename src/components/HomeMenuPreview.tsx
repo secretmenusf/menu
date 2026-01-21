@@ -1,10 +1,26 @@
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Leaf, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft, X, Plus, Minus, Check, MessageSquare } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
+
+// Helper to check if item is a dessert
+const isDessert = (item: MenuItem): boolean => {
+  const name = item.name.toLowerCase();
+  const dessertKeywords = ['cookie', 'cake', 'pudding', 'cheesecake', 'shortcake', 'brownie', 'pie', 'tart', 'mousse', 'tiramisu', 'gelato', 'ice cream', 'sorbet', 'macaron'];
+  return dessertKeywords.some(keyword => name.includes(keyword)) || (item.sortPriority && item.sortPriority >= 70);
+};
+
+// Sort items with desserts last
+const sortedMenuItems = [...galleryMenuItems].sort((a, b) => {
+  const aIsDessert = isDessert(a);
+  const bIsDessert = isDessert(b);
+  if (aIsDessert && !bIsDessert) return 1;
+  if (!aIsDessert && bIsDessert) return -1;
+  return (a.sortPriority || 50) - (b.sortPriority || 50);
+});
 
 // Quantity Stepper Component (Uber Eats style)
 const QuantityStepper = ({
@@ -114,11 +130,55 @@ const QuantityOption = ({
 );
 
 // Detail Modal Component - Full-page with fixed CTA
-const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => void }) => {
+const MenuDetailModal = ({
+  item,
+  onClose,
+  onPrev,
+  onNext,
+  hasPrev,
+  hasNext,
+  currentIndex,
+  totalItems
+}: {
+  item: MenuItem;
+  onClose: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
+  hasPrev?: boolean;
+  hasNext?: boolean;
+  currentIndex?: number;
+  totalItems?: number;
+}) => {
   // State for customization options
   const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
   const [specialInstructions, setSpecialInstructions] = useState('');
   const [quantity, setQuantity] = useState(1);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' && hasPrev && onPrev) {
+        e.preventDefault();
+        onPrev();
+      } else if (e.key === 'ArrowRight' && hasNext && onNext) {
+        e.preventDefault();
+        onNext();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [hasPrev, hasNext, onPrev, onNext, onClose]);
+
+  // Reset selections when item changes
+  useEffect(() => {
+    setSelectedOptions({});
+    setSpecialInstructions('');
+    setQuantity(1);
+  }, [item.id]);
 
   // Group options by category
   const groupedOptions = useMemo(() => {
@@ -209,6 +269,31 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
       >
         <ArrowLeft size={24} />
       </button>
+
+      {/* Navigation controls - centered */}
+      {(onPrev || onNext) && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-2">
+          <button
+            onClick={(e) => { e.stopPropagation(); onPrev?.(); }}
+            disabled={!hasPrev}
+            className="w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors shadow-lg disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          {currentIndex !== undefined && totalItems !== undefined && (
+            <span className="px-3 py-1.5 bg-background/90 backdrop-blur border border-border rounded-full text-xs font-medium text-foreground shadow-lg">
+              {currentIndex + 1} / {totalItems}
+            </span>
+          )}
+          <button
+            onClick={(e) => { e.stopPropagation(); onNext?.(); }}
+            disabled={!hasNext}
+            className="w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors shadow-lg disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      )}
 
       {/* Close button - fixed position right */}
       <button
@@ -485,7 +570,7 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
 
 const HomeMenuPreview = () => {
   const [scrollIndex, setScrollIndex] = useState(0);
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number>(0);
   const isDragging = useRef<boolean>(false);
@@ -497,7 +582,10 @@ const HomeMenuPreview = () => {
   const cardWidth = 320;
   const gap = 20;
   const cardTotalWidth = cardWidth + gap;
-  const maxIndex = Math.max(0, galleryMenuItems.length - 1);
+  const maxIndex = Math.max(0, sortedMenuItems.length - 1);
+
+  // Get selected item from index
+  const selectedItem = selectedIndex !== null ? sortedMenuItems[selectedIndex] : null;
 
   const handlePrev = () => {
     setScrollIndex(prev => Math.max(0, prev - 1));
@@ -506,6 +594,23 @@ const HomeMenuPreview = () => {
   const handleNext = () => {
     setScrollIndex(prev => Math.min(maxIndex, prev + 1));
   };
+
+  // Modal navigation handlers
+  const handleModalPrev = useCallback(() => {
+    if (selectedIndex !== null && selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+    }
+  }, [selectedIndex]);
+
+  const handleModalNext = useCallback(() => {
+    if (selectedIndex !== null && selectedIndex < sortedMenuItems.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
+    }
+  }, [selectedIndex]);
+
+  const handleModalClose = useCallback(() => {
+    setSelectedIndex(null);
+  }, []);
 
   // Handle mouse wheel scrolling with debouncing
   const handleWheel = useCallback((e: React.WheelEvent) => {
@@ -593,7 +698,8 @@ const HomeMenuPreview = () => {
       wasDragged.current = false;
       return;
     }
-    setSelectedItem(item);
+    const index = sortedMenuItems.findIndex(i => i.id === item.id);
+    setSelectedIndex(index >= 0 ? index : null);
   }, []);
 
   return (
@@ -651,7 +757,7 @@ const HomeMenuPreview = () => {
               transform: `translateX(-${scrollIndex * cardTotalWidth}px)`
             }}
           >
-            {galleryMenuItems.map(item => (
+            {sortedMenuItems.map(item => (
               <MenuCard key={item.id} item={item} onClick={() => handleCardClick(item)} />
             ))}
           </div>
@@ -679,8 +785,17 @@ const HomeMenuPreview = () => {
       </div>
 
       {/* Detail Modal - rendered via portal to escape parent containers */}
-      {selectedItem && createPortal(
-        <MenuDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />,
+      {selectedItem && selectedIndex !== null && createPortal(
+        <MenuDetailModal
+          item={selectedItem}
+          onClose={handleModalClose}
+          onPrev={handleModalPrev}
+          onNext={handleModalNext}
+          hasPrev={selectedIndex > 0}
+          hasNext={selectedIndex < sortedMenuItems.length - 1}
+          currentIndex={selectedIndex}
+          totalItems={sortedMenuItems.length}
+        />,
         document.body
       )}
     </section>

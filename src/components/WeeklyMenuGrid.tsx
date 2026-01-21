@@ -1,10 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft } from 'lucide-react';
+import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
+
+// Helper to check if item is a dessert
+const isDessert = (item: MenuItem): boolean => {
+  const name = item.name.toLowerCase();
+  const dessertKeywords = ['cookie', 'cake', 'pudding', 'cheesecake', 'shortcake', 'brownie', 'pie', 'tart', 'mousse', 'tiramisu', 'gelato', 'ice cream', 'sorbet', 'macaron'];
+  return dessertKeywords.some(keyword => name.includes(keyword)) || (item.sortPriority && item.sortPriority >= 70);
+};
 
 type FilterType = 'all' | 'vegetarian' | 'dairy-free' | 'gluten-free' | 'pescatarian' | 'low-carb';
 
@@ -125,9 +132,52 @@ const QuantityOption = ({
 );
 
 // Detail Modal Component
-const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => void }) => {
+const MenuDetailModal = ({
+  item,
+  onClose,
+  onPrev,
+  onNext,
+  hasPrev,
+  hasNext,
+  currentIndex,
+  totalItems
+}: {
+  item: MenuItem;
+  onClose: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
+  hasPrev?: boolean;
+  hasNext?: boolean;
+  currentIndex?: number;
+  totalItems?: number;
+}) => {
   const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
   const [specialInstructions, setSpecialInstructions] = useState('');
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' && hasPrev && onPrev) {
+        e.preventDefault();
+        onPrev();
+      } else if (e.key === 'ArrowRight' && hasNext && onNext) {
+        e.preventDefault();
+        onNext();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [hasPrev, hasNext, onPrev, onNext, onClose]);
+
+  // Reset selections when item changes
+  useEffect(() => {
+    setSelectedOptions({});
+    setSpecialInstructions('');
+  }, [item.id]);
   const [quantity, setQuantity] = useState(1);
 
   const isVegetarian = item.tags?.includes('v') || item.tags?.includes('vg');
@@ -215,6 +265,31 @@ const MenuDetailModal = ({ item, onClose }: { item: MenuItem; onClose: () => voi
       >
         <ArrowLeft size={24} />
       </button>
+
+      {/* Navigation controls - centered */}
+      {(onPrev || onNext) && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-2">
+          <button
+            onClick={(e) => { e.stopPropagation(); onPrev?.(); }}
+            disabled={!hasPrev}
+            className="w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors shadow-lg disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          {currentIndex !== undefined && totalItems !== undefined && (
+            <span className="px-3 py-1.5 bg-background/90 backdrop-blur border border-border rounded-full text-xs font-medium text-foreground shadow-lg">
+              {currentIndex + 1} / {totalItems}
+            </span>
+          )}
+          <button
+            onClick={(e) => { e.stopPropagation(); onNext?.(); }}
+            disabled={!hasNext}
+            className="w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors shadow-lg disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      )}
 
       {/* Close button - fixed position right */}
       <button
@@ -523,7 +598,7 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
 
 const WeeklyMenuGrid = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   // Get current date for the title
   const today = new Date();
@@ -531,35 +606,69 @@ const WeeklyMenuGrid = () => {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
 
-  // Filter menu items based on active filter
+  // Filter and sort menu items (desserts always last)
   const filteredItems = useMemo(() => {
-    if (activeFilter === 'all') {
-      return galleryMenuItems;
+    let items = galleryMenuItems;
+
+    if (activeFilter !== 'all') {
+      items = items.filter(item => {
+        const tags = item.tags || [];
+        switch (activeFilter) {
+          case 'vegetarian':
+            return tags.includes('v') || tags.includes('vg');
+          case 'dairy-free':
+            return tags.includes('df');
+          case 'gluten-free':
+            return tags.includes('gf');
+          case 'low-carb':
+            return item.nutrition && item.nutrition.carbs < 30;
+          case 'pescatarian': {
+            const name = item.name.toLowerCase();
+            const ingredients = item.ingredients?.map(i => i.toLowerCase()).join(' ') || '';
+            const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') || name.includes('tuna') ||
+              ingredients.includes('cod') || ingredients.includes('fish') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp') || ingredients.includes('tuna');
+            return hasSeafood;
+          }
+          default:
+            return true;
+        }
+      });
     }
 
-    return galleryMenuItems.filter(item => {
-      const tags = item.tags || [];
-      switch (activeFilter) {
-        case 'vegetarian':
-          return tags.includes('v') || tags.includes('vg');
-        case 'dairy-free':
-          return tags.includes('df');
-        case 'gluten-free':
-          return tags.includes('gf');
-        case 'low-carb':
-          return item.nutrition && item.nutrition.carbs < 30;
-        case 'pescatarian': {
-          const name = item.name.toLowerCase();
-          const ingredients = item.ingredients?.map(i => i.toLowerCase()).join(' ') || '';
-          const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') || name.includes('tuna') ||
-            ingredients.includes('cod') || ingredients.includes('fish') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp') || ingredients.includes('tuna');
-          return hasSeafood;
-        }
-        default:
-          return true;
-      }
+    // Sort with desserts last
+    return [...items].sort((a, b) => {
+      const aIsDessert = isDessert(a);
+      const bIsDessert = isDessert(b);
+      if (aIsDessert && !bIsDessert) return 1;
+      if (!aIsDessert && bIsDessert) return -1;
+      return (a.sortPriority || 50) - (b.sortPriority || 50);
     });
   }, [activeFilter]);
+
+  // Get selected item from index
+  const selectedItem = selectedIndex !== null ? filteredItems[selectedIndex] : null;
+
+  // Navigation handlers
+  const handleSelectItem = useCallback((item: MenuItem) => {
+    const index = filteredItems.findIndex(i => i.id === item.id);
+    setSelectedIndex(index >= 0 ? index : null);
+  }, [filteredItems]);
+
+  const handlePrev = useCallback(() => {
+    if (selectedIndex !== null && selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+    }
+  }, [selectedIndex]);
+
+  const handleNext = useCallback(() => {
+    if (selectedIndex !== null && selectedIndex < filteredItems.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
+    }
+  }, [selectedIndex, filteredItems.length]);
+
+  const handleClose = useCallback(() => {
+    setSelectedIndex(null);
+  }, []);
 
   return (
     <section className="py-20 bg-muted/30">
@@ -596,7 +705,7 @@ const WeeklyMenuGrid = () => {
         {/* Menu grid - 4 columns on desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {filteredItems.map((item) => (
-            <MenuCard key={item.id} item={item} onClick={() => setSelectedItem(item)} />
+            <MenuCard key={item.id} item={item} onClick={() => handleSelectItem(item)} />
           ))}
         </div>
 
@@ -609,8 +718,17 @@ const WeeklyMenuGrid = () => {
       </div>
 
       {/* Detail Modal - rendered via portal to escape parent containers */}
-      {selectedItem && createPortal(
-        <MenuDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />,
+      {selectedItem && selectedIndex !== null && createPortal(
+        <MenuDetailModal
+          item={selectedItem}
+          onClose={handleClose}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          hasPrev={selectedIndex > 0}
+          hasNext={selectedIndex < filteredItems.length - 1}
+          currentIndex={selectedIndex}
+          totalItems={filteredItems.length}
+        />,
         document.body
       )}
     </section>
