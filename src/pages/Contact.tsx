@@ -13,7 +13,7 @@ const Contact = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           {/* Hero */}
           <div className="text-center mb-20">
-            <div className="mb-8">
+            <div className="mb-8 flex justify-center">
               <SeedOfLife3D size={64} />
             </div>
             <h1 className="font-display font-semibold text-4xl md:text-5xl tracking-[0.15em] mb-6">

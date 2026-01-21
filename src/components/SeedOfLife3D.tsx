@@ -96,11 +96,11 @@ const SeedOfLifeGeometry = () => {
   );
 };
 
-// Dark geometry with subtle backlight for light mode - WITH ROTATION
-const SeedOfLifeGeometryDark = () => {
+// Black geometry for light mode - WITH ROTATION
+const SeedOfLifeGeometryBlack = () => {
   const groupRef = useRef<THREE.Group>(null);
 
-  // Light mode: rotation and subtle breathing
+  // Light mode: rotation and breathing
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const PHI = 1.618033988749;
@@ -119,7 +119,7 @@ const SeedOfLifeGeometryDark = () => {
   });
 
   const r = 0.35;
-  const tubeRadius = 0.028; // Thinner lines for more elegant look
+  const tubeRadius = 0.028;
 
   const positions: [number, number, number][] = [];
   for (let i = 0; i < 6; i++) {
@@ -128,13 +128,13 @@ const SeedOfLifeGeometryDark = () => {
   }
 
   // Matte black material
-  const darkMaterial = useMemo(() => {
+  const blackMaterial = useMemo(() => {
     return new THREE.MeshStandardMaterial({
       color: '#1a1a1a',
       emissive: '#000000',
       emissiveIntensity: 0,
-      metalness: 0.1,
-      roughness: 0.8,
+      metalness: 0.3,
+      roughness: 0.7,
       toneMapped: true,
     });
   }, []);
@@ -143,12 +143,12 @@ const SeedOfLifeGeometryDark = () => {
     <group ref={groupRef}>
       <mesh>
         <torusGeometry args={[r, tubeRadius, 32, 100]} />
-        <primitive object={darkMaterial} attach="material" />
+        <primitive object={blackMaterial} attach="material" />
       </mesh>
       {positions.map((pos, i) => (
         <mesh key={i} position={pos}>
           <torusGeometry args={[r, tubeRadius, 32, 100]} />
-          <primitive object={darkMaterial} attach="material" />
+          <primitive object={blackMaterial} attach="material" />
         </mesh>
       ))}
     </group>
@@ -178,7 +178,7 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
     return () => observer.disconnect();
   }, [theme]);
 
-  // In light mode, show 3D black version with subtle backlight
+  // In light mode, show black spinning version
   if (!isDarkMode) {
     return (
       <div
@@ -189,27 +189,6 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
           position: 'relative',
         }}
       >
-        {/* Subtle shadow/ambient layer */}
-        <div
-          className="absolute"
-          style={{
-            inset: '-10%',
-            filter: 'blur(8px)',
-            opacity: 0.15,
-          }}
-        >
-          <Canvas
-            camera={{ position: [0, 0, 2.5], fov: 40 }}
-            gl={{ alpha: true, antialias: true }}
-            frameloop="always"
-            dpr={[1, 1]}
-          >
-            <ambientLight intensity={0.3} />
-            <Center>
-              <SeedOfLifeGeometryDark />
-            </Center>
-          </Canvas>
-        </div>
         {/* Main layer */}
         <div style={{ position: 'absolute', inset: 0 }}>
           <Canvas
@@ -218,11 +197,12 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
             frameloop="always"
             dpr={[1, 2]}
           >
-            <ambientLight intensity={0.8} />
-            <pointLight position={[0, 0, 4]} intensity={1.0} color="#ffffff" />
-            <pointLight position={[-2, -2, 3]} intensity={0.5} color="#e0e0e0" />
+            <ambientLight intensity={1.0} />
+            <pointLight position={[0, 0, 4]} intensity={1.5} color="#ffffff" />
+            <pointLight position={[2, 2, 3]} intensity={0.8} color="#ffffff" />
+            <pointLight position={[-2, -2, 3]} intensity={0.8} color="#ffffff" />
             <Center>
-              <SeedOfLifeGeometryDark />
+              <SeedOfLifeGeometryBlack />
             </Center>
           </Canvas>
         </div>
