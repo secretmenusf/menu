@@ -488,8 +488,16 @@ const HomeMenuPreview = () => {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number>(0);
-  const itemsToShow = 4;
-  const maxIndex = Math.max(0, galleryMenuItems.length - itemsToShow);
+  const isDragging = useRef<boolean>(false);
+  const wasDragged = useRef<boolean>(false);
+  const dragStartX = useRef<number>(0);
+  const dragStartIndex = useRef<number>(0);
+  const lastWheelTime = useRef<number>(0);
+
+  const cardWidth = 320;
+  const gap = 20;
+  const cardTotalWidth = cardWidth + gap;
+  const maxIndex = Math.max(0, galleryMenuItems.length - 1);
 
   const handlePrev = () => {
     setScrollIndex(prev => Math.max(0, prev - 1));
@@ -499,25 +507,30 @@ const HomeMenuPreview = () => {
     setScrollIndex(prev => Math.min(maxIndex, prev + 1));
   };
 
-  // Handle mouse wheel scrolling on the carousel
+  // Handle mouse wheel scrolling with debouncing
   const handleWheel = useCallback((e: React.WheelEvent) => {
-    // Determine scroll direction (support both vertical and horizontal wheel)
+    const now = Date.now();
+    const timeSinceLastWheel = now - lastWheelTime.current;
+
+    // Debounce: only allow scroll every 150ms
+    if (timeSinceLastWheel < 150) {
+      e.preventDefault();
+      return;
+    }
+
     const delta = e.deltaY !== 0 ? e.deltaY : e.deltaX;
 
-    if (delta > 0) {
-      // Scrolling down/right - go to next
-      if (scrollIndex < maxIndex) {
-        e.preventDefault();
-        setScrollIndex(prev => Math.min(maxIndex, prev + 1));
-      }
-      // If at end, allow page scroll (don't preventDefault)
-    } else if (delta < 0) {
-      // Scrolling up/left - go to previous
-      if (scrollIndex > 0) {
-        e.preventDefault();
-        setScrollIndex(prev => Math.max(0, prev - 1));
-      }
-      // If at beginning, allow page scroll (don't preventDefault)
+    // Require a minimum delta to trigger scroll
+    if (Math.abs(delta) < 10) return;
+
+    if (delta > 0 && scrollIndex < maxIndex) {
+      e.preventDefault();
+      lastWheelTime.current = now;
+      setScrollIndex(prev => Math.min(maxIndex, prev + 1));
+    } else if (delta < 0 && scrollIndex > 0) {
+      e.preventDefault();
+      lastWheelTime.current = now;
+      setScrollIndex(prev => Math.max(0, prev - 1));
     }
   }, [scrollIndex, maxIndex]);
 
@@ -529,18 +542,59 @@ const HomeMenuPreview = () => {
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
-    const threshold = 50; // Minimum swipe distance
+    const threshold = 50;
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0 && scrollIndex < maxIndex) {
-        // Swiped left - go to next
         setScrollIndex(prev => Math.min(maxIndex, prev + 1));
       } else if (diff < 0 && scrollIndex > 0) {
-        // Swiped right - go to previous
         setScrollIndex(prev => Math.max(0, prev - 1));
       }
     }
   }, [scrollIndex, maxIndex]);
+
+  // Handle mouse drag for desktop
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    isDragging.current = true;
+    wasDragged.current = false;
+    dragStartX.current = e.clientX;
+    dragStartIndex.current = scrollIndex;
+  }, [scrollIndex]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+
+    const diff = dragStartX.current - e.clientX;
+
+    // Only consider it a drag if moved more than 10px
+    if (Math.abs(diff) > 10) {
+      wasDragged.current = true;
+    }
+
+    const indexDiff = Math.round(diff / cardTotalWidth);
+    const newIndex = Math.max(0, Math.min(maxIndex, dragStartIndex.current + indexDiff));
+
+    if (newIndex !== scrollIndex) {
+      setScrollIndex(newIndex);
+    }
+  }, [scrollIndex, maxIndex, cardTotalWidth]);
+
+  const handleMouseUp = useCallback(() => {
+    isDragging.current = false;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    isDragging.current = false;
+  }, []);
+
+  const handleCardClick = useCallback((item: MenuItem) => {
+    // Prevent click if we were dragging
+    if (wasDragged.current) {
+      wasDragged.current = false;
+      return;
+    }
+    setSelectedItem(item);
+  }, []);
 
   return (
     <section className="py-20 bg-muted/30 overflow-hidden">
@@ -580,18 +634,25 @@ const HomeMenuPreview = () => {
       {/* Scrollable menu cards - Full width: 100px from left, flush to right */}
       <div
         ref={carouselRef}
-        className="relative ml-6 md:ml-[100px] pr-0 cursor-grab active:cursor-grabbing"
+        className="relative ml-6 md:ml-[100px] pr-0 cursor-grab active:cursor-grabbing select-none"
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
       >
         <div className="overflow-visible">
           <div
-            className="flex gap-5 transition-transform duration-300 ease-out"
-            style={{ transform: `translateX(-${scrollIndex * 340}px)` }}
+            className="flex transition-transform duration-300 ease-out"
+            style={{
+              gap: `${gap}px`,
+              transform: `translateX(-${scrollIndex * cardTotalWidth}px)`
+            }}
           >
             {galleryMenuItems.map(item => (
-              <MenuCard key={item.id} item={item} onClick={() => setSelectedItem(item)} />
+              <MenuCard key={item.id} item={item} onClick={() => handleCardClick(item)} />
             ))}
           </div>
         </div>
