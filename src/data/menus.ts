@@ -13,10 +13,10 @@ export interface MenuItemOption {
 
 // Standard protein and customization options for vegetarian/salad dishes
 export const vegetarianCustomizations: MenuItemOption[] = [
-  { id: 'add-chicken', name: 'Add Grilled Free-Range Organic Chicken', priceModifier: 8, category: 'protein', allowMultiple: true, maxQuantity: 5 },
-  { id: 'add-steak', name: 'Add Grilled Grass-Fed Sirloin Steak', priceModifier: 12, category: 'protein', allowMultiple: true, maxQuantity: 5 },
-  { id: 'add-salmon', name: 'Add Pan-Seared Wild Caught Salmon', priceModifier: 10, category: 'protein', allowMultiple: true, maxQuantity: 5 },
-  { id: 'add-tofu', name: 'Add Marinated Teriyaki Tofu', priceModifier: 5, category: 'protein', allowMultiple: true, maxQuantity: 5 },
+  { id: 'add-chicken', name: 'Add Grilled Free-Range Organic Chicken (+200g)', priceModifier: 8, category: 'protein', allowMultiple: true, maxQuantity: 5 },
+  { id: 'add-steak', name: 'Add Grilled Grass-Fed Sirloin Steak (+200g)', priceModifier: 12, category: 'protein', allowMultiple: true, maxQuantity: 5 },
+  { id: 'add-salmon', name: 'Add Pan-Seared Wild Caught Salmon (+200g)', priceModifier: 10, category: 'protein', allowMultiple: true, maxQuantity: 5 },
+  { id: 'add-tofu', name: 'Add Marinated Teriyaki Tofu (+200g)', priceModifier: 5, category: 'protein', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-sweet-potatoes', name: 'Add Sweet Potatoes', priceModifier: 3, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-artichoke-hearts', name: 'Add Artichoke Hearts', priceModifier: 2, category: 'extra', allowMultiple: true, maxQuantity: 5 },
   { id: 'add-avocado', name: 'Add Avocado', priceModifier: 3, category: 'extra', allowMultiple: true, maxQuantity: 5 },
@@ -86,7 +86,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'challenging',
     orderable: true,
     options: [
-      { id: 'double-meat', name: 'Double Meat', priceModifier: 18, category: 'protein' },
+      { id: 'double-meat', name: 'Double Meat (+200g)', priceModifier: 18, category: 'protein' },
       { id: 'sub-roasted-veggies', name: 'Sub Roasted Potatoes for Roasted Veggies', priceModifier: 0, category: 'side' },
       { id: 'sub-mashed-potatoes', name: 'Sub Roasted Potatoes for Mashed Potatoes', priceModifier: 2, category: 'side' },
       { id: 'add-beet-salad', name: 'Side of Beet Salad', priceModifier: 9, category: 'side' },
@@ -158,7 +158,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'easy',
     orderable: true,
     options: [
-      { id: 'double-steak', name: 'Double Steak', priceModifier: 16, category: 'protein' },
+      { id: 'double-steak', name: 'Double Steak (+200g)', priceModifier: 16, category: 'protein' },
       { id: 'add-avocado', name: 'Add Avocado', priceModifier: 3, category: 'extra' },
       { id: 'extra-blue-cheese', name: 'Extra Blue Cheese', priceModifier: 3, category: 'add-on' },
       { id: 'add-artisan-bread', name: 'Add Artisan Bread Slice', priceModifier: 2, category: 'side', allowMultiple: true, maxQuantity: 5 },
@@ -293,7 +293,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'medium',
     orderable: true,
     options: [
-      { id: 'extra-duck-breast', name: 'Extra Duck Breast', priceModifier: 16, category: 'protein', allowMultiple: true, maxQuantity: 3 },
+      { id: 'extra-duck-breast', name: 'Extra Duck Breast (+200g)', priceModifier: 16, category: 'protein', allowMultiple: true, maxQuantity: 3 },
       { id: 'add-mashed-potatoes', name: 'Add Mashed Potatoes', priceModifier: 8, category: 'side' },
       { id: 'add-smashed-potatoes', name: 'Add Smashed Garlic and Rosemary Potatoes', priceModifier: 8, category: 'side' }
     ]
@@ -344,6 +344,28 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       { id: 'extra-black-cod', name: 'Extra Black Cod (250-300g)', priceModifier: 25, category: 'protein' }
+    ]
+  },
+  {
+    id: 'sesame-crusted-tuna-tataki',
+    name: 'Sesame Crusted Tuna Tataki',
+    description: 'Seared ahi tuna with pistachio, sesame, and macadamia crust, served with cilantro lime aioli, brown rice, smashed cucumber salad, and edamame garnished with green onions',
+    ingredients: ['ahi tuna', 'pistachios', 'sesame seeds', 'macadamia nuts', 'cilantro', 'lime', 'aioli', 'brown rice', 'cucumber', 'rice vinegar', 'edamame', 'green onions', 'soy sauce', 'sesame oil', 'garlic', 'ginger', 'salt'],
+    tags: ['gf', 'df'],
+    price: 38,
+    sortPriority: 6,
+    image: '/images/menu/plated/sesamecrustedtunataki.png',
+    nutrition: { calories: 780, protein: 58, carbs: 52, fat: 38, fiber: 8, servingSize: '1 plate (550g)' },
+    allergens: ['fish', 'tree nuts', 'sesame', 'soy', 'eggs'],
+    prepTime: 25,
+    difficulty: 'medium',
+    orderable: true,
+    options: [
+      { id: 'extra-tuna', name: 'Extra Tuna (200g)', priceModifier: 14, category: 'protein' },
+      { id: 'sub-white-rice', name: 'Sub Brown Rice for White Rice', priceModifier: 0, category: 'side' },
+      { id: 'sub-cauliflower-rice', name: 'Sub Brown Rice for Cauliflower Rice', priceModifier: 2, category: 'side' },
+      { id: 'extra-aioli', name: 'Extra Cilantro Lime Aioli', priceModifier: 2, category: 'add-on' },
+      { id: 'add-avocado', name: 'Add Avocado', priceModifier: 4, category: 'add-on' }
     ]
   },
   {
@@ -405,7 +427,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'easy',
     orderable: true,
     options: [
-      { id: 'double-shrimp', name: 'Double Shrimp', priceModifier: 14, category: 'protein' },
+      { id: 'double-shrimp', name: 'Double Shrimp (+200g)', priceModifier: 14, category: 'protein' },
       { id: 'extra-fried-egg', name: 'Extra Fried Egg', priceModifier: 3, category: 'add-on' },
       { id: 'no-spicy', name: 'No Spicy', priceModifier: 0, category: 'dietary' }
     ]
@@ -425,7 +447,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'challenging',
     orderable: true,
     options: [
-      { id: 'extra-duck-leg', name: 'Extra Duck Confit Leg', priceModifier: 16, category: 'protein', allowMultiple: true, maxQuantity: 5 },
+      { id: 'extra-duck-leg', name: 'Extra Duck Confit Leg (+200g)', priceModifier: 16, category: 'protein', allowMultiple: true, maxQuantity: 5 },
       { id: 'add-mashed-potatoes', name: 'Add Mashed Potatoes', priceModifier: 9, category: 'side' },
       { id: 'add-smashed-potatoes', name: 'Add Garlic Rosemary Smashed Potatoes', priceModifier: 7, category: 'side' }
     ]
@@ -603,7 +625,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'easy',
     orderable: true,
     options: [
-      { id: 'double-meat', name: 'Double Meat', priceModifier: 12, category: 'protein' },
+      { id: 'double-meat', name: 'Double Meat (+200g)', priceModifier: 12, category: 'protein' },
       { id: 'add-soy-egg', name: 'Add Soy Marinated Egg', priceModifier: 3, category: 'add-on' },
       { id: 'extra-kimchi', name: 'Extra Kimchi', priceModifier: 3, category: 'add-on' },
       { id: 'add-chili-crunch', name: 'Chili Crunch', priceModifier: 3, category: 'add-on' },
@@ -657,7 +679,7 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       ...vegetarianCustomizations,
-      { id: 'add-salmon', name: 'Add Line Caught Salmon', priceModifier: 15, category: 'protein' },
+      { id: 'add-salmon', name: 'Add Line Caught Salmon (+200g)', priceModifier: 15, category: 'protein' },
       { id: 'add-poached-eggs', name: 'Add 2 Poached Eggs', priceModifier: 7, category: 'protein' }
     ]
   },
@@ -701,7 +723,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'medium',
     orderable: true,
     options: [
-      { id: 'double-chicken', name: 'Double Chicken', priceModifier: 10, category: 'protein' }
+      { id: 'double-chicken', name: 'Double Chicken (+200g)', priceModifier: 10, category: 'protein' }
     ]
   },
   {
@@ -719,7 +741,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'easy',
     orderable: true,
     options: [
-      { id: 'double-meat', name: 'Double Meat', priceModifier: 10, category: 'protein' },
+      { id: 'double-meat', name: 'Double Meat (+200g)', priceModifier: 10, category: 'protein' },
       { id: 'side-guac', name: 'Side of Guac', priceModifier: 4, category: 'side' },
       { id: 'pint-guac', name: 'Pint of Guac', priceModifier: 15, category: 'side' },
       { id: 'extra-salsa', name: 'Extra Salsa', priceModifier: 1, category: 'add-on' }
@@ -740,7 +762,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'challenging',
     orderable: true,
     options: [
-      { id: 'double-meat', name: 'Double Meat', priceModifier: 16, category: 'protein' },
+      { id: 'double-meat', name: 'Double Meat (+200g)', priceModifier: 16, category: 'protein' },
       { id: 'add-garden-salad', name: 'Side Garden Salad', priceModifier: 8, category: 'side' },
       { id: 'add-roasted-veggies', name: 'Roasted Veggies', priceModifier: 9, category: 'side' }
     ]
@@ -760,7 +782,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'easy',
     orderable: true,
     options: [
-      { id: 'double-fish', name: 'Double Fish', priceModifier: 10, category: 'protein' },
+      { id: 'double-fish', name: 'Double Fish (+200g)', priceModifier: 10, category: 'protein' },
       { id: 'extra-tortillas', name: '3 Extra Tortillas', priceModifier: 3, category: 'add-on' },
       { id: 'side-guac', name: 'Side of Guac', priceModifier: 4, category: 'side' },
       { id: 'pint-guac', name: 'Pint of Guac', priceModifier: 15, category: 'side' },
@@ -800,7 +822,7 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       ...vegetarianCustomizations,
-      { id: 'add-salmon', name: 'Add Line Caught Salmon', priceModifier: 12, category: 'protein' }
+      { id: 'add-salmon', name: 'Add Line Caught Salmon (+200g)', priceModifier: 12, category: 'protein' }
     ]
   },
   {
@@ -871,7 +893,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'medium',
     orderable: true,
     options: [
-      { id: 'double-pork-chop', name: 'Double Pork Chop', priceModifier: 16, category: 'protein' },
+      { id: 'double-pork-chop', name: 'Double Pork Chop (+200g)', priceModifier: 16, category: 'protein' },
       { id: 'extra-fried-egg', name: 'Extra Fried Egg', priceModifier: 3, category: 'add-on' },
       { id: 'extra-jasmine-rice', name: 'Extra Jasmine Rice', priceModifier: 3, category: 'side' },
       { id: 'add-chili-crunch', name: 'Chili Crunch', priceModifier: 3, category: 'add-on' },
@@ -895,7 +917,7 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       ...vegetarianCustomizations,
-      { id: 'add-salmon', name: 'Add Line Caught Salmon', priceModifier: 14, category: 'protein' }
+      { id: 'add-salmon', name: 'Add Line Caught Salmon (+200g)', priceModifier: 14, category: 'protein' }
     ]
   },
   {
@@ -960,7 +982,7 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       ...vegetarianCustomizations,
-      { id: 'add-grilled-salmon', name: 'Add Grilled Salmon', priceModifier: 12, category: 'protein' }
+      { id: 'add-grilled-salmon', name: 'Add Grilled Salmon (+200g)', priceModifier: 12, category: 'protein' }
     ]
   },
   {
@@ -978,7 +1000,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'challenging',
     orderable: true,
     options: [
-      { id: 'double-meat', name: 'Double Meat', priceModifier: 16, category: 'protein' },
+      { id: 'double-meat', name: 'Double Meat (+200g)', priceModifier: 16, category: 'protein' },
       { id: 'extra-gremolata', name: 'Extra Gremolata', priceModifier: 3, category: 'add-on' },
       { id: 'sub-roasted-potatoes', name: 'Sub Polenta for Roasted Rosemary Garlic Potatoes', priceModifier: 0, category: 'side' },
       { id: 'sub-mashed-potatoes', name: 'Sub Polenta for Mashed Potatoes', priceModifier: 2, category: 'side' },
@@ -1019,13 +1041,13 @@ export const galleryMenuItems: MenuItem[] = [
     price: 42,
     sortPriority: 11,
     image: '/images/menu/plated/steakw_greenbeansalmonds.png',
-    nutrition: { calories: 820, protein: 58, carbs: 24, fat: 56, fiber: 6, servingSize: '1 plate (520g)' },
+    nutrition: { calories: 920, protein: 54, carbs: 38, fat: 62, fiber: 5, servingSize: '1 plate (580g)' },
     allergens: ['dairy', 'tree nuts'],
     prepTime: 25,
     difficulty: 'medium',
     orderable: true,
     options: [
-      { id: 'double-meat', name: 'Double Meat', priceModifier: 16, category: 'protein' },
+      { id: 'double-meat', name: 'Double Meat (+200g)', priceModifier: 16, category: 'protein' },
       { id: 'sub-roasted-veggies', name: 'Sub Mashed Potatoes for Roasted Veggies', priceModifier: 0, category: 'side' },
       { id: 'sub-smashed-potatoes', name: 'Sub Mashed Potatoes for Smashed Rosemary Garlic Potatoes', priceModifier: 0, category: 'side' },
       { id: 'sub-fingerling-potatoes', name: 'Sub Mashed Potatoes for Crispy Fingerling Potatoes', priceModifier: 2, category: 'side' },
@@ -1064,7 +1086,7 @@ export const galleryMenuItems: MenuItem[] = [
     difficulty: 'easy',
     orderable: true,
     options: [
-      { id: 'double-chicken', name: 'Double Chicken', priceModifier: 10, category: 'protein' },
+      { id: 'double-chicken', name: 'Double Chicken (+200g)', priceModifier: 10, category: 'protein' },
       { id: 'sub-tofu', name: 'Sub Tofu for Chicken', priceModifier: 0, category: 'protein' },
       { id: 'extra-fried-egg', name: 'Extra Fried Egg', priceModifier: 3, category: 'add-on' },
       { id: 'extra-jasmine-rice', name: 'Extra Jasmine Rice', priceModifier: 3, category: 'side' },
@@ -1120,7 +1142,7 @@ export const galleryMenuItems: MenuItem[] = [
     orderable: true,
     options: [
       { id: 'extra-bone-broth', name: 'Extra Bone Broth Side', priceModifier: 8, category: 'side' },
-      { id: 'double-shrimp', name: 'Double Shrimp', priceModifier: 10, category: 'protein' }
+      { id: 'double-shrimp', name: 'Double Shrimp (+200g)', priceModifier: 10, category: 'protein' }
     ]
   },
   {

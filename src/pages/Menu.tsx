@@ -5,7 +5,7 @@ import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 
 const Menu = () => {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col dark">
+    <div className="min-h-screen bg-background flex flex-col">
       <SEOHead
         {...pageSEO.menu}
         url="https://secretmenusf.com/menu"

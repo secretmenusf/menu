@@ -551,8 +551,8 @@ const WeeklyMenuGrid = () => {
         case 'pescatarian': {
           const name = item.name.toLowerCase();
           const ingredients = item.ingredients?.map(i => i.toLowerCase()).join(' ') || '';
-          const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') ||
-            ingredients.includes('cod') || ingredients.includes('fish') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp');
+          const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') || name.includes('tuna') ||
+            ingredients.includes('cod') || ingredients.includes('fish') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp') || ingredients.includes('tuna');
           return hasSeafood;
         }
         default:
