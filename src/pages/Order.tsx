@@ -233,6 +233,7 @@ const Order = () => {
 
                 {/* CTA */}
                 <Button
+                  type="button"
                   onClick={() => {
                     const url = plan.customPricing
                       ? plan.ctaLink
@@ -240,7 +241,7 @@ const Order = () => {
                     navigate(url);
                   }}
                   className={cn(
-                    'w-full font-display tracking-wider',
+                    'w-full font-display tracking-wider relative z-10',
                     plan.highlighted
                       ? 'bg-foreground text-background hover:bg-foreground/90'
                       : ''
