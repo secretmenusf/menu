@@ -233,7 +233,12 @@ const Order = () => {
 
                 {/* CTA */}
                 <Button
-                  onClick={() => navigate(plan.ctaLink)}
+                  onClick={() => {
+                    const url = plan.customPricing
+                      ? plan.ctaLink
+                      : `/checkout?plan=${plan.id}&billing=${billingCycle}`;
+                    navigate(url);
+                  }}
                   className={cn(
                     'w-full font-display tracking-wider',
                     plan.highlighted

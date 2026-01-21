@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useOrder } from '@/contexts/OrderContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
@@ -34,11 +34,47 @@ const PAYMENT_ADDRESSES = {
 
 type Step = 'contact' | 'delivery' | 'payment';
 
+// Plan definitions for subscription checkout
+const PLANS = {
+  everyday: {
+    id: 'everyday',
+    name: 'Everyday Secret',
+    emoji: '🥗',
+    weeklyPrice: 100,
+    monthlyPrice: 400,
+    description: 'Effortless chef-made meals, ready when you are',
+  },
+  house: {
+    id: 'house',
+    name: 'House & Team Table',
+    emoji: '🍽️',
+    weeklyPrice: 1400,
+    monthlyPrice: 5600,
+    description: 'Lunch and dinner covered for groups who eat together',
+  },
+} as const;
+
 const Checkout = () => {
   const { cart, total, clearCart } = useOrder();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+
+  // Check for plan-based checkout
+  const planId = searchParams.get('plan') as keyof typeof PLANS | null;
+  const billingCycle = searchParams.get('billing') as 'weekly' | 'monthly' | null;
+  const selectedPlan = planId && PLANS[planId] ? PLANS[planId] : null;
+
+  // Calculate plan price
+  const planPrice = useMemo(() => {
+    if (!selectedPlan) return 0;
+    return billingCycle === 'weekly' ? selectedPlan.weeklyPrice : selectedPlan.monthlyPrice;
+  }, [selectedPlan, billingCycle]);
+
+  // Determine if this is a plan checkout or cart checkout
+  const isPlanCheckout = !!selectedPlan;
+  const checkoutTotal = isPlanCheckout ? planPrice : total;
 
   // Current step
   const [step, setStep] = useState<Step>('contact');
@@ -133,12 +169,16 @@ const Checkout = () => {
     }
 
     toast({
-      title: 'Order confirmed!',
-      description: 'Your meal is being prepared with care',
+      title: isPlanCheckout ? 'Membership activated!' : 'Order confirmed!',
+      description: isPlanCheckout
+        ? `Your $${planPrice} in food credits are ready to use`
+        : 'Your meal is being prepared with care',
     });
 
-    clearCart();
-    navigate('/my-orders');
+    if (!isPlanCheckout) {
+      clearCart();
+    }
+    navigate(isPlanCheckout ? '/menu' : '/my-orders');
   };
 
   const handlePaymentError = (error: { message?: string; code?: string; [key: string]: unknown }) => {
@@ -154,7 +194,23 @@ const Checkout = () => {
     setLoading(true);
 
     // Build WhatsApp message for non-card payments
-    const message = `🍽️ *SECRET MENU ORDER*
+    const message = isPlanCheckout
+      ? `🍽️ *SECRET MENU MEMBERSHIP*
+
+👤 *Customer:* ${firstName} ${lastName}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+
+📋 *Plan:* ${selectedPlan?.emoji} ${selectedPlan?.name}
+🔄 *Billing:* ${billingCycle === 'weekly' ? 'Weekly' : 'Monthly'}
+💰 *Amount: $${planPrice}*
+💳 *Payment: ${paymentMethod.toUpperCase()}*
+
+📍 *Delivery Address:*
+${deliveryAddress}
+
+${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`
+      : `🍽️ *SECRET MENU ORDER*
 
 👤 *Customer:* ${firstName} ${lastName}
 📧 *Email:* ${email}
@@ -175,16 +231,21 @@ ${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`;
     window.open(whatsappUrl, '_blank');
 
     toast({
-      title: 'Order submitted',
-      description: 'Complete payment via WhatsApp to confirm',
+      title: isPlanCheckout ? 'Membership started!' : 'Order submitted',
+      description: isPlanCheckout
+        ? 'Complete payment via WhatsApp to activate your credits'
+        : 'Complete payment via WhatsApp to confirm',
     });
 
-    clearCart();
+    if (!isPlanCheckout) {
+      clearCart();
+    }
     setLoading(false);
-    navigate('/my-orders');
+    navigate(isPlanCheckout ? '/' : '/my-orders');
   };
 
-  if (cart.length === 0) {
+  // Show empty cart only if not a plan checkout
+  if (!isPlanCheckout && cart.length === 0) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -197,7 +258,7 @@ ${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`;
               Your order awaits creation
             </p>
             <Button onClick={() => navigate('/order')} className="font-display tracking-wider">
-              BUILD YOUR MENU
+              CHOOSE A PLAN
             </Button>
           </div>
         </main>
@@ -215,10 +276,12 @@ ${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`;
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="font-display text-3xl md:text-4xl tracking-[0.2em] text-mystical mb-2">
-              CHECKOUT
+              {isPlanCheckout ? 'START YOUR MEMBERSHIP' : 'CHECKOUT'}
             </h1>
             <p className="font-body text-sm text-muted-foreground">
-              No account required • Guest checkout
+              {isPlanCheckout
+                ? `${selectedPlan?.emoji} ${selectedPlan?.name} • ${billingCycle === 'weekly' ? 'Weekly' : 'Monthly'} billing`
+                : 'No account required • Guest checkout'}
             </p>
           </div>
 
@@ -409,7 +472,7 @@ ${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`;
 
                   {paymentMethod === 'card' ? (
                     <StripePayment
-                      amount={total}
+                      amount={checkoutTotal}
                       onPaymentSuccess={handlePaymentSuccess}
                       onPaymentError={handlePaymentError}
                       loading={loading}
@@ -540,38 +603,83 @@ ${deliveryNotes ? `📝 *Notes:* ${deliveryNotes}` : ''}`;
             <div className="lg:col-span-2">
               <div className="border border-border/30 rounded-lg p-6 bg-card/30 sticky top-32">
                 <h2 className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-6">
-                  ORDER SUMMARY
+                  {isPlanCheckout ? 'MEMBERSHIP SUMMARY' : 'ORDER SUMMARY'}
                 </h2>
 
-                <div className="space-y-4 mb-6">
-                  {cart.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-start">
-                      <div>
-                        <p className="font-body text-sm text-foreground">{item.name}</p>
-                        <p className="font-body text-xs text-muted-foreground">
-                          Qty: {item.quantity}
+                {isPlanCheckout && selectedPlan ? (
+                  /* Plan Summary */
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-start gap-3">
+                      <span className="text-3xl">{selectedPlan.emoji}</span>
+                      <div className="flex-1">
+                        <p className="font-display text-sm tracking-wider text-foreground">
+                          {selectedPlan.name}
+                        </p>
+                        <p className="font-body text-xs text-muted-foreground mt-1">
+                          {selectedPlan.description}
                         </p>
                       </div>
-                      <span className="font-display text-sm text-foreground">
-                        ${item.price * item.quantity}
-                      </span>
                     </div>
-                  ))}
-                </div>
+                    <div className="bg-emerald-500/10 rounded-lg p-3">
+                      <p className="font-body text-xs text-emerald-500">
+                        ${planPrice} in food credits • Use anytime
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Cart Items */
+                  <div className="space-y-4 mb-6">
+                    {cart.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-start">
+                        <div>
+                          <p className="font-body text-sm text-foreground">{item.name}</p>
+                          <p className="font-body text-xs text-muted-foreground">
+                            Qty: {item.quantity}
+                          </p>
+                        </div>
+                        <span className="font-display text-sm text-foreground">
+                          ${item.price * item.quantity}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="border-t border-border/30 pt-4 space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Subtotal</span>
-                    <span className="font-display text-sm">${total}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Delivery</span>
-                    <span className="font-display text-sm text-emerald-400">Free</span>
-                  </div>
-                  <div className="flex justify-between items-center pt-2 border-t border-border/30">
-                    <span className="font-display tracking-wider">TOTAL</span>
-                    <span className="font-display text-xl text-mystical">${total}</span>
-                  </div>
+                  {isPlanCheckout ? (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">
+                          {billingCycle === 'weekly' ? 'Weekly' : 'Monthly'} membership
+                        </span>
+                        <span className="font-display text-sm">${planPrice}</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-border/30">
+                        <span className="font-display tracking-wider">
+                          {billingCycle === 'weekly' ? 'DUE TODAY' : 'DUE TODAY'}
+                        </span>
+                        <span className="font-display text-xl text-mystical">${planPrice}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground pt-2">
+                        Billed {billingCycle === 'weekly' ? 'weekly' : 'monthly'} • Cancel anytime
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">Subtotal</span>
+                        <span className="font-display text-sm">${total}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">Delivery</span>
+                        <span className="font-display text-sm text-emerald-400">Free</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-border/30">
+                        <span className="font-display tracking-wider">TOTAL</span>
+                        <span className="font-display text-xl text-mystical">${total}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Contact summary when past step 1 */}
