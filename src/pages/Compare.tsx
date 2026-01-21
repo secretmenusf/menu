@@ -150,7 +150,7 @@ const ValuePropsSection = () => (
               <>
                 <div
                   className="absolute inset-0 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${(prop as any).image})` }}
+                  style={{ backgroundImage: `url(${(prop as { image?: string }).image})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
               </>

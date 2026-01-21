@@ -548,11 +548,12 @@ const WeeklyMenuGrid = () => {
           return tags.includes('gf');
         case 'low-carb':
           return item.nutrition && item.nutrition.carbs < 30;
-        case 'pescatarian':
+        case 'pescatarian': {
           const name = item.name.toLowerCase();
           const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp');
           const hasMeat = name.includes('chicken') || name.includes('beef') || name.includes('lamb') || name.includes('pork') || name.includes('duck');
           return hasSeafood || (tags.includes('v') && !hasMeat);
+        }
         default:
           return true;
       }
