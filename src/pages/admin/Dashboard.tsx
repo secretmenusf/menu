@@ -1,9 +1,24 @@
 import { StatCard } from '@/components/admin/StatCard';
 import { RevenueChart } from '@/components/admin/RevenueChart';
 import { RecentOrders } from '@/components/admin/RecentOrders';
-import { ShoppingCart, DollarSign, Users, Truck } from 'lucide-react';
+import { ShoppingCart, DollarSign, Building2, Truck } from 'lucide-react';
+import { useAdminOrders } from '@/hooks/useAdminOrders';
 
 export default function Dashboard() {
+  const { orders, organizations, isLoading, getStats, getRecentOrders } = useAdminOrders();
+  const stats = getStats();
+  const recentOrders = getRecentOrders(5);
+
+  // Transform orders for RecentOrders component
+  const recentOrdersForDisplay = recentOrders.map((order) => ({
+    id: order.id,
+    customer: order.organization?.name || order.customer.name,
+    email: order.customer.email,
+    total: order.total,
+    status: order.status as 'pending' | 'confirmed' | 'preparing' | 'delivered' | 'cancelled',
+    createdAt: order.createdAt,
+  }));
+
   return (
     <div className="space-y-6">
       <div>
@@ -17,29 +32,26 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="ORDERS TODAY"
-          value={12}
+          value={isLoading ? '...' : stats.ordersToday}
           description="from yesterday"
           icon={ShoppingCart}
-          trend={{ value: 12, isPositive: true }}
         />
         <StatCard
           title="REVENUE TODAY"
-          value="$4,250"
+          value={isLoading ? '...' : `$${stats.revenueToday.toLocaleString()}`}
           description="from yesterday"
           icon={DollarSign}
-          trend={{ value: 8, isPositive: true }}
         />
         <StatCard
-          title="ACTIVE SUBSCRIPTIONS"
-          value={48}
-          description="active members"
-          icon={Users}
-          trend={{ value: 4, isPositive: true }}
+          title="ACTIVE ORGANIZATIONS"
+          value={isLoading ? '...' : stats.activeOrganizations}
+          description="active clients"
+          icon={Building2}
         />
         <StatCard
           title="PENDING DELIVERIES"
-          value={7}
-          description="scheduled today"
+          value={isLoading ? '...' : stats.pendingDeliveries}
+          description="scheduled"
           icon={Truck}
         />
       </div>
@@ -50,7 +62,7 @@ export default function Dashboard() {
           <RevenueChart />
         </div>
         <div className="lg:col-span-3">
-          <RecentOrders />
+          <RecentOrders orders={recentOrdersForDisplay} />
         </div>
       </div>
     </div>

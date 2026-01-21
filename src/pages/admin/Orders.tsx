@@ -13,88 +13,41 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { OrderTable, type Order } from '@/components/admin/OrderTable';
 import { OrderActions } from '@/components/admin/OrderActions';
-import { Search, CalendarIcon, Download } from 'lucide-react';
+import { Search, CalendarIcon, Download, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useAdminOrders, type AdminOrder } from '@/hooks/useAdminOrders';
 
-// Mock data
-const mockOrders: Order[] = [
-  {
-    id: 'ORD-001',
-    customer: { name: 'Alex Chen', email: 'alex@example.com', phone: '+1234567890' },
-    items: 4,
-    total: 950,
-    status: 'delivered',
-    paymentStatus: 'paid',
-    paymentMethod: 'card',
-    deliveryDate: new Date(),
-    createdAt: new Date(),
-  },
-  {
-    id: 'ORD-002',
-    customer: { name: 'Maria Santos', email: 'maria@example.com' },
-    items: 6,
-    total: 1200,
-    status: 'preparing',
-    paymentStatus: 'paid',
-    paymentMethod: 'crypto',
-    deliveryDate: new Date(Date.now() + 86400000),
-    createdAt: new Date(Date.now() - 86400000),
-  },
-  {
-    id: 'ORD-003',
-    customer: { name: 'James Wilson', email: 'james@example.com' },
-    items: 3,
-    total: 900,
-    status: 'confirmed',
-    paymentStatus: 'paid',
-    paymentMethod: 'card',
-    deliveryDate: new Date(Date.now() + 172800000),
-    createdAt: new Date(Date.now() - 172800000),
-  },
-  {
-    id: 'ORD-004',
-    customer: { name: 'Emily Davis', email: 'emily@example.com' },
-    items: 8,
-    total: 1500,
-    status: 'pending',
-    paymentStatus: 'pending',
-    paymentMethod: 'crypto',
-    deliveryDate: new Date(Date.now() + 259200000),
-    createdAt: new Date(Date.now() - 259200000),
-  },
-  {
-    id: 'ORD-005',
-    customer: { name: 'Michael Brown', email: 'michael@example.com' },
-    items: 5,
-    total: 1100,
-    status: 'out_for_delivery',
-    paymentStatus: 'paid',
-    paymentMethod: 'card',
-    deliveryDate: new Date(),
-    createdAt: new Date(Date.now() - 345600000),
-  },
-  {
-    id: 'ORD-006',
-    customer: { name: 'Sarah Johnson', email: 'sarah@example.com' },
-    items: 2,
-    total: 500,
-    status: 'cancelled',
-    paymentStatus: 'refunded',
-    paymentMethod: 'card',
-    deliveryDate: new Date(Date.now() - 86400000),
-    createdAt: new Date(Date.now() - 432000000),
-  },
-];
+// Transform AdminOrder to OrderTable's Order type
+function transformOrder(order: AdminOrder): Order {
+  return {
+    id: order.id,
+    customer: {
+      name: order.organization?.name || order.customer.name,
+      email: order.customer.email,
+      phone: order.customer.phone,
+    },
+    items: order.items,
+    total: order.total,
+    status: order.status,
+    paymentStatus: order.paymentStatus,
+    paymentMethod: order.paymentMethod === 'ramp' || order.paymentMethod === 'ach' ? 'card' : order.paymentMethod as 'card' | 'crypto',
+    deliveryDate: order.deliveryDate,
+    createdAt: order.createdAt,
+  };
+}
 
 export default function Orders() {
+  const { orders, isLoading, updateOrderStatus, addAdminNote } = useAdminOrders();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<Date | undefined>();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
-  const filteredOrders = mockOrders.filter((order) => {
+  const transformedOrders = orders.map(transformOrder);
+
+  const filteredOrders = transformedOrders.filter((order) => {
     const matchesSearch =
       order.id.toLowerCase().includes(search.toLowerCase()) ||
       order.customer.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -217,12 +170,18 @@ export default function Orders() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <OrderTable
-            orders={filteredOrders}
-            onViewOrder={handleViewOrder}
-            onEditOrder={handleEditOrder}
-            onRefundOrder={handleRefundOrder}
-          />
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <OrderTable
+              orders={filteredOrders}
+              onViewOrder={handleViewOrder}
+              onEditOrder={handleEditOrder}
+              onRefundOrder={handleRefundOrder}
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -234,11 +193,18 @@ export default function Orders() {
           setIsActionsOpen(false);
           setSelectedOrder(null);
         }}
-        onUpdateStatus={(id, status) => {
-          console.log('Update status:', id, status);
+        onUpdateStatus={async (id, status) => {
+          // Find the original order ID (the full UUID)
+          const originalOrder = orders.find(o => o.id === id || o.invoiceNumber === id);
+          if (originalOrder) {
+            await updateOrderStatus({ orderId: originalOrder.id, status });
+          }
         }}
-        onAddNote={(id, note) => {
-          console.log('Add note:', id, note);
+        onAddNote={async (id, note) => {
+          const originalOrder = orders.find(o => o.id === id || o.invoiceNumber === id);
+          if (originalOrder) {
+            await addAdminNote({ orderId: originalOrder.id, note });
+          }
         }}
         onRefund={(id) => {
           console.log('Refund:', id);

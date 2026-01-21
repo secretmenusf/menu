@@ -16,6 +16,7 @@ import SeedOfLife from '@/components/SeedOfLife';
 import {
   LayoutDashboard,
   ShoppingCart,
+  Building2,
   Users,
   Truck,
   UtensilsCrossed,
@@ -35,6 +36,11 @@ const navItems = [
     title: 'Orders',
     icon: ShoppingCart,
     href: '/admin/orders',
+  },
+  {
+    title: 'Organizations',
+    icon: Building2,
+    href: '/admin/organizations',
   },
   {
     title: 'Customers',

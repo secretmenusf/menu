@@ -14,6 +14,210 @@ export type Database = {
   }
   public: {
     Tables: {
+      organizations: {
+        Row: {
+          id: string
+          name: string
+          billing_email: string
+          billing_contact_name: string | null
+          billing_method: Database["public"]["Enums"]["billing_method"]
+          ramp_customer_id: string | null
+          stripe_customer_id: string | null
+          notes: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          billing_email: string
+          billing_contact_name?: string | null
+          billing_method?: Database["public"]["Enums"]["billing_method"]
+          ramp_customer_id?: string | null
+          stripe_customer_id?: string | null
+          notes?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          billing_email?: string
+          billing_contact_name?: string | null
+          billing_method?: Database["public"]["Enums"]["billing_method"]
+          ramp_customer_id?: string | null
+          stripe_customer_id?: string | null
+          notes?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      organization_members: {
+        Row: {
+          id: string
+          organization_id: string
+          user_id: string | null
+          email: string
+          name: string | null
+          role: Database["public"]["Enums"]["org_member_role"]
+          can_place_orders: boolean
+          can_customize_orders: boolean
+          can_view_invoices: boolean
+          invite_token: string | null
+          invite_expires_at: string | null
+          joined_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          user_id?: string | null
+          email: string
+          name?: string | null
+          role?: Database["public"]["Enums"]["org_member_role"]
+          can_place_orders?: boolean
+          can_customize_orders?: boolean
+          can_view_invoices?: boolean
+          invite_token?: string | null
+          invite_expires_at?: string | null
+          joined_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          user_id?: string | null
+          email?: string
+          name?: string | null
+          role?: Database["public"]["Enums"]["org_member_role"]
+          can_place_orders?: boolean
+          can_customize_orders?: boolean
+          can_view_invoices?: boolean
+          invite_token?: string | null
+          invite_expires_at?: string | null
+          joined_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_credits: {
+        Row: {
+          id: string
+          organization_id: string
+          credit_type: Database["public"]["Enums"]["credit_type"]
+          credits_amount_cents: number
+          credits_remaining_cents: number
+          valid_from: string
+          valid_until: string | null
+          notes: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          credit_type?: Database["public"]["Enums"]["credit_type"]
+          credits_amount_cents?: number
+          credits_remaining_cents?: number
+          valid_from: string
+          valid_until?: string | null
+          notes?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          credit_type?: Database["public"]["Enums"]["credit_type"]
+          credits_amount_cents?: number
+          credits_remaining_cents?: number
+          valid_from?: string
+          valid_until?: string | null
+          notes?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_credits_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_invoices: {
+        Row: {
+          id: string
+          organization_id: string
+          invoice_number: string
+          amount_cents: number
+          status: Database["public"]["Enums"]["invoice_status"]
+          payment_method: string | null
+          payment_reference: string | null
+          due_date: string | null
+          paid_at: string | null
+          description: string | null
+          line_items: Json | null
+          notes: string | null
+          sent_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          invoice_number: string
+          amount_cents: number
+          status?: Database["public"]["Enums"]["invoice_status"]
+          payment_method?: string | null
+          payment_reference?: string | null
+          due_date?: string | null
+          paid_at?: string | null
+          description?: string | null
+          line_items?: Json | null
+          notes?: string | null
+          sent_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          invoice_number?: string
+          amount_cents?: number
+          status?: Database["public"]["Enums"]["invoice_status"]
+          payment_method?: string | null
+          payment_reference?: string | null
+          due_date?: string | null
+          paid_at?: string | null
+          description?: string | null
+          line_items?: Json | null
+          notes?: string | null
+          sent_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_invoices_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       addresses: {
         Row: {
           id: string
@@ -141,43 +345,58 @@ export type Database = {
           created_at: string
           delivery_notes: string | null
           id: string
-          menu_week_id: string
+          menu_week_id: string | null
           payment_method: string
           payment_status: string
           status: string
           stripe_payment_id: string | null
           total_cents: number
           updated_at: string
-          user_id: string
+          user_id: string | null
           wallet_tx_hash: string | null
+          organization_id: string | null
+          order_notes: string | null
+          admin_notes: string | null
+          line_items: Json | null
+          invoice_id: string | null
         }
         Insert: {
           created_at?: string
           delivery_notes?: string | null
           id?: string
-          menu_week_id: string
+          menu_week_id?: string | null
           payment_method: string
           payment_status?: string
           status?: string
           stripe_payment_id?: string | null
           total_cents: number
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           wallet_tx_hash?: string | null
+          organization_id?: string | null
+          order_notes?: string | null
+          admin_notes?: string | null
+          line_items?: Json | null
+          invoice_id?: string | null
         }
         Update: {
           created_at?: string
           delivery_notes?: string | null
           id?: string
-          menu_week_id?: string
+          menu_week_id?: string | null
           payment_method?: string
           payment_status?: string
           status?: string
           stripe_payment_id?: string | null
           total_cents?: number
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           wallet_tx_hash?: string | null
+          organization_id?: string | null
+          order_notes?: string | null
+          admin_notes?: string | null
+          line_items?: Json | null
+          invoice_id?: string | null
         }
         Relationships: [
           {
@@ -185,6 +404,20 @@ export type Database = {
             columns: ["menu_week_id"]
             isOneToOne: false
             referencedRelation: "menu_weeks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "organization_invoices"
             referencedColumns: ["id"]
           },
         ]
@@ -332,7 +565,27 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      admin_orders_summary: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          status: string
+          payment_status: string
+          payment_method: string
+          total_cents: number
+          delivery_notes: string | null
+          admin_notes: string | null
+          organization_name: string | null
+          billing_contact_name: string | null
+          billing_email: string | null
+          invoice_number: string | null
+          invoice_status: string | null
+          customer_name: string | null
+          customer_email: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
@@ -346,6 +599,10 @@ export type Database = {
     Enums: {
       app_role: "admin" | "user"
       referral_status: "pending" | "signed_up" | "first_order" | "active"
+      billing_method: "stripe" | "ramp" | "ach" | "invoice"
+      org_member_role: "owner" | "admin" | "member"
+      credit_type: "weekly" | "one_time" | "rollover"
+      invoice_status: "draft" | "sent" | "paid" | "overdue" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -475,6 +732,10 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "user"],
       referral_status: ["pending", "signed_up", "first_order", "active"],
+      billing_method: ["stripe", "ramp", "ach", "invoice"],
+      org_member_role: ["owner", "admin", "member"],
+      credit_type: ["weekly", "one_time", "rollover"],
+      invoice_status: ["draft", "sent", "paid", "overdue", "cancelled"],
     },
   },
 } as const
