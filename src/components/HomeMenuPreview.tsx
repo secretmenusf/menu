@@ -1,10 +1,71 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Leaf, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft, X, Plus, Minus, Check, MessageSquare } from 'lucide-react';
+import { Leaf, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft, X, Plus, Minus, Check, MessageSquare, Star, ChevronDown, Truck, Shield } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
+
+// Star Rating Component
+const StarRating = ({ rating }: { rating: number }) => (
+  <div className="flex items-center gap-1">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <Star
+        key={star}
+        size={16}
+        className={star <= rating ? 'fill-amber-400 text-amber-400' : 'fill-muted text-muted'}
+      />
+    ))}
+  </div>
+);
+
+// FAQ Item Component
+const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border-b border-border/50">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-4 flex items-center justify-between text-left"
+      >
+        <span className="font-medium text-foreground">{question}</span>
+        <ChevronDown className={`w-5 h-5 transition-transform text-muted-foreground ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="pb-4">
+          <p className="text-sm text-muted-foreground">{answer}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// FAQ Data
+const productFAQs = [
+  {
+    question: 'How does delivery work?',
+    answer: 'We deliver fresh, chef-prepared meals in insulated packaging to keep everything at the perfect temperature. Delivery is available throughout the Bay Area.'
+  },
+  {
+    question: 'How long do the meals last?',
+    answer: 'Our meals stay fresh for 5-7 days in the refrigerator. Each meal comes with heating instructions for the best experience.'
+  },
+  {
+    question: 'Can I customize my order?',
+    answer: 'Yes! You can add proteins, swap sides, and customize portions using the options above. We also accommodate dietary restrictions - just add your requests in special instructions.'
+  },
+  {
+    question: 'What if I\'m not satisfied?',
+    answer: 'We offer a 30-day satisfaction guarantee. If you\'re not happy with your order, we\'ll make it right or refund you.'
+  }
+];
+
+// Sample Reviews
+const sampleReviews = [
+  { name: 'Sarah M.', review: 'The food is absolutely incredible. Restaurant quality without leaving home!', rating: 5 },
+  { name: 'James K.', review: 'Finally, healthy food that actually tastes good. The portions are generous.', rating: 5 },
+  { name: 'Emily R.', review: 'Game changer for busy weeknights. Heat for 5 minutes and dinner is served.', rating: 5 },
+];
 
 // Helper to check if item is a dessert
 const isDessert = (item: MenuItem): boolean => {
@@ -462,6 +523,136 @@ const MenuDetailModal = ({
                   max={20}
                 />
               </div>
+
+              {/* Trust Badges */}
+              <div className="flex items-center justify-center gap-6 mb-8 py-4 border-t border-b border-border/30">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Truck size={18} />
+                  <span>Bay Area Delivery</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Shield size={18} />
+                  <span>30-Day Guarantee</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Content Sections - Below the fold */}
+        <div className="bg-background">
+          {/* Reviews Section */}
+          <div className="py-12 border-t border-border/30">
+            <div className="px-6 md:px-10 lg:px-12 max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="text-xl font-semibold text-foreground mb-2">Customer Reviews</h3>
+                <div className="flex items-center justify-center gap-2">
+                  <StarRating rating={5} />
+                  <span className="text-sm text-muted-foreground">4.9 out of 5</span>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4">
+                {sampleReviews.map((review, idx) => (
+                  <div key={idx} className="bg-muted/30 rounded-xl p-4">
+                    <StarRating rating={review.rating} />
+                    <p className="text-sm text-foreground/80 mt-3 mb-3">"{review.review}"</p>
+                    <p className="text-xs text-muted-foreground font-medium">{review.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Why Secret Menu - Comparison */}
+          <div className="py-12 bg-muted/20 border-t border-border/30">
+            <div className="px-6 md:px-10 lg:px-12 max-w-4xl mx-auto">
+              <h3 className="text-xl font-semibold text-foreground text-center mb-8">Why Secret Menu?</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/50">
+                      <th className="text-left py-3 font-normal text-muted-foreground"></th>
+                      <th className="text-center py-3 font-semibold text-foreground">Secret Menu</th>
+                      <th className="text-center py-3 font-normal text-muted-foreground">Meal Kits</th>
+                      <th className="text-center py-3 font-normal text-muted-foreground">Takeout</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { feature: 'Chef-prepared', us: true, kits: false, takeout: true },
+                      { feature: 'Organic ingredients', us: true, kits: false, takeout: false },
+                      { feature: 'No cooking required', us: true, kits: false, takeout: true },
+                      { feature: 'Fully customizable', us: true, kits: true, takeout: false },
+                      { feature: 'Cost per meal', us: '$15-25', kits: '$10-15', takeout: '$20-40' },
+                    ].map((row, idx) => (
+                      <tr key={idx} className="border-b border-border/30">
+                        <td className="py-3 text-foreground">{row.feature}</td>
+                        <td className="py-3 text-center">
+                          {typeof row.us === 'boolean' ? (
+                            row.us ? <Check className="mx-auto text-emerald-500" size={18} /> : <span className="text-muted-foreground">—</span>
+                          ) : (
+                            <span className="font-medium text-foreground">{row.us}</span>
+                          )}
+                        </td>
+                        <td className="py-3 text-center">
+                          {typeof row.kits === 'boolean' ? (
+                            row.kits ? <Check className="mx-auto text-emerald-500" size={18} /> : <span className="text-muted-foreground">—</span>
+                          ) : (
+                            <span className="text-muted-foreground">{row.kits}</span>
+                          )}
+                        </td>
+                        <td className="py-3 text-center">
+                          {typeof row.takeout === 'boolean' ? (
+                            row.takeout ? <Check className="mx-auto text-emerald-500" size={18} /> : <span className="text-muted-foreground">—</span>
+                          ) : (
+                            <span className="text-muted-foreground">{row.takeout}</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="py-12 border-t border-border/30">
+            <div className="px-6 md:px-10 lg:px-12 max-w-2xl mx-auto">
+              <h3 className="text-xl font-semibold text-foreground text-center mb-8">Frequently Asked Questions</h3>
+              <div>
+                {productFAQs.map((faq, idx) => (
+                  <FAQItem key={idx} question={faq.question} answer={faq.answer} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Related Dishes */}
+          <div className="py-12 bg-muted/20 border-t border-border/30">
+            <div className="px-6 md:px-10 lg:px-12">
+              <h3 className="text-xl font-semibold text-foreground text-center mb-8">You May Also Like</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                {sortedMenuItems
+                  .filter(m => m.id !== item.id)
+                  .slice(0, 4)
+                  .map((relatedItem) => (
+                    <div key={relatedItem.id} className="text-center">
+                      <div className="w-24 h-24 mx-auto rounded-full overflow-hidden bg-muted mb-3">
+                        {relatedItem.image && (
+                          <img
+                            src={relatedItem.image}
+                            alt={relatedItem.name}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </div>
+                      <h4 className="text-sm font-medium text-foreground line-clamp-1">{relatedItem.name}</h4>
+                      <p className="text-sm text-muted-foreground">${relatedItem.price}</p>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
@@ -480,7 +671,7 @@ const MenuDetailModal = ({
                 onClick={(e) => { e.stopPropagation(); handleAddToOrder(); }}
                 className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg"
               >
-                Add to Order
+                Add to Delivery
               </button>
             </div>
           </div>
@@ -494,6 +685,26 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
   const isVegetarian = item.tags?.includes('v') || item.tags?.includes('vg');
   const isVegan = item.tags?.includes('vg');
   const hasFish = item.allergens?.includes('fish') || item.allergens?.includes('shellfish');
+
+  // State for zoom pan effect
+  const [isHovering, setIsHovering] = useState(false);
+  const [transformOrigin, setTransformOrigin] = useState('center center');
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setTransformOrigin(`${x}% ${y}%`);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setTransformOrigin('center center');
+  };
 
   return (
     <div
@@ -518,13 +729,23 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
           )}
         </div>
 
-        {/* Food image - larger circle with zoom on hover */}
-        <div className="w-[200px] h-[200px] mx-auto rounded-full overflow-hidden bg-muted">
+        {/* Food image - larger circle with zoom and pan on hover */}
+        <div
+          className="w-[200px] h-[200px] mx-auto rounded-full overflow-hidden bg-muted"
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          style={{ cursor: isHovering ? 'grab' : 'pointer' }}
+        >
           {item.image ? (
             <img
               src={item.image}
               alt={item.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-300"
+              style={{
+                transform: isHovering ? 'scale(2)' : 'scale(1)',
+                transformOrigin: transformOrigin,
+              }}
               loading="lazy"
             />
           ) : (
