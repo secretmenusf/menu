@@ -21,7 +21,7 @@ test.describe('Order Detail View - Responsive Tests', () => {
     await expect(modal).toBeVisible();
   });
 
-  test('should have Add to Order button always visible at bottom', async ({ page }) => {
+  test('should have Add to Delivery button always visible at bottom', async ({ page }) => {
     // Click menu item to open modal
     const menuCard = page.locator('[class*="rounded-2xl"][class*="cursor-pointer"]').first();
     await expect(menuCard).toBeVisible();
@@ -34,16 +34,16 @@ test.describe('Order Detail View - Responsive Tests', () => {
     const ctaSection = page.locator('[class*="fixed"][class*="bottom-0"]').filter({ hasText: 'Total' });
     await expect(ctaSection).toBeVisible();
 
-    // Check for "Add to Order" button
-    const addToOrderButton = page.getByRole('button', { name: /add to order/i });
-    await expect(addToOrderButton).toBeVisible();
+    // Check for "Add to Delivery" button
+    const addToDeliveryButton = page.getByRole('button', { name: /add to delivery/i });
+    await expect(addToDeliveryButton).toBeVisible();
 
     // Check for Total text
     const totalLabel = page.getByText('Total', { exact: false });
     await expect(totalLabel).toBeVisible();
   });
 
-  test('should keep Add to Order button visible after scrolling', async ({ page }) => {
+  test('should keep Add to Delivery button visible after scrolling', async ({ page }) => {
     // Click menu item to open modal
     const menuCard = page.locator('[class*="rounded-2xl"][class*="cursor-pointer"]').first();
     await menuCard.click({ force: true });
@@ -57,9 +57,9 @@ test.describe('Order Detail View - Responsive Tests', () => {
       el.scrollTop = el.scrollHeight;
     });
 
-    // Add to Order button should still be visible
-    const addToOrderButton = page.getByRole('button', { name: /add to order/i });
-    await expect(addToOrderButton).toBeVisible();
+    // Add to Delivery button should still be visible
+    const addToDeliveryButton = page.getByRole('button', { name: /add to delivery/i });
+    await expect(addToDeliveryButton).toBeVisible();
 
     // Verify it's in the viewport (not scrolled away)
     const buttonBox = await addToOrderButton.boundingBox();

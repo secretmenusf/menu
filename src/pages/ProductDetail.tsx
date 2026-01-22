@@ -3,7 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { galleryMenuItems, type MenuItem } from '@/data/menus';
+import { Textarea } from '@/components/ui/textarea';
+import { galleryMenuItems, type MenuItem, type MenuItemOption, vegetarianCustomizations } from '@/data/menus';
 import {
   Check,
   ChevronLeft,
@@ -14,7 +15,8 @@ import {
   Plus,
   Minus,
   ChevronDown,
-  Leaf
+  Leaf,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -104,6 +106,76 @@ const StarRating = ({ rating }: { rating: number }) => (
   </div>
 );
 
+// Option Selection Component
+const OptionCheckbox = ({
+  option,
+  isSelected,
+  quantity: optQuantity,
+  onToggle,
+  onQuantityChange
+}: {
+  option: MenuItemOption;
+  isSelected: boolean;
+  quantity: number;
+  onToggle: () => void;
+  onQuantityChange: (qty: number) => void;
+}) => {
+  const priceDisplay = option.priceModifier > 0
+    ? `+$${option.priceModifier.toFixed(2)}`
+    : option.priceModifier < 0
+      ? `-$${Math.abs(option.priceModifier).toFixed(2)}`
+      : 'Free';
+
+  return (
+    <div className={cn(
+      'flex items-center justify-between p-4 rounded-xl border transition-all',
+      isSelected
+        ? 'border-emerald-500 bg-emerald-500/5'
+        : 'border-border/50 hover:border-border'
+    )}>
+      <button
+        onClick={onToggle}
+        className="flex items-center gap-3 flex-1 text-left"
+      >
+        <div className={cn(
+          'w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all',
+          isSelected
+            ? 'border-emerald-500 bg-emerald-500'
+            : 'border-muted-foreground/30'
+        )}>
+          {isSelected && <Check size={12} className="text-white" />}
+        </div>
+        <span className="font-body text-foreground">{option.name}</span>
+      </button>
+      <div className="flex items-center gap-3">
+        {option.allowMultiple && isSelected && (
+          <div className="flex items-center border border-border rounded-lg">
+            <button
+              onClick={() => onQuantityChange(Math.max(1, optQuantity - 1))}
+              className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+            >
+              <Minus size={14} />
+            </button>
+            <span className="w-8 text-center text-sm font-medium">{optQuantity}</span>
+            <button
+              onClick={() => onQuantityChange(Math.min(option.maxQuantity || 10, optQuantity + 1))}
+              className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+        )}
+        <span className={cn(
+          'font-medium text-sm min-w-[60px] text-right',
+          option.priceModifier < 0 ? 'text-emerald-500' : 'text-muted-foreground'
+        )}>
+          {priceDisplay}
+        </span>
+      </div>
+    </div>
+  );
+};
+
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -117,11 +189,64 @@ const ProductDetail = () => {
   // State
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
+  const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // Calculate pricing
-  const originalPrice = item.price;
-  const discountedPrice = Math.round(originalPrice * 0.57); // 43% off
-  const savings = originalPrice - discountedPrice;
+  // Get all available options for this item
+  const availableOptions = useMemo(() => {
+    // Use item's own options, or default vegetarian customizations for items without options
+    return item.options || vegetarianCustomizations;
+  }, [item]);
+
+  // Group options by category
+  const groupedOptions = useMemo(() => {
+    const groups: Record<string, MenuItemOption[]> = {};
+    availableOptions.forEach(opt => {
+      const category = opt.category || 'other';
+      if (!groups[category]) groups[category] = [];
+      groups[category].push(opt);
+    });
+    return groups;
+  }, [availableOptions]);
+
+  // Category labels
+  const categoryLabels: Record<string, string> = {
+    protein: '🥩 Add Protein',
+    side: '🥗 Side Options',
+    'add-on': '✨ Add-ons',
+    extra: '➕ Extras',
+    portion: '📏 Portion Size',
+    dietary: '🌱 Dietary Options',
+    other: '📋 Other Options'
+  };
+
+  // Toggle option selection
+  const toggleOption = (optionId: string) => {
+    setSelectedOptions(prev => {
+      if (prev[optionId]) {
+        const { [optionId]: _, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [optionId]: 1 };
+    });
+  };
+
+  // Update option quantity
+  const updateOptionQuantity = (optionId: string, qty: number) => {
+    setSelectedOptions(prev => ({ ...prev, [optionId]: qty }));
+  };
+
+  // Calculate total price
+  const calculateTotal = () => {
+    let total = item.price;
+    Object.entries(selectedOptions).forEach(([optId, qty]) => {
+      const option = availableOptions.find(o => o.id === optId);
+      if (option) {
+        total += option.priceModifier * qty;
+      }
+    });
+    return total * quantity;
+  };
 
   // Get related items (same category or random)
   const relatedItems = useMemo(() =>
@@ -233,50 +358,65 @@ const ProductDetail = () => {
                 <span className="text-sm text-muted-foreground">4.9 (127 reviews)</span>
               </div>
 
-              {/* Discount Banner */}
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-3 mb-6">
-                <p className="font-display text-amber-600 tracking-wide">
-                  Save 43% today - First week special
-                </p>
-              </div>
-
               {/* Pricing */}
               <div className="mb-6">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-2xl text-muted-foreground line-through">${originalPrice}</span>
-                  <span className="font-display text-4xl text-foreground">${discountedPrice}</span>
-                  <span className="text-emerald-500 font-medium">SAVE 43%</span>
-                </div>
-              </div>
-
-              {/* Benefits Checklist */}
-              <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-3">
-                  <Check size={18} className="text-emerald-500" />
-                  <span className="font-body text-foreground">Chef-prepared with organic ingredients</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Check size={18} className="text-emerald-500" />
-                  <span className="font-body text-foreground">Ready in 5 minutes - just heat and serve</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Check size={18} className="text-emerald-500" />
-                  <span className="font-body text-foreground">${originalPrice}/week after first order, cancel anytime</span>
+                  <span className="font-display text-4xl text-foreground">${originalPrice}</span>
+                  <span className="text-muted-foreground">per serving</span>
                 </div>
               </div>
 
               {/* Quantity Selector */}
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border/50">
                 <span className="font-display text-sm tracking-wider text-muted-foreground">QUANTITY</span>
                 <QuantityStepper value={quantity} onChange={setQuantity} />
               </div>
 
-              {/* Add to Cart Button */}
+              {/* Customization Options */}
+              {Object.keys(groupedOptions).length > 0 && (
+                <div className="space-y-6 mb-6">
+                  {Object.entries(groupedOptions).map(([category, options]) => (
+                    <div key={category}>
+                      <h3 className="font-display text-sm tracking-wider text-muted-foreground mb-3">
+                        {categoryLabels[category] || category.toUpperCase()}
+                      </h3>
+                      <div className="space-y-2">
+                        {options.map(option => (
+                          <OptionCheckbox
+                            key={option.id}
+                            option={option}
+                            isSelected={!!selectedOptions[option.id]}
+                            quantity={selectedOptions[option.id] || 1}
+                            onToggle={() => toggleOption(option.id)}
+                            onQuantityChange={(qty) => updateOptionQuantity(option.id, qty)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Special Instructions */}
+              <div className="mb-6">
+                <h3 className="font-display text-sm tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+                  <MessageSquare size={14} />
+                  SPECIAL INSTRUCTIONS
+                </h3>
+                <Textarea
+                  value={specialInstructions}
+                  onChange={(e) => setSpecialInstructions(e.target.value)}
+                  placeholder="Any allergies, preferences, or special requests..."
+                  className="min-h-[100px] resize-none bg-muted/30 border-border/50"
+                />
+              </div>
+
+              {/* Add to Delivery Button */}
               <Button
                 size="lg"
-                className="w-full h-14 bg-amber-700 hover:bg-amber-800 text-white font-display text-lg tracking-wider"
+                className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-display text-lg tracking-wider"
               >
-                Add to cart - ${discountedPrice * quantity}
+                Add to Delivery - ${calculateTotal().toFixed(2)}
               </Button>
 
               {/* Trust Badges */}
