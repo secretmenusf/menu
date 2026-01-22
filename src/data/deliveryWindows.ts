@@ -11,36 +11,20 @@ export interface DeliveryWindow {
 
 export const deliveryWindows: DeliveryWindow[] = [
   {
-    id: 'morning',
-    name: 'Morning',
-    startHour: 10,
+    id: 'late-morning',
+    name: 'Late Morning',
+    startHour: 10.5,
     endHour: 12,
-    label: '10am - 12pm',
-    description: 'Perfect for brunch prep'
+    label: '10:30am - 12pm',
+    description: 'Late morning delivery'
   },
   {
     id: 'lunch',
     name: 'Lunch',
     startHour: 12,
-    endHour: 14,
-    label: '12pm - 2pm',
-    description: 'Ready for lunch service'
-  },
-  {
-    id: 'afternoon',
-    name: 'Afternoon',
-    startHour: 14,
-    endHour: 17,
-    label: '2pm - 5pm',
-    description: 'Ideal for dinner prep'
-  },
-  {
-    id: 'dinner',
-    name: 'Dinner',
-    startHour: 17,
-    endHour: 20,
-    label: '5pm - 8pm',
-    description: 'Evening delivery'
+    endHour: 15,
+    label: '12pm - 3pm',
+    description: 'Lunch delivery'
   },
 ];
 

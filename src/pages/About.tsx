@@ -104,7 +104,7 @@ const About = () => {
               </div>
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <Clock className="w-4 h-4" />
-                <span className="font-body">Delivery Hours: 8:00 AM – 1:00 AM, daily</span>
+                <span className="font-body">Delivery Hours: 10:30 AM – 3:00 PM, daily</span>
               </div>
             </div>
           </section>

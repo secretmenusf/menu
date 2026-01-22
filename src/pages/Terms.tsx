@@ -48,7 +48,7 @@ const Terms = () => {
               <div className="font-body text-muted-foreground space-y-4">
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Delivery is available within the San Francisco Bay Area</li>
-                  <li>Delivery hours are 8:00 AM to 1:00 AM daily</li>
+                  <li>Delivery hours are 10:30 AM to 3:00 PM daily</li>
                   <li>You must provide accurate delivery information</li>
                   <li>Someone must be available to receive the order</li>
                 </ul>

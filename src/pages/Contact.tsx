@@ -88,7 +88,7 @@ const Contact = () => {
               <Clock className="w-5 h-5 text-foreground" />
               <h3 className="font-display text-lg tracking-[0.1em]">DELIVERY HOURS</h3>
             </div>
-            <p className="font-body text-xl text-foreground mb-2">8:00 AM – 1:00 AM</p>
+            <p className="font-body text-xl text-foreground mb-2">10:30 AM – 3:00 PM</p>
             <p className="font-body text-muted-foreground">Seven days a week</p>
           </div>
 

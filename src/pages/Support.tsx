@@ -146,7 +146,7 @@ const Support = () => {
     },
     {
       question: 'What are your delivery hours?',
-      answer: 'We deliver from 8am to 1am daily throughout the San Francisco Bay Area. Orders placed after 1am will be scheduled for the next available delivery window.',
+      answer: 'We deliver from 10:30am to 3pm daily throughout the San Francisco Bay Area.',
     },
     {
       question: 'Do you accommodate dietary restrictions?',

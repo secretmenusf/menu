@@ -41,7 +41,7 @@ const faqCategories = [
       },
       {
         q: 'What are your delivery hours?',
-        a: 'Delivery is available daily from 8am to 1am. Select your preferred time window during checkout.',
+        a: 'Delivery is available daily from 10:30am to 3pm. Select your preferred time window during checkout.',
       },
       {
         q: 'Is there a delivery fee?',
