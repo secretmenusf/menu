@@ -815,9 +815,16 @@ const WeeklyMenuGrid = () => {
           case 'pescatarian': {
             const name = item.name.toLowerCase();
             const ingredients = item.ingredients?.map(i => i.toLowerCase()).join(' ') || '';
-            const hasSeafood = name.includes('cod') || name.includes('fish') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') || name.includes('tuna') ||
-              ingredients.includes('cod') || ingredients.includes('fish') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp') || ingredients.includes('tuna');
-            return hasSeafood;
+            // Check for meat (not pescatarian)
+            const hasMeat = name.includes('chicken') || name.includes('beef') || name.includes('pork') || name.includes('lamb') || name.includes('steak') || name.includes('meatball') ||
+              ingredients.includes('chicken') || ingredients.includes('beef') || ingredients.includes('pork') || ingredients.includes('lamb') || ingredients.includes('steak');
+            if (hasMeat) return false;
+            // Check for actual seafood (pescatarian-friendly) - exclude "fish sauce" as it's a condiment
+            const hasSeafood = name.includes('cod') || name.includes('salmon') || name.includes('crab') || name.includes('shrimp') || name.includes('tuna') || name.includes('seafood') ||
+              ingredients.includes(' cod') || ingredients.includes('salmon') || ingredients.includes('crab') || ingredients.includes('shrimp') || ingredients.includes('tuna');
+            // Also include vegetarian items as they're pescatarian-friendly
+            const isVegetarian = item.tags?.includes('v') || item.tags?.includes('vg');
+            return hasSeafood || isVegetarian;
           }
           default:
             return true;
