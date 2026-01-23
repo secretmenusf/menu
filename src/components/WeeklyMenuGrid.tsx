@@ -1,10 +1,13 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
-import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft, ChevronLeft, ChevronRight, Star, ChevronDown, Truck, Shield } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft, ChevronLeft, ChevronRight, Star, ChevronDown, Truck, Shield, Lock, ChefHat, Calendar, Globe } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
+import { useSubscriptionContext } from '@/contexts/SubscriptionContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { Badge } from '@/components/ui/badge';
 
 // Star Rating Component
 const StarRating = ({ rating }: { rating: number }) => (
@@ -212,6 +215,17 @@ const MenuDetailModal = ({
   currentIndex?: number;
   totalItems?: number;
 }) => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const {
+    canOrderDelivery,
+    canCustomizeOrders,
+    canAccessChefAI,
+    isSubscribed,
+    nextWeek,
+    deliveryFee,
+  } = useSubscriptionContext();
+
   const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
   const [specialInstructions, setSpecialInstructions] = useState('');
 
@@ -663,13 +677,53 @@ const MenuDetailModal = ({
               <div className="flex-shrink-0">
                 <span className="text-xs text-muted-foreground uppercase tracking-wide">Total</span>
                 <div className="text-2xl md:text-3xl font-bold text-foreground">${calculateTotal().toFixed(2)}</div>
+                {deliveryFee > 0 && canOrderDelivery && (
+                  <span className="text-[10px] text-muted-foreground">+ ${(deliveryFee / 100).toFixed(0)} delivery</span>
+                )}
               </div>
-              <button
-                onClick={(e) => { e.stopPropagation(); handleAddToOrder(); }}
-                className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg"
-              >
-                Add to Delivery
-              </button>
+
+              {/* CTA based on subscription status */}
+              {!user ? (
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate('/login'); }}
+                  className="flex-1 max-w-md py-4 px-6 bg-muted text-foreground rounded-full font-semibold text-base md:text-lg hover:bg-muted/80 transition-colors shadow-lg flex items-center justify-center gap-2"
+                >
+                  <Lock size={18} />
+                  Sign in to Order
+                </button>
+              ) : !isSubscribed ? (
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate('/pricing'); }}
+                  className="flex-1 max-w-md py-4 px-6 bg-mystical text-background rounded-full font-semibold text-base md:text-lg hover:bg-mystical/90 transition-colors shadow-lg flex items-center justify-center gap-2"
+                >
+                  <Lock size={18} />
+                  Subscribe to Order
+                </button>
+              ) : canOrderDelivery ? (
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleAddToOrder(); }}
+                  className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg flex items-center justify-center gap-2"
+                >
+                  <Calendar size={18} />
+                  Order for {nextWeek?.label}
+                </button>
+              ) : (
+                <div className="flex-1 max-w-md flex flex-col gap-2">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); /* Open AI chat */ }}
+                    className="w-full py-3 px-6 bg-mystical/20 text-mystical border border-mystical/30 rounded-full font-semibold text-sm hover:bg-mystical/30 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <ChefHat size={16} />
+                    Get Recipe from Chef AI
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate('/pricing'); }}
+                    className="w-full py-2 px-6 text-muted-foreground text-xs hover:text-foreground transition-colors"
+                  >
+                    Upgrade to Member ($29/mo) for delivery
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -787,10 +841,21 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
 };
 
 const WeeklyMenuGrid = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const {
+    isSubscribed,
+    canOrderDelivery,
+    canAccessArchives,
+    currentWeek,
+    nextWeek,
+    tier,
+  } = useSubscriptionContext();
+
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  // Get current date for the title
+  // Get current date for the title - using subscription context week info
   const today = new Date();
   const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'short' });
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -877,9 +942,57 @@ const WeeklyMenuGrid = () => {
           <h2 className="text-3xl md:text-4xl font-light text-foreground mb-3 tracking-tight">
             Menu for week of {dayOfWeek}, {month}/{day}
           </h2>
-          <p className="text-sm text-muted-foreground mb-8">
+
+          {/* Week ordering context */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
+            <Badge variant="outline" className="text-xs">
+              <Calendar size={12} className="mr-1" />
+              This Week: {currentWeek?.label}
+            </Badge>
+            {canOrderDelivery && nextWeek && (
+              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-xs">
+                <Truck size={12} className="mr-1" />
+                Order for: {nextWeek.label}
+              </Badge>
+            )}
+            {!canOrderDelivery && isSubscribed && (
+              <Badge variant="secondary" className="text-xs">
+                <ChefHat size={12} className="mr-1" />
+                Cook at Home Mode
+              </Badge>
+            )}
+          </div>
+
+          <p className="text-sm text-muted-foreground mb-4">
             55+ rotating gourmet meals to choose from
           </p>
+
+          {/* Non-subscriber upsell */}
+          {!isSubscribed && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-mystical/10 border border-mystical/20 rounded-full mb-6">
+              <Lock size={14} className="text-mystical" />
+              <span className="text-sm text-muted-foreground">
+                <button onClick={() => navigate('/pricing')} className="text-mystical hover:underline">
+                  Subscribe from $9/mo
+                </button>
+                {' '}to access menus & Chef AI
+              </span>
+            </div>
+          )}
+
+          {/* Explorer tier upsell - can't order but can cook */}
+          {isSubscribed && !canOrderDelivery && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted border border-border rounded-full mb-6">
+              <Globe size={14} className="text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">
+                Browsing from outside SF?{' '}
+                <button onClick={() => navigate('/pricing')} className="text-foreground hover:underline">
+                  Upgrade to Member ($29/mo)
+                </button>
+                {' '}for delivery
+              </span>
+            </div>
+          )}
 
           {/* Filter buttons */}
           <div className="flex flex-wrap justify-center gap-2">
