@@ -38,6 +38,8 @@ const GiftCards = lazy(() => import("./pages/GiftCards"));
 const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
 const Global = lazy(() => import("./pages/Global"));
 const Invite = lazy(() => import("./pages/Invite"));
+const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
+const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -129,6 +131,8 @@ const AppRoutes = () => (
       <Route path="/gift-meal-plan" element={<GiftMealPlan />} />
       <Route path="/global" element={<Global />} />
       <Route path="/invite" element={<Invite />} />
+      <Route path="/subscription/success" element={<SubscriptionSuccess />} />
+      <Route path="/onboarding" element={<Onboarding />} />
 
       {/* Protected user routes */}
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

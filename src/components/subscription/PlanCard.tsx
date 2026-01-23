@@ -1,12 +1,9 @@
-import { Check, CreditCard, Sparkles, Truck, Bot, X } from 'lucide-react';
+import { Check, CreditCard, Sparkles, Truck, Bot, X, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
-import { StripeCheckout } from '@/components/StripeCheckout';
 import { useToast } from '@/hooks/use-toast';
+import { stripeService, getStripePriceId } from '@/services/stripeService';
 import type { SubscriptionPlan } from '@/data/plans';
 
 interface PlanCardProps {
@@ -15,25 +12,41 @@ interface PlanCardProps {
 }
 
 const PlanCard = ({ plan, compact = false }: PlanCardProps) => {
-  const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [showCheckout, setShowCheckout] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isPopular = plan.popular;
-  const isLoggedIn = !!user;
 
-  const handleSubscribeClick = () => {
-    // Redirect to login with return URL to come back and complete checkout
-    navigate('/login', { state: { from: location, planId: plan.id } });
-  };
+  const handleSubscribeClick = async () => {
+    setIsLoading(true);
+    try {
+      const priceId = getStripePriceId(plan.id);
+      if (!priceId) {
+        throw new Error('Invalid plan configuration');
+      }
 
-  const handleSubscriptionSuccess = () => {
-    setShowCheckout(false);
-    toast({
-      title: 'Subscription Created!',
-      description: `Welcome to the ${plan.name} plan. ${plan.canOrderDelivery ? "You can now order for next week's menu." : "Start exploring menus and talking to Chef AI."}`,
-    });
+      // Go directly to Stripe Checkout - no login required
+      // Stripe will collect email during checkout
+      const { url } = await stripeService.createCheckoutSession({
+        priceId,
+        successUrl: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan.id}`,
+        cancelUrl: `${window.location.origin}/pricing`,
+        metadata: {
+          planId: plan.id,
+          source: 'secretmenusf',
+        },
+      });
+
+      // Redirect to Stripe Checkout
+      window.location.href = url;
+    } catch (error) {
+      console.error('Failed to start checkout:', error);
+      toast({
+        title: 'Checkout Error',
+        description: 'Failed to start checkout. Please try again.',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+    }
   };
 
   // Highlight badges based on tier
@@ -144,47 +157,30 @@ const PlanCard = ({ plan, compact = false }: PlanCardProps) => {
         </ul>
       )}
 
-      {/* CTA */}
-      {isLoggedIn ? (
-        <Dialog open={showCheckout} onOpenChange={setShowCheckout}>
-          <DialogTrigger asChild>
-            <Button
-              className={`w-full rounded-full font-display tracking-wider ${
-                isPopular
-                  ? 'bg-mystical text-background hover:bg-mystical/90'
-                  : 'bg-transparent border border-border hover:bg-card hover:border-mystical/50'
-              }`}
-              variant={isPopular ? 'default' : 'outline'}
-              size={compact ? 'sm' : 'default'}
-            >
-              <CreditCard size={14} className="mr-2" />
-              {plan.ctaText || plan.name.toUpperCase()}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-lg border-mystical/30">
-            <StripeCheckout
-              plan={plan}
-              customerEmail={user?.email}
-              onSuccess={handleSubscriptionSuccess}
-              onCancel={() => setShowCheckout(false)}
-            />
-          </DialogContent>
-        </Dialog>
-      ) : (
-        <Button
-          onClick={handleSubscribeClick}
-          className={`w-full rounded-full font-display tracking-wider ${
-            isPopular
-              ? 'bg-mystical text-background hover:bg-mystical/90'
-              : 'bg-transparent border border-border hover:bg-card hover:border-mystical/50'
-          }`}
-          variant={isPopular ? 'default' : 'outline'}
-          size={compact ? 'sm' : 'default'}
-        >
-          <CreditCard size={14} className="mr-2" />
-          {plan.ctaText || plan.name.toUpperCase()}
-        </Button>
-      )}
+      {/* CTA - Direct to checkout (no login required) */}
+      <Button
+        onClick={handleSubscribeClick}
+        disabled={isLoading}
+        className={`w-full rounded-full font-display tracking-wider ${
+          isPopular
+            ? 'bg-mystical text-background hover:bg-mystical/90'
+            : 'bg-transparent border border-border hover:bg-card hover:border-mystical/50'
+        }`}
+        variant={isPopular ? 'default' : 'outline'}
+        size={compact ? 'sm' : 'default'}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 size={14} className="mr-2 animate-spin" />
+            LOADING...
+          </>
+        ) : (
+          <>
+            <CreditCard size={14} className="mr-2" />
+            {plan.ctaText || plan.name.toUpperCase()}
+          </>
+        )}
+      </Button>
     </div>
   );
 };

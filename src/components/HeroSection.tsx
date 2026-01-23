@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Star, ArrowRight } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { EmailZipCapture } from '@/components/onboarding/EmailZipCapture';
 
 const heroImage = {
   src: '/images/menu/plated/hero-pasta-hand.png',
@@ -9,6 +11,8 @@ const heroImage = {
 };
 
 const HeroSection = () => {
+  const { user } = useAuth();
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center bg-background overflow-hidden">
       <div className="w-full">
@@ -43,20 +47,29 @@ const HeroSection = () => {
               Food that nourishes the body, mind, and soul.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link to="/join">
-                <Button size="lg" className="px-10 font-display tracking-wider text-base">
-                  JOIN FROM $29/MO
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/compare">
-                <Button variant="outline" size="lg" className="px-8 font-display font-semibold tracking-wider hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow duration-300">
-                  WHY WE'RE DIFFERENT
-                </Button>
-              </Link>
-            </div>
+            {/* CTA - Email/ZIP capture for new users, buttons for logged in */}
+            {user ? (
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                <Link to="/menu">
+                  <Button size="lg" className="px-10 font-display tracking-wider text-base">
+                    VIEW THIS WEEK'S MENU
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/order">
+                  <Button variant="outline" size="lg" className="px-8 font-display font-semibold tracking-wider hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow duration-300">
+                    ORDER NOW
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="mb-12">
+                <EmailZipCapture variant="hero" />
+                <p className="text-xs text-muted-foreground mt-3 text-center sm:text-left">
+                  Enter your email and ZIP to check if we deliver to you
+                </p>
+              </div>
+            )}
 
             {/* Quick trust indicators */}
             <div className="flex flex-wrap gap-6 text-xs text-muted-foreground">
