@@ -35,6 +35,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { expansionCities, City } from '@/data/plans';
 import { SEOHead, schemas } from '@/components/seo/SEOHead';
+import { currentSite, getSiteUrl } from '@/config/site';
 
 // City card component
 const CityCard = ({
