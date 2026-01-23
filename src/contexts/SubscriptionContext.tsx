@@ -213,64 +213,69 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   }, [user?.id]);
 
   // Use credits with optimistic concurrency control to prevent race conditions
-  const useCredits = useCallback(async (amountCents: number, retryCount = 0): Promise<boolean> => {
+  const useCredits = useCallback(async (amountCents: number): Promise<boolean> => {
     const MAX_RETRIES = 3;
 
     if (!subscription) {
       return false;
     }
 
-    // First, fetch the current balance to ensure we have the latest value
-    const { data: currentSub, error: fetchError } = await supabase
-      .from('subscriptions')
-      .select('credits_remaining_cents')
-      .eq('id', subscription.id)
-      .single();
+    // Retry loop to handle race conditions
+    for (let retryCount = 0; retryCount <= MAX_RETRIES; retryCount++) {
+      // First, fetch the current balance to ensure we have the latest value
+      const { data: currentSub, error: fetchError } = await supabase
+        .from('subscriptions')
+        .select('credits_remaining_cents')
+        .eq('id', subscription.id)
+        .single();
 
-    if (fetchError || !currentSub) {
-      console.error('Error fetching current credits:', fetchError);
-      return false;
-    }
+      if (fetchError || !currentSub) {
+        console.error('Error fetching current credits:', fetchError);
+        return false;
+      }
 
-    const currentCredits = currentSub.credits_remaining_cents || 0;
+      const currentCredits = currentSub.credits_remaining_cents || 0;
 
-    // Check if we have enough credits
-    if (currentCredits < amountCents) {
-      await refetch(); // Update local state with actual balance
-      return false;
-    }
+      // Check if we have enough credits
+      if (currentCredits < amountCents) {
+        await refetch(); // Update local state with actual balance
+        return false;
+      }
 
-    // Update with optimistic concurrency - only update if credits haven't changed
-    const { data, error } = await supabase
-      .from('subscriptions')
-      .update({
-        credits_remaining_cents: currentCredits - amountCents,
-      })
-      .eq('id', subscription.id)
-      .eq('credits_remaining_cents', currentCredits) // Optimistic lock
-      .select('credits_remaining_cents');
+      // Update with optimistic concurrency - only update if credits haven't changed
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .update({
+          credits_remaining_cents: currentCredits - amountCents,
+        })
+        .eq('id', subscription.id)
+        .eq('credits_remaining_cents', currentCredits) // Optimistic lock
+        .select('credits_remaining_cents');
 
-    if (error) {
-      console.error('Error using credits:', error);
-      await refetch();
-      return false;
-    }
+      if (error) {
+        console.error('Error using credits:', error);
+        await refetch();
+        return false;
+      }
 
-    // If no rows updated, another transaction modified the credits (race condition)
-    if (!data || data.length === 0) {
+      // If rows updated, success!
+      if (data && data.length > 0) {
+        await refetch();
+        return true;
+      }
+
+      // No rows updated - race condition detected
       if (retryCount < MAX_RETRIES) {
         console.warn(`Credit update race condition detected - retry ${retryCount + 1}/${MAX_RETRIES}`);
         await refetch();
-        return useCredits(amountCents, retryCount + 1);
+        // Continue to next iteration
       }
-      console.error('Max retries exceeded for credit update');
-      await refetch();
-      return false;
     }
 
-    // Refetch subscription to update local state
+    // Max retries exceeded
+    console.error('Max retries exceeded for credit update');
     await refetch();
-    return true;
+    return false;
   }, [subscription, refetch]);
 
   // Computed values
