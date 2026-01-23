@@ -1003,7 +1003,7 @@ const WeeklyMenuGrid = () => {
               <Lock size={14} className="text-mystical" />
               <span className="text-sm text-muted-foreground">
                 <button onClick={() => navigate('/pricing')} className="text-mystical hover:underline">
-                  Subscribe from $9/mo
+                  Subscribe from $29/mo
                 </button>
                 {' '}to view recipes & order
               </span>
@@ -1023,16 +1023,16 @@ const WeeklyMenuGrid = () => {
             </div>
           )}
 
-          {/* Explorer tier upsell - can't order but can cook */}
+          {/* Outside SF delivery area notice */}
           {isSubscribed && !canOrderDelivery && (
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted border border-border rounded-full mb-6">
               <Globe size={14} className="text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
-                Browsing from outside SF?{' '}
-                <button onClick={() => navigate('/pricing')} className="text-foreground hover:underline">
-                  Upgrade to Member ($29/mo)
+                Delivery currently available in SF Bay Area only.{' '}
+                <button onClick={() => navigate('/global')} className="text-foreground hover:underline">
+                  Join the waitlist
                 </button>
-                {' '}for delivery
+                {' '}for your city
               </span>
             </div>
           )}

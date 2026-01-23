@@ -401,9 +401,8 @@ const Global = () => {
                   NOT IN A DELIVERY CITY?
                 </h3>
                 <p className="font-body text-sm text-muted-foreground">
-                  The $9/mo Explorer plan gives you full access to Chef Antje's weekly menus and AI cooking
-                  assistant. Get recipes, nutrition advice, and learn to cook each dish at home—no matter where
-                  you are in the world.
+                  Join the waitlist to get notified when we launch in your city. Be first in line for
+                  early access and exclusive launch pricing.
                 </p>
               </div>
               <div>
@@ -411,8 +410,8 @@ const Global = () => {
                   WHEN WE LAUNCH IN YOUR CITY
                 </h3>
                 <p className="font-body text-sm text-muted-foreground">
-                  Waitlist members get early access and exclusive launch pricing. Upgrade to Member ($29/mo)
-                  when we arrive to unlock delivery. Your Explorer subscription credits transfer automatically.
+                  Waitlist members get early access and exclusive launch pricing. Subscribe from $29/mo
+                  when we arrive to access menus and delivery.
                 </p>
               </div>
             </div>
@@ -420,7 +419,7 @@ const Global = () => {
               <Button asChild className="rounded-full font-display tracking-wider bg-mystical text-background hover:bg-mystical/90">
                 <Link to="/pricing">
                   <Sparkles size={14} className="mr-2" />
-                  START WITH EXPLORER - $9/MO
+                  VIEW PLANS - FROM $29/MO
                 </Link>
               </Button>
             </div>

@@ -154,7 +154,7 @@ const Support = () => {
     },
     {
       question: 'How do subscriptions work?',
-      answer: 'Subscribe to access Chef Antje\'s weekly menus. Explorer ($9/mo) lets you browse and cook at home with AI help. Member ($29/mo) unlocks delivery in SF. Pro ($79/mo) includes $50 in credits. Developer ($399/mo) and Startup ($999/mo) are for power users and teams. Cancel or pause anytime.',
+      answer: 'Subscribe to access Chef Antje\'s weekly menus. Access ($29/mo) unlocks the menu, ordering, and Chef AI. Plus ($79/mo) includes a meal credit. Solo Dev ($399/mo) is for power users with $350 in credits. Hacker House ($999/mo) is for teams with $900 in credits. SF Bay Area delivery. Cancel or pause anytime.',
     },
     {
       question: 'What payment methods do you accept?',
