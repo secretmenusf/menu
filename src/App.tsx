@@ -8,6 +8,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { config } from '@/lib/wagmi';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { OrderProvider } from '@/contexts/OrderContext';
+import { SubscriptionProvider } from '@/contexts/SubscriptionContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemeTransition } from '@/components/ThemeTransition';
 import { Suspense, lazy, ReactNode } from 'react';
@@ -35,6 +36,7 @@ const Reviews = lazy(() => import("./pages/Reviews"));
 const Compare = lazy(() => import("./pages/Compare"));
 const GiftCards = lazy(() => import("./pages/GiftCards"));
 const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
+const Global = lazy(() => import("./pages/Global"));
 const Invite = lazy(() => import("./pages/Invite"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -130,6 +132,7 @@ const AppRoutes = () => (
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/gift-cards" element={<GiftCards />} />
       <Route path="/gift-meal-plan" element={<GiftMealPlan />} />
+      <Route path="/global" element={<Global />} />
       <Route path="/invite" element={<Invite />} />
 
       {/* Protected user routes */}
@@ -169,8 +172,9 @@ const App = () => (
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <OrderProvider>
-              <TooltipProvider>
+            <SubscriptionProvider>
+              <OrderProvider>
+                <TooltipProvider>
                 <Toaster />
                 <Sonner />
                 <ThemeTransition>
@@ -184,7 +188,8 @@ const App = () => (
                   </BrowserRouter>
                 </ThemeTransition>
               </TooltipProvider>
-            </OrderProvider>
+              </OrderProvider>
+            </SubscriptionProvider>
           </AuthProvider>
         </QueryClientProvider>
       </WagmiProvider>
