@@ -23,10 +23,13 @@ export const getStripe = () => {
 };
 
 // Stripe Price IDs (these should match your Stripe Dashboard)
+// Maps to new subscription tiers: explorer, member, pro, developer, startup
 export const STRIPE_PRICE_IDS = {
-  essential: import.meta.env.VITE_STRIPE_PRICE_ESSENTIAL || 'price_essential_monthly',
-  standard: import.meta.env.VITE_STRIPE_PRICE_STANDARD || 'price_standard_monthly', 
-  premium: import.meta.env.VITE_STRIPE_PRICE_PREMIUM || 'price_premium_monthly',
+  explorer: import.meta.env.VITE_STRIPE_PRICE_EXPLORER || 'price_explorer_2026',
+  member: import.meta.env.VITE_STRIPE_PRICE_MEMBER || 'price_member_2026',
+  pro: import.meta.env.VITE_STRIPE_PRICE_PRO || 'price_pro_2026',
+  developer: import.meta.env.VITE_STRIPE_PRICE_DEVELOPER || 'price_developer_2026',
+  startup: import.meta.env.VITE_STRIPE_PRICE_STARTUP || 'price_startup_2026',
 } as const;
 
 export interface StripeCustomer {
@@ -229,6 +232,12 @@ export function getPlanByStripePrice(priceId: string) {
 }
 
 export function getStripePriceId(planId: string): string | null {
+  // First check if plan has stripePriceId defined
+  const plan = subscriptionPlans.find(p => p.id === planId);
+  if (plan?.stripePriceId) {
+    return plan.stripePriceId;
+  }
+  // Fall back to STRIPE_PRICE_IDS mapping
   return STRIPE_PRICE_IDS[planId as keyof typeof STRIPE_PRICE_IDS] || null;
 }
 
