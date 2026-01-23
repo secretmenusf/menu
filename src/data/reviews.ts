@@ -52,4 +52,12 @@ export const reviews: Review[] = [
     date: '2026-01-18',
     mealsOrdered: ['Duck Confit'],
   },
+  {
+    id: '6',
+    name: 'Eric Rodriguez',
+    rating: 5,
+    text: 'The sourdough is legit. Crusty outside, soft inside, perfect tang. I\'ve tried a lot of bread in the city and this holds up.',
+    date: '2026-01-12',
+    mealsOrdered: ['Sourdough Bread'],
+  },
 ];
