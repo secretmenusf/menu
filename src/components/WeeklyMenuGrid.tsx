@@ -910,11 +910,15 @@ const WeeklyMenuGrid = () => {
   // Get selected item from index
   const selectedItem = selectedIndex !== null ? filteredItems[selectedIndex] : null;
 
-  // Navigation handlers
+  // Navigation handlers - redirect non-logged-in users to pricing
   const handleSelectItem = useCallback((item: MenuItem) => {
+    if (!user) {
+      navigate('/pricing');
+      return;
+    }
     const index = filteredItems.findIndex(i => i.id === item.id);
     setSelectedIndex(index >= 0 ? index : null);
-  }, [filteredItems]);
+  }, [filteredItems, user, navigate]);
 
   const handlePrev = useCallback(() => {
     if (selectedIndex !== null && selectedIndex > 0) {
@@ -968,14 +972,27 @@ const WeeklyMenuGrid = () => {
           </p>
 
           {/* Non-subscriber upsell */}
-          {!isSubscribed && (
+          {!user && (
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-mystical/10 border border-mystical/20 rounded-full mb-6">
               <Lock size={14} className="text-mystical" />
               <span className="text-sm text-muted-foreground">
                 <button onClick={() => navigate('/pricing')} className="text-mystical hover:underline">
                   Subscribe from $9/mo
                 </button>
-                {' '}to access menus & Chef AI
+                {' '}to view recipes & order
+              </span>
+            </div>
+          )}
+
+          {/* Logged in but not subscribed */}
+          {user && !isSubscribed && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-mystical/10 border border-mystical/20 rounded-full mb-6">
+              <Lock size={14} className="text-mystical" />
+              <span className="text-sm text-muted-foreground">
+                <button onClick={() => navigate('/pricing')} className="text-mystical hover:underline">
+                  Choose a plan
+                </button>
+                {' '}to unlock menus & Chef AI
               </span>
             </div>
           )}
