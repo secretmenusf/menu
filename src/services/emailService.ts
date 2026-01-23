@@ -290,12 +290,11 @@ class EmailService {
   }
 
   /**
-   * Strip HTML tags from content
+   * Strip HTML tags from content safely using DOMParser
    */
   private stripHTML(html: string): string {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
   }
 
   /**

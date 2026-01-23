@@ -1,6 +1,6 @@
-import { Check, Lock, CreditCard, Sparkles, Truck, Bot } from 'lucide-react';
+import { Check, CreditCard, Sparkles, Truck, Bot } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
@@ -17,9 +17,16 @@ interface PlanCardProps {
 const PlanCard = ({ plan, compact = false }: PlanCardProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [showCheckout, setShowCheckout] = useState(false);
   const isPopular = plan.popular;
   const isLoggedIn = !!user;
+
+  const handleSubscribeClick = () => {
+    // Redirect to login with return URL to come back and complete checkout
+    navigate('/login', { state: { from: location, planId: plan.id } });
+  };
 
   const handleSubscriptionSuccess = () => {
     setShowCheckout(false);
@@ -73,36 +80,20 @@ const PlanCard = ({ plan, compact = false }: PlanCardProps) => {
         </p>
       </div>
 
-      {/* Price */}
+      {/* Price - always visible */}
       <div className="text-center mb-4">
-        {isLoggedIn ? (
-          <>
-            <div className="flex items-baseline justify-center gap-1">
-              <span className={`font-display text-mystical ${compact ? 'text-3xl' : 'text-4xl'}`}>
-                ${plan.price}
-              </span>
-              <span className="font-body text-sm text-muted-foreground">
-                /{plan.period}
-              </span>
-            </div>
-            {plan.includedCredits > 0 && (
-              <p className="font-body text-xs text-mystical/80 mt-1">
-                ${plan.includedCredits / 100} credits included
-              </p>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Lock size={16} className="text-muted-foreground" />
-              <span className="font-display text-xl text-muted-foreground">
-                • • •
-              </span>
-            </div>
-            <p className="font-body text-xs text-foreground/70">
-              Sign in to see pricing
-            </p>
-          </>
+        <div className="flex items-baseline justify-center gap-1">
+          <span className={`font-display text-mystical ${compact ? 'text-3xl' : 'text-4xl'}`}>
+            ${plan.price}
+          </span>
+          <span className="font-body text-sm text-muted-foreground">
+            /{plan.period}
+          </span>
+        </div>
+        {plan.includedCredits > 0 && (
+          <p className="font-body text-xs text-mystical/80 mt-1">
+            ${plan.includedCredits / 100} credits included
+          </p>
         )}
       </div>
 
@@ -176,15 +167,21 @@ const PlanCard = ({ plan, compact = false }: PlanCardProps) => {
         </Dialog>
       ) : (
         <Button
-          asChild
-          className="w-full rounded-full font-display tracking-wider bg-transparent border border-border hover:bg-card hover:border-mystical/50"
-          variant="outline"
+          onClick={handleSubscribeClick}
+          className={`w-full rounded-full font-display tracking-wider ${
+            isPopular
+              ? 'bg-mystical text-background hover:bg-mystical/90'
+              : 'bg-transparent border border-border hover:bg-card hover:border-mystical/50'
+          }`}
+          variant={isPopular ? 'default' : 'outline'}
           size={compact ? 'sm' : 'default'}
         >
-          <Link to="/login">
-            <Lock size={14} className="mr-2" />
-            JOIN TO UNLOCK
-          </Link>
+          <CreditCard size={14} className="mr-2" />
+          {plan.price === 9 ? 'START EXPLORING' :
+           plan.price === 29 ? 'UNLOCK DELIVERY' :
+           plan.price === 79 ? 'GET CREDITS' :
+           plan.price === 399 ? 'FEED ME' :
+           'FEED THE TEAM'}
         </Button>
       )}
     </div>
