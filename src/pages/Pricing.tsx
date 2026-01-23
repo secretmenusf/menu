@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Sparkles, Check, Globe, ChefHat, Utensils, Bot, Truck, Users, Lock, CreditCard, Calendar, Clock, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sparkles, Check, Globe, ChefHat, Utensils, Bot, Truck, Users, Lock, CreditCard, Calendar, Clock, AlertTriangle, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PlanCard from '@/components/subscription/PlanCard';
@@ -7,6 +8,8 @@ import { subscriptionPlans, planBenefits } from '@/data/plans';
 import { ShareButton } from '@/components/social/ShareButton';
 import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 import { Button } from '@/components/ui/button';
+import { stripeService, getStripePriceId } from '@/services/stripeService';
+import { useToast } from '@/hooks/use-toast';
 
 const HowItWorksStep = ({
   number,
@@ -103,6 +106,39 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  const handleDirectCheckout = async (planId: string) => {
+    setIsLoading(planId);
+    try {
+      const priceId = getStripePriceId(planId);
+      if (!priceId) {
+        throw new Error('Invalid plan configuration');
+      }
+
+      // Go directly to Stripe Checkout - no login required
+      const { url } = await stripeService.createCheckoutSession({
+        priceId,
+        successUrl: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
+        cancelUrl: `${window.location.origin}/pricing`,
+        metadata: {
+          planId,
+          source: 'secretmenusf',
+        },
+      });
+
+      window.location.href = url;
+    } catch (error) {
+      console.error('Failed to start checkout:', error);
+      toast({
+        title: 'Checkout Error',
+        description: 'Failed to start checkout. Please try again.',
+        variant: 'destructive',
+      });
+      setIsLoading(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -141,12 +177,22 @@ const Pricing = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
             <Button
-              onClick={() => navigate('/login', { state: { planId: 'access' } })}
+              onClick={() => handleDirectCheckout('access')}
+              disabled={isLoading === 'access'}
               className="rounded-full font-display tracking-wider bg-mystical text-background hover:bg-mystical/90 px-8"
               size="lg"
             >
-              <Lock size={16} className="mr-2" />
-              UNLOCK ACCESS — $29/MO
+              {isLoading === 'access' ? (
+                <>
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                  LOADING...
+                </>
+              ) : (
+                <>
+                  <Lock size={16} className="mr-2" />
+                  UNLOCK ACCESS — $29/MO
+                </>
+              )}
             </Button>
             <Button
               variant="outline"
@@ -264,11 +310,19 @@ const Pricing = () => {
               Members see the drop first. Orders are for next week. Delivery slots are limited.
             </p>
             <Button
-              onClick={() => navigate('/login', { state: { planId: 'access' } })}
+              onClick={() => handleDirectCheckout('access')}
+              disabled={isLoading === 'access'}
               className="rounded-full font-display tracking-wider bg-amber-500 text-background hover:bg-amber-600 px-8"
               size="lg"
             >
-              JOIN BEFORE NEXT DROP
+              {isLoading === 'access' ? (
+                <>
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                  LOADING...
+                </>
+              ) : (
+                'JOIN BEFORE NEXT DROP'
+              )}
             </Button>
           </div>
         </div>
