@@ -480,32 +480,58 @@ const MenuDetailModal = ({
               {item.options && item.options.length > 0 && (
                 <div className="mb-8 space-y-6">
                   <h3 className="text-sm font-medium text-foreground uppercase tracking-wide">Customize Your Order</h3>
-                  {Object.entries(groupedOptions).map(([category, options]) => (
-                    <div key={category}>
-                      <h4 className="text-base font-medium text-foreground mb-3">
-                        {categoryLabels[category] || category}
-                      </h4>
-                      <div className="space-y-2">
-                        {options.map((option) => (
-                          option.allowMultiple ? (
-                            <QuantityOption
-                              key={option.id}
-                              option={option}
-                              quantity={selectedOptions[option.id] || 0}
-                              onChange={(qty) => updateOption(option.id, qty)}
-                            />
-                          ) : (
-                            <CheckboxOption
-                              key={option.id}
-                              option={option}
-                              checked={(selectedOptions[option.id] || 0) > 0}
-                              onChange={(checked) => updateOption(option.id, checked ? 1 : 0)}
-                            />
-                          )
-                        ))}
+                  {user && isSubscribed && canCustomizeOrders ? (
+                    // Show customization options for subscribers
+                    Object.entries(groupedOptions).map(([category, options]) => (
+                      <div key={category}>
+                        <h4 className="text-base font-medium text-foreground mb-3">
+                          {categoryLabels[category] || category}
+                        </h4>
+                        <div className="space-y-2">
+                          {options.map((option) => (
+                            option.allowMultiple ? (
+                              <QuantityOption
+                                key={option.id}
+                                option={option}
+                                quantity={selectedOptions[option.id] || 0}
+                                onChange={(qty) => updateOption(option.id, qty)}
+                              />
+                            ) : (
+                              <CheckboxOption
+                                key={option.id}
+                                option={option}
+                                checked={(selectedOptions[option.id] || 0) > 0}
+                                onChange={(checked) => updateOption(option.id, checked ? 1 : 0)}
+                              />
+                            )
+                          ))}
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    // Show subscribe CTA for non-subscribers
+                    <div className="p-6 bg-muted/50 rounded-xl border border-border/50 text-center">
+                      <Lock size={32} className="mx-auto mb-3 text-muted-foreground" />
+                      <h4 className="text-base font-medium text-foreground mb-2">
+                        Subscribe to Customize
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {!user
+                          ? "Join SF Secret Menu to customize your meals with add-ons, protein upgrades, and more."
+                          : "Upgrade your subscription to unlock meal customization options."}
+                      </p>
+                      <button
+                        onClick={() => {
+                          onClose();
+                          navigate(user ? '/pricing' : '/login', { state: { from: { pathname: '/menu' } } });
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-medium hover:bg-emerald-700 transition-colors"
+                      >
+                        <ChefHat size={18} />
+                        {user ? 'View Plans' : 'Get Started'}
+                      </button>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
 

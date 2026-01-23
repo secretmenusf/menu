@@ -189,7 +189,7 @@ const Support = () => {
               SUPPORT CENTER
             </h1>
             <p className="font-body text-xl text-muted-foreground max-w-2xl mx-auto">
-              We're here to help with any questions about your culinary journey
+              We're here to help with any questions about your orders or subscription
             </p>
           </div>
 
@@ -538,7 +538,7 @@ const Support = () => {
                   STILL NEED HELP?
                 </h3>
                 <p className="font-body text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Our concierge team is standing by to provide personalized assistance with your culinary experience.
+                  Our support team is standing by to provide personalized assistance with your order.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button asChild size="lg" className="font-display tracking-wider">

@@ -213,14 +213,14 @@ export function HowItWorksSection({ className }: { className?: string }) {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <Link to="/order">
+          <Link to="/join">
             <Button size="lg" className="px-10 font-display tracking-wider">
-              START YOUR JOURNEY
+              JOIN FROM $29/MO
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
           <p className="font-body text-sm text-muted-foreground mt-4">
-            No commitment required • Skip or cancel anytime
+            SF Bay Area delivery • Chef AI included • Cancel anytime
           </p>
         </div>
       </div>

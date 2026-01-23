@@ -44,14 +44,14 @@ const Login = () => {
 
     if (error) {
       toast({
-        title: 'Entry denied',
+        title: 'Sign in failed',
         description: error.message,
         variant: 'destructive',
       });
     } else {
       toast({
         title: 'Welcome back',
-        description: 'The sanctum awaits',
+        description: 'You\'re signed in',
       });
       navigate(redirectTo);
     }
@@ -82,7 +82,7 @@ const Login = () => {
       setMagicLinkSent(true);
       toast({
         title: 'Magic link sent',
-        description: 'Check your email for the sacred passage',
+        description: 'Check your email for the sign-in link',
       });
     }
 
@@ -105,7 +105,7 @@ const Login = () => {
             </h1>
             <p className="font-body text-muted-foreground mb-8">
               We've sent a magic link to <span className="text-foreground">{email}</span>.
-              Click the link to enter the sanctum.
+              Click the link to sign in.
             </p>
             <Button
               variant="outline"
@@ -129,12 +129,11 @@ const Login = () => {
         <div className="container mx-auto px-6 max-w-md">
           {/* Header */}
           <div className="text-center mb-12">
-            <span className="text-foreground text-3xl mb-4 block">◯</span>
             <h1 className="font-display text-3xl md:text-4xl tracking-[0.2em] text-mystical mb-2">
-              ENTER
+              SIGN IN
             </h1>
             <p className="font-body text-muted-foreground">
-              Return to the inner circle
+              Welcome back
             </p>
           </div>
 
@@ -194,10 +193,10 @@ const Login = () => {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ENTERING...
+                    SIGNING IN...
                   </>
                 ) : (
-                  'ENTER THE SANCTUM'
+                  'SIGN IN'
                 )}
               </Button>
             </form>
@@ -288,12 +287,12 @@ const Login = () => {
 
           {/* Signup Link */}
           <p className="text-center mt-8 font-body text-muted-foreground">
-            New to the order?{' '}
+            Don't have an account?{' '}
             <Link
               to={redirectParam ? `/signup?redirect=${encodeURIComponent(redirectParam)}` : '/signup'}
               className="text-foreground hover:underline"
             >
-              Seek entry
+              Sign up
             </Link>
           </p>
         </div>

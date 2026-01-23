@@ -113,6 +113,7 @@ const AppRoutes = () => (
       <Route path="/press" element={<Press />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/join" element={<Navigate to="/pricing" replace />} />
       <Route path="/support" element={<Support />} />
       <Route path="/supprt" element={<Navigate to="/support" replace />} />
       <Route path="/faq" element={<FAQ />} />

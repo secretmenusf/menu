@@ -14,7 +14,7 @@ export function MobileStickyCTA({ className }: MobileStickyCTAProps) {
   const location = useLocation();
 
   // Pages where CTA should not appear
-  const hiddenPaths = ['/order', '/checkout', '/login', '/signup', '/admin'];
+  const hiddenPaths = ['/pricing', '/checkout', '/login', '/signup', '/admin'];
   const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path));
 
   useEffect(() => {
@@ -62,12 +62,12 @@ export function MobileStickyCTA({ className }: MobileStickyCTAProps) {
           </div>
 
           {/* Main CTA */}
-          <Link to="/order" className="flex-1">
+          <Link to="/join" className="flex-1">
             <Button
               size="lg"
               className="w-full font-display tracking-wider text-sm py-5"
             >
-              ORDER NOW
+              JOIN FROM $29/MO
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -84,7 +84,7 @@ export function MobileStickyCTA({ className }: MobileStickyCTAProps) {
 
         {/* Subtext */}
         <p className="text-center text-[10px] text-muted-foreground mt-2">
-          Free delivery • 98% organic • Made fresh daily
+          SF Bay Area delivery • Chef AI included • Cancel anytime
         </p>
       </div>
     </div>
@@ -96,7 +96,7 @@ export function FloatingOrderButton({ className }: { className?: string }) {
   const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
 
-  const hiddenPaths = ['/order', '/checkout', '/login', '/signup', '/admin'];
+  const hiddenPaths = ['/pricing', '/checkout', '/login', '/signup', '/admin'];
   const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path));
 
   useEffect(() => {
@@ -116,7 +116,7 @@ export function FloatingOrderButton({ className }: { className?: string }) {
   if (shouldHide || !isVisible) return null;
 
   return (
-    <Link to="/order">
+    <Link to="/join">
       <Button
         size="lg"
         className={cn(
@@ -129,7 +129,7 @@ export function FloatingOrderButton({ className }: { className?: string }) {
           className
         )}
       >
-        ORDER
+        JOIN
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
     </Link>

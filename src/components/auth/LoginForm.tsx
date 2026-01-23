@@ -93,10 +93,10 @@ export function LoginForm({ onForgotPassword, onSignUp, onSuccess }: LoginFormPr
     <div className="space-y-6">
       <div className="text-center space-y-2">
         <h2 className="font-display text-2xl tracking-[0.2em] text-foreground">
-          ENTER THE SANCTUM
+          SIGN IN
         </h2>
         <p className="text-sm text-muted-foreground">
-          Sign in to access your secret membership
+          Sign in to access your account
         </p>
       </div>
 
@@ -164,7 +164,7 @@ export function LoginForm({ onForgotPassword, onSignUp, onSuccess }: LoginFormPr
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ENTERING...
+                    SIGNING IN...
                   </>
                 ) : (
                   'SIGN IN'
@@ -235,13 +235,13 @@ export function LoginForm({ onForgotPassword, onSignUp, onSuccess }: LoginFormPr
           </button>
         )}
         <p className="text-muted-foreground">
-          Not yet initiated?{' '}
+          Don't have an account?{' '}
           <button
             type="button"
             onClick={onSignUp}
             className="text-foreground hover:underline font-medium"
           >
-            Join the circle
+            Sign up
           </button>
         </p>
       </div>

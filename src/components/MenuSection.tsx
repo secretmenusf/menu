@@ -258,13 +258,13 @@ const MenuSection = () => {
 
         {/* Order CTA */}
         <div className="mt-12 text-center">
-          <Link to={`/order?week=${currentMenu.id}`}>
+          <Link to="/join">
             <Button size="lg" className="rounded-full px-12 font-display tracking-wider text-lg">
-              ORDER {currentMenu.theme?.toUpperCase()} WEEK
+              JOIN TO ORDER THIS WEEK
             </Button>
           </Link>
           <p className="font-body text-sm text-muted-foreground/60 tracking-wide mt-4">
-            A gratuity of 20% is included for all who partake
+            SF Bay Area delivery • From $29/mo • Cancel anytime
           </p>
         </div>
       </div>

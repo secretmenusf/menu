@@ -69,7 +69,7 @@ export function SignUpForm({ onLogin, onSuccess }: SignUpFormProps) {
       });
     } else {
       toast({
-        title: 'Welcome to the circle',
+        title: 'Account created',
         description: 'Please check your email to verify your account.',
       });
       onSuccess?.();
@@ -80,10 +80,10 @@ export function SignUpForm({ onLogin, onSuccess }: SignUpFormProps) {
     <div className="space-y-6">
       <div className="text-center space-y-2">
         <h2 className="font-display text-2xl tracking-[0.2em] text-foreground">
-          JOIN THE CIRCLE
+          CREATE ACCOUNT
         </h2>
         <p className="text-sm text-muted-foreground">
-          Begin your journey with the Secret Menu
+          Get access to weekly menus and delivery
         </p>
       </div>
 
@@ -211,7 +211,7 @@ export function SignUpForm({ onLogin, onSuccess }: SignUpFormProps) {
                   </div>
                 </FormControl>
                 <FormDescription className="text-xs">
-                  Have a friend in the circle? Enter their code.
+                  Have a referral code? Enter it here.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -226,7 +226,7 @@ export function SignUpForm({ onLogin, onSuccess }: SignUpFormProps) {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                INITIATING...
+                CREATING...
               </>
             ) : (
               'CREATE ACCOUNT'

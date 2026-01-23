@@ -1,10 +1,12 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
-import { Leaf, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft, X, Plus, Minus, Check, MessageSquare, Star, ChevronDown, Truck, Shield } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Leaf, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft, X, Plus, Minus, Check, MessageSquare, Star, ChevronDown, Truck, Shield, Lock, CreditCard } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSubscriptionContext } from '@/contexts/SubscriptionContext';
 
 // Star Rating Component
 const StarRating = ({ rating }: { rating: number }) => (
@@ -210,10 +212,18 @@ const MenuDetailModal = ({
   currentIndex?: number;
   totalItems?: number;
 }) => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { canCustomizeOrders, canOrderDelivery, isSubscribed } = useSubscriptionContext();
+
   // State for customization options
   const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({});
   const [specialInstructions, setSpecialInstructions] = useState('');
   const [quantity, setQuantity] = useState(1);
+
+  // Check if user can customize (must be subscribed)
+  const canCustomize = user && isSubscribed && canCustomizeOrders;
+  const canOrder = user && isSubscribed && canOrderDelivery;
 
   // Keyboard navigation
   useEffect(() => {
@@ -469,32 +479,58 @@ const MenuDetailModal = ({
               {item.options && item.options.length > 0 && (
                 <div className="mb-8 space-y-6">
                   <h3 className="text-sm font-medium text-foreground uppercase tracking-wide">Customize Your Order</h3>
-                  {Object.entries(groupedOptions).map(([category, options]) => (
-                    <div key={category}>
-                      <h4 className="text-base font-medium text-foreground mb-3">
-                        {categoryLabels[category] || category}
-                      </h4>
-                      <div className="space-y-2">
-                        {options.map((option) => (
-                          option.allowMultiple ? (
-                            <QuantityOption
-                              key={option.id}
-                              option={option}
-                              quantity={selectedOptions[option.id] || 0}
-                              onChange={(qty) => handleQuantityChange(option.id, qty)}
-                            />
-                          ) : (
-                            <CheckboxOption
-                              key={option.id}
-                              option={option}
-                              checked={!!selectedOptions[option.id]}
-                              onChange={(checked) => handleOptionToggle(option.id, checked)}
-                            />
-                          )
-                        ))}
+                  {canCustomize ? (
+                    // Show customization options for subscribers
+                    Object.entries(groupedOptions).map(([category, options]) => (
+                      <div key={category}>
+                        <h4 className="text-base font-medium text-foreground mb-3">
+                          {categoryLabels[category] || category}
+                        </h4>
+                        <div className="space-y-2">
+                          {options.map((option) => (
+                            option.allowMultiple ? (
+                              <QuantityOption
+                                key={option.id}
+                                option={option}
+                                quantity={selectedOptions[option.id] || 0}
+                                onChange={(qty) => handleQuantityChange(option.id, qty)}
+                              />
+                            ) : (
+                              <CheckboxOption
+                                key={option.id}
+                                option={option}
+                                checked={!!selectedOptions[option.id]}
+                                onChange={(checked) => handleOptionToggle(option.id, checked)}
+                              />
+                            )
+                          ))}
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    // Show subscribe CTA for non-subscribers
+                    <div className="p-6 bg-muted/50 rounded-xl border border-border/50 text-center">
+                      <Lock size={32} className="mx-auto mb-3 text-muted-foreground" />
+                      <h4 className="text-base font-medium text-foreground mb-2">
+                        Subscribe to Customize
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {!user
+                          ? "Join SF Secret Menu to customize your meals with add-ons, protein upgrades, and more."
+                          : "Upgrade your subscription to unlock meal customization options."}
+                      </p>
+                      <button
+                        onClick={() => {
+                          onClose();
+                          navigate(user ? '/pricing' : '/login', { state: { from: { pathname: '/' } } });
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-medium hover:bg-emerald-700 transition-colors"
+                      >
+                        <CreditCard size={18} />
+                        {user ? 'View Plans' : 'Get Started'}
+                      </button>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
 
@@ -667,12 +703,26 @@ const MenuDetailModal = ({
                 <span className="text-xs text-muted-foreground uppercase tracking-wide">Total</span>
                 <div className="text-2xl md:text-3xl font-bold text-foreground">${calculateTotal().toFixed(2)}</div>
               </div>
-              <button
-                onClick={(e) => { e.stopPropagation(); handleAddToOrder(); }}
-                className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg"
-              >
-                Add to Delivery
-              </button>
+              {canOrder ? (
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleAddToOrder(); }}
+                  className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg"
+                >
+                  Add to Delivery
+                </button>
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                    navigate(user ? '/pricing' : '/login', { state: { from: { pathname: '/' } } });
+                  }}
+                  className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg flex items-center justify-center gap-2"
+                >
+                  <CreditCard size={20} />
+                  {user ? 'Subscribe to Order' : 'Join to Order'}
+                </button>
+              )}
             </div>
           </div>
         </div>

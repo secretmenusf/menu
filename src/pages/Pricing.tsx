@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Sparkles, Check, X, Globe, ChefHat, Utensils, Bot, Truck, Users, Lock, CreditCard, Calendar } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, Sparkles, Check, Globe, ChefHat, Utensils, Bot, Truck, Users, Lock, CreditCard, Calendar, Clock, AlertTriangle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PlanCard from '@/components/subscription/PlanCard';
-import { subscriptionPlans, planBenefits, DELIVERY_FEE_CENTS, CREDIT_PRICING } from '@/data/plans';
+import { subscriptionPlans, planBenefits } from '@/data/plans';
 import { ShareButton } from '@/components/social/ShareButton';
 import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 import { Button } from '@/components/ui/button';
@@ -35,32 +35,32 @@ const HowItWorksStep = ({
 
 const FeatureComparison = () => {
   const features = [
-    { name: 'Browse weekly menus', explorer: true, member: true, pro: true, developer: true, startup: true },
-    { name: 'Chef Antje AI', explorer: '50/mo', member: '100/mo', pro: '200/mo', developer: 'Unlimited', startup: 'Unlimited' },
-    { name: 'Cook-at-home recipes', explorer: true, member: true, pro: true, developer: true, startup: true },
-    { name: 'Order delivery (SF)', explorer: false, member: true, pro: true, developer: true, startup: true },
-    { name: 'Secret menu access', explorer: false, member: true, pro: true, developer: true, startup: true },
-    { name: 'Menu archives', explorer: false, member: true, pro: true, developer: true, startup: true },
-    { name: 'Customize orders', explorer: false, member: false, pro: true, developer: true, startup: true },
-    { name: 'Secret secret menu', explorer: false, member: false, pro: true, developer: true, startup: true },
-    { name: 'Universal credits', explorer: '$0', member: '$0', pro: '$50', developer: '$350', startup: '$900' },
-    { name: 'Credit discount', explorer: '0%', member: '0%', pro: '0%', developer: '10%', startup: '20%' },
-    { name: 'Delivery fee', explorer: '$10', member: '$10', pro: '$10', developer: 'Free', startup: 'Free' },
-    { name: 'Team members', explorer: '1', member: '1', pro: '2', developer: '2', startup: 'Unlimited' },
+    { name: 'Weekly menu access', access: true, plus: true, solodev: true, hackerhouse: true },
+    { name: 'Chef AI included', access: true, plus: true, solodev: 'Unlimited', hackerhouse: 'Unlimited' },
+    { name: 'Order delivery (SF)', access: true, plus: true, solodev: true, hackerhouse: true },
+    { name: 'Menu archives', access: true, plus: true, solodev: true, hackerhouse: true },
+    { name: 'Meal credits included', access: '$0', plus: '~$35', solodev: '$350', hackerhouse: '$900' },
+    { name: 'Customize orders', access: false, plus: true, solodev: true, hackerhouse: true },
+    { name: 'Early access / VIP items', access: false, plus: true, solodev: true, hackerhouse: true },
+    { name: 'Delivery fee', access: '$10', plus: '$10*', solodev: 'Free', hackerhouse: 'Free' },
+    { name: 'Team members', access: '1', plus: '2', solodev: '2', hackerhouse: 'Unlimited' },
+    { name: 'Priority support', access: false, plus: false, solodev: true, hackerhouse: 'Concierge' },
   ];
 
-  const tiers = ['explorer', 'member', 'pro', 'developer', 'startup'] as const;
-  const tierNames = ['Explorer', 'Member', 'Pro', 'Developer', 'Startup'];
+  const tiers = ['access', 'plus', 'solodev', 'hackerhouse'] as const;
+  const tierNames = ['Access', 'Plus', 'Solo Dev', 'Hacker House'];
+  const tierPrices = ['$29', '$79', '$399', '$999'];
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[800px]">
+      <table className="w-full min-w-[700px]">
         <thead>
           <tr className="border-b border-border/30">
             <th className="text-left py-4 px-4 font-display text-sm tracking-wider text-muted-foreground">FEATURE</th>
             {tierNames.map((name, i) => (
-              <th key={tiers[i]} className="text-center py-4 px-4 font-display text-sm tracking-wider text-foreground">
-                {name.toUpperCase()}
+              <th key={tiers[i]} className="text-center py-4 px-4">
+                <span className="font-display text-sm tracking-wider text-foreground block">{name.toUpperCase()}</span>
+                <span className="font-body text-xs text-muted-foreground">{tierPrices[i]}/mo</span>
               </th>
             ))}
           </tr>
@@ -76,7 +76,7 @@ const FeatureComparison = () => {
                     {value === true ? (
                       <Check size={16} className="mx-auto text-green-500" />
                     ) : value === false ? (
-                      <X size={16} className="mx-auto text-muted-foreground/30" />
+                      <span className="text-muted-foreground/30">—</span>
                     ) : (
                       <span className="font-body text-sm text-foreground">{value}</span>
                     )}
@@ -87,11 +87,23 @@ const FeatureComparison = () => {
           ))}
         </tbody>
       </table>
+      <p className="text-[10px] text-muted-foreground/50 text-center mt-2">
+        *Plus plan includes credits that cover first delivery
+      </p>
     </div>
   );
 };
 
+const FAQItem = ({ question, answer }: { question: string; answer: string }) => (
+  <div className="border-b border-border/20 pb-4 mb-4">
+    <h4 className="font-display text-sm tracking-wider text-foreground mb-2">{question}</h4>
+    <p className="font-body text-sm text-muted-foreground">{answer}</p>
+  </div>
+);
+
 const Pricing = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SEOHead
@@ -107,7 +119,7 @@ const Pricing = () => {
 
       <main className="pt-32 pb-24">
         {/* Back link */}
-        <div className="container mx-auto px-6 mb-12">
+        <div className="container mx-auto px-6 mb-8">
           <Link
             to="/"
             className="inline-flex items-center gap-2 font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
@@ -117,28 +129,77 @@ const Pricing = () => {
           </Link>
         </div>
 
-        {/* Section header */}
-        <div className="container mx-auto px-6 max-w-4xl text-center mb-8">
-          <h1 className="font-display text-4xl md:text-5xl tracking-[0.2em] text-mystical mb-6">
-            MEMBERSHIP
+        {/* Hero section - Conversion focused */}
+        <div className="container mx-auto px-6 max-w-4xl text-center mb-12">
+          <h1 className="font-display text-4xl md:text-5xl tracking-[0.1em] text-foreground mb-6">
+            JOIN THE SECRET MENU
           </h1>
-          <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-            Join the inner circle. Experience Chef Antje's curated culinary excellence
-            delivered to your door—or cook along from anywhere in the world.
+          <p className="font-body text-xl text-muted-foreground max-w-2xl mx-auto mb-4">
+            Weekly drops curated by Chef Antje.<br />
+            Members get access first. When a dish sells out, it's gone.
           </p>
-          <p className="font-body text-sm text-foreground/60 max-w-xl mx-auto mb-6">
-            Currently serving <span className="text-mystical font-semibold">San Francisco</span> • More cities coming soon
-          </p>
-          <ShareButton
-            title="SF Secret Menu - Membership Plans"
-            text="Check out the membership tiers for SF Secret Menu - chef-crafted meals delivered weekly"
-            variant="outline"
-            size="sm"
-          />
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+            <Button
+              onClick={() => navigate('/login', { state: { planId: 'access' } })}
+              className="rounded-full font-display tracking-wider bg-mystical text-background hover:bg-mystical/90 px-8"
+              size="lg"
+            >
+              <Lock size={16} className="mr-2" />
+              UNLOCK ACCESS — $29/MO
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate('/menu')}
+              className="rounded-full font-display tracking-wider px-8"
+              size="lg"
+            >
+              SEE THIS WEEK'S DROP
+              <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </div>
+
+          {/* Truth line */}
+          <div className="inline-block px-6 py-3 bg-muted/30 border border-border/30 rounded-lg">
+            <p className="font-body text-xs text-muted-foreground">
+              All plans include Chef AI. Meals are paid separately unless included in your plan.<br />
+              SF Bay Area delivery is $10 per delivery unless included.
+            </p>
+          </div>
+        </div>
+
+        {/* Why Members Join - tight bullets */}
+        <div className="container mx-auto px-6 max-w-4xl mb-16">
+          <h2 className="font-display text-xl tracking-[0.15em] text-foreground text-center mb-8">
+            WHY MEMBERS JOIN
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center p-4">
+              <Calendar size={28} className="mx-auto text-mystical mb-3" />
+              <h3 className="font-display text-sm tracking-wider mb-2">WEEKLY DROPS</h3>
+              <p className="font-body text-xs text-muted-foreground">
+                New dishes every week, limited availability
+              </p>
+            </div>
+            <div className="text-center p-4">
+              <Clock size={28} className="mx-auto text-mystical mb-3" />
+              <h3 className="font-display text-sm tracking-wider mb-2">ORDER AHEAD</h3>
+              <p className="font-body text-xs text-muted-foreground">
+                Order for next week (fresh sourcing, real prep time)
+              </p>
+            </div>
+            <div className="text-center p-4">
+              <Bot size={28} className="mx-auto text-mystical mb-3" />
+              <h3 className="font-display text-sm tracking-wider mb-2">CHEF AI INCLUDED</h3>
+              <p className="font-body text-xs text-muted-foreground">
+                Recipes, swaps, nutrition, meal plans
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* How it works */}
-        <div className="container mx-auto px-6 max-w-5xl mb-20">
+        <div className="container mx-auto px-6 max-w-5xl mb-16">
           <div className="border border-border/30 rounded-lg p-8 md:p-12 bg-card/20">
             <h2 className="font-display text-xl tracking-[0.2em] text-foreground text-center mb-10">
               HOW IT WORKS
@@ -147,34 +208,34 @@ const Pricing = () => {
               <HowItWorksStep
                 number={1}
                 title="Subscribe"
-                description="Choose a plan starting at $9/mo. Explorer lets you browse and cook at home. Member ($29/mo) unlocks delivery."
+                description="Instant access + Chef AI. Starting at $29/mo."
                 icon={CreditCard}
               />
               <HowItWorksStep
                 number={2}
-                title="Browse This Week"
-                description="See the current week's secret menu. New dishes every week, curated by Chef Antje."
+                title="Browse"
+                description="See this week's menu. New drop every week."
                 icon={Utensils}
               />
               <HowItWorksStep
                 number={3}
-                title="Order Next Week"
-                description="Place orders for NEXT week's menu. This ensures fresh prep and perfect timing."
+                title="Order"
+                description="Order next week's menu. SF Bay Area delivery only."
                 icon={Calendar}
               />
               <HowItWorksStep
                 number={4}
                 title="Enjoy"
-                description="Delivery in SF ($10 fee, free on Developer+). Or use Chef AI to cook at home anywhere."
+                description="Most plans: pay for meals + $10 delivery. Some plans: included."
                 icon={ChefHat}
               />
             </div>
           </div>
         </div>
 
-        {/* Plans grid */}
-        <div className="container mx-auto px-6 max-w-7xl mb-20">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        {/* Plans grid - 4 columns */}
+        <div className="container mx-auto px-6 max-w-6xl mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {subscriptionPlans.map((plan) => (
               <PlanCard key={plan.id} plan={plan} />
             ))}
@@ -182,7 +243,7 @@ const Pricing = () => {
         </div>
 
         {/* Feature comparison */}
-        <div className="container mx-auto px-6 max-w-6xl mb-20">
+        <div className="container mx-auto px-6 max-w-5xl mb-16">
           <div className="border border-border/30 rounded-lg p-6 md:p-8 bg-card/20">
             <h2 className="font-display text-xl tracking-[0.2em] text-foreground text-center mb-8">
               COMPARE PLANS
@@ -191,120 +252,96 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* Universal Credits Section */}
-        <div className="container mx-auto px-6 max-w-4xl mb-20">
-          <div className="border border-mystical/30 rounded-lg p-8 md:p-12 bg-gradient-to-b from-mystical/5 to-transparent">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Sparkles size={20} className="text-mystical" />
-              <h2 className="font-display text-xl tracking-[0.2em] text-foreground">
-                UNIVERSAL CREDITS
-              </h2>
-              <Sparkles size={20} className="text-mystical" />
-            </div>
-            <p className="text-center font-body text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Credits work for both food orders AND Chef Antje AI. Use them however you like—order meals,
-              get nutrition advice, plan your week, or learn to cook. One balance, endless possibilities.
+        {/* FOMO Section */}
+        <div className="container mx-auto px-6 max-w-4xl mb-16">
+          <div className="border border-amber-500/30 rounded-lg p-8 md:p-12 bg-gradient-to-b from-amber-500/5 to-transparent text-center">
+            <AlertTriangle size={32} className="mx-auto text-amber-500 mb-4" />
+            <h2 className="font-display text-2xl tracking-[0.1em] text-foreground mb-3">
+              THIS WEEK'S MENU DISAPPEARS
+            </h2>
+            <p className="font-body text-muted-foreground mb-6 max-w-lg mx-auto">
+              You don't "scroll it later." You either join—or you miss it.<br />
+              Members see the drop first. Orders are for next week. Delivery slots are limited.
             </p>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center p-4">
-                <Utensils size={24} className="mx-auto text-mystical mb-3" />
-                <h3 className="font-display text-sm tracking-wider mb-2">FOOD ORDERS</h3>
-                <p className="font-body text-xs text-muted-foreground">
-                  $1 credit = $1 toward meals. Use credits for delivery orders anytime.
-                </p>
+            <Button
+              onClick={() => navigate('/login', { state: { planId: 'access' } })}
+              className="rounded-full font-display tracking-wider bg-amber-500 text-background hover:bg-amber-600 px-8"
+              size="lg"
+            >
+              JOIN BEFORE NEXT DROP
+            </Button>
+          </div>
+        </div>
+
+        {/* Clarity Box */}
+        <div className="container mx-auto px-6 max-w-4xl mb-16">
+          <div className="border border-border/50 rounded-lg p-6 bg-muted/20">
+            <h3 className="font-display text-sm tracking-[0.2em] text-foreground mb-4 text-center">
+              THE FINE PRINT (IN PLAIN ENGLISH)
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="flex items-start gap-3">
+                <Lock size={16} className="text-mystical mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-foreground font-medium">What membership is:</span>
+                  <span className="text-muted-foreground"> Access to weekly menu + ordering + Chef AI</span>
+                </div>
               </div>
-              <div className="text-center p-4">
-                <Bot size={24} className="mx-auto text-mystical mb-3" />
-                <h3 className="font-display text-sm tracking-wider mb-2">CHEF AI</h3>
-                <p className="font-body text-xs text-muted-foreground">
-                  ~$0.10/message. Get recipes, nutrition advice, meal planning help.
-                </p>
+              <div className="flex items-start gap-3">
+                <Globe size={16} className="text-mystical mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-foreground font-medium">Where delivery works:</span>
+                  <span className="text-muted-foreground"> San Francisco Bay Area only</span>
+                </div>
               </div>
-              <div className="text-center p-4">
-                <CreditCard size={24} className="mx-auto text-mystical mb-3" />
-                <h3 className="font-display text-sm tracking-wider mb-2">BULK DISCOUNTS</h3>
-                <p className="font-body text-xs text-muted-foreground">
-                  Buy more, save more. Up to 20% off on credit purchases of $500+.
-                </p>
+              <div className="flex items-start gap-3">
+                <CreditCard size={16} className="text-mystical mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-foreground font-medium">What you pay separately:</span>
+                  <span className="text-muted-foreground"> Meals at checkout (unless plan includes credits)</span>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Truck size={16} className="text-mystical mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="text-foreground font-medium">Delivery fee:</span>
+                  <span className="text-muted-foreground"> $10 per delivery (free on Solo Dev & Hacker House)</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Why We're Different */}
-        <div className="container mx-auto px-6 max-w-4xl mb-20">
-          <h2 className="font-display text-xl tracking-[0.2em] text-foreground text-center mb-10">
-            WHY WE'RE DIFFERENT
+        {/* FAQ */}
+        <div className="container mx-auto px-6 max-w-2xl mb-16">
+          <h2 className="font-display text-xl tracking-[0.2em] text-foreground text-center mb-8">
+            FAQ
           </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <Lock size={20} className="flex-shrink-0 text-mystical mt-1" />
-                <div>
-                  <h3 className="font-display text-sm tracking-wider mb-1">SECRET MENU</h3>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Only members see what's cooking. New menu every week—dishes you won't find anywhere else.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Calendar size={20} className="flex-shrink-0 text-mystical mt-1" />
-                <div>
-                  <h3 className="font-display text-sm tracking-wider mb-1">ORDER AHEAD</h3>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Browse this week's menu, order for next week. Gives Chef Antje time to source the best ingredients.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <ChefHat size={20} className="flex-shrink-0 text-mystical mt-1" />
-                <div>
-                  <h3 className="font-display text-sm tracking-wider mb-1">REAL CHEF, REAL AI</h3>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Chef Antje creates the menus. Her AI helps you cook, plan nutrition, and master each recipe.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <Globe size={20} className="flex-shrink-0 text-mystical mt-1" />
-                <div>
-                  <h3 className="font-display text-sm tracking-wider mb-1">COOK FROM ANYWHERE</h3>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Not in SF? The $9 Explorer plan gives you menus and AI help to cook at home in any city.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Users size={20} className="flex-shrink-0 text-mystical mt-1" />
-                <div>
-                  <h3 className="font-display text-sm tracking-wider mb-1">TEAMS & HOUSEHOLDS</h3>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Startup plan lets your whole team order on-demand with shared credits and individual preferences.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Truck size={20} className="flex-shrink-0 text-mystical mt-1" />
-                <div>
-                  <h3 className="font-display text-sm tracking-wider mb-1">$10 DELIVERY</h3>
-                  <p className="font-body text-sm text-muted-foreground">
-                    Flat rate in SF. Free delivery on Developer and Startup plans. More cities coming soon.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FAQItem
+            question="Do I still pay for food?"
+            answer="Yes—meals are priced per dish at checkout, unless your plan includes a monthly meal credit (Plus and above)."
+          />
+          <FAQItem
+            question="Is delivery included?"
+            answer="Delivery is SF Bay Area only. It's $10 per delivery unless your plan includes it (Solo Dev and Hacker House get free delivery)."
+          />
+          <FAQItem
+            question="Why order next week?"
+            answer="So Chef Antje can source peak ingredients and prep properly—this is how the quality stays high."
+          />
+          <FAQItem
+            question="Can I cancel anytime?"
+            answer="Yes. Cancel or pause anytime. No long-term commitments."
+          />
         </div>
 
         {/* Benefits section */}
-        <div className="container mx-auto px-6 max-w-4xl mb-20">
+        <div className="container mx-auto px-6 max-w-4xl mb-16">
           <div className="border border-border/30 rounded-lg p-8 md:p-12 bg-card/20">
             <div className="flex items-center justify-center gap-3 mb-8">
               <Sparkles size={20} className="text-muted-foreground" />
               <h2 className="font-display text-xl tracking-[0.2em] text-foreground">
-                ALL MEMBERSHIPS INCLUDE
+                ALL PLANS INCLUDE
               </h2>
               <Sparkles size={20} className="text-muted-foreground" />
             </div>
@@ -323,30 +360,18 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* Global Expansion CTA */}
-        <div className="container mx-auto px-6 max-w-4xl mb-16">
-          <div className="text-center border border-mystical/20 rounded-lg p-8 bg-gradient-to-b from-mystical/5 to-transparent">
-            <Globe size={32} className="mx-auto text-mystical mb-4" />
-            <h2 className="font-display text-2xl tracking-[0.15em] text-foreground mb-3">
-              COMING TO 100 CITIES
-            </h2>
-            <p className="font-body text-muted-foreground mb-6 max-w-md mx-auto">
-              LA, NYC, Chicago, Miami next. Then London, Paris, Tokyo, and beyond.
-              Vote for your city and be first to know when we launch.
-            </p>
-            <Button asChild variant="outline" className="rounded-full font-display tracking-wider">
-              <Link to="/global">
-                <Globe size={14} className="mr-2" />
-                VIEW EXPANSION MAP
-              </Link>
-            </Button>
-          </div>
-        </div>
-
-        {/* FAQ teaser */}
+        {/* Share & contact */}
         <div className="container mx-auto px-6 max-w-4xl text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <ShareButton
+              title="SF Secret Menu - Membership Plans"
+              text="Check out the membership tiers for SF Secret Menu - chef-crafted meals delivered weekly"
+              variant="outline"
+              size="sm"
+            />
+          </div>
           <p className="font-body text-sm text-muted-foreground/60">
-            Questions about our service?{' '}
+            Questions?{' '}
             <Link
               to="/support"
               className="text-foreground underline underline-offset-4 hover:text-muted-foreground transition-colors"

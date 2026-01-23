@@ -1,8 +1,8 @@
 // Subscription plans for SF Secret Menu
-// Premium meal delivery service tiers
+// Conversion-focused 4-tier structure
 // Updated pricing as of 2026
 
-export type SubscriptionTier = 'explorer' | 'member' | 'pro' | 'developer' | 'startup';
+export type SubscriptionTier = 'access' | 'plus' | 'solodev' | 'hackerhouse';
 
 export interface SubscriptionPlan {
   id: SubscriptionTier;
@@ -12,6 +12,7 @@ export interface SubscriptionPlan {
   description: string;
   tagline: string;
   features: string[];
+  notIncluded?: string[];
   popular: boolean;
   // Access controls
   canViewSecretMenu: boolean;
@@ -23,76 +24,37 @@ export interface SubscriptionPlan {
   canCookAtHome: boolean;
   // Credits (can be used for food OR AI)
   includedCredits: number; // in cents - universal credits
-  aiCreditsIncluded: number; // AI chat messages/month
+  aiCreditsIncluded: number; // AI chat messages/month (-1 = unlimited)
   creditDiscountPercent: number;
   deliveryFee: number; // in cents, 0 = free
-  maxMembers: number; // for organizations/households
+  maxMembers: number; // for organizations/households (-1 = unlimited)
+  // CTA
+  ctaText: string;
   // Payment integration
   stripePriceId?: string;
 }
 
-// Credit pricing
-export const CREDIT_PRICING = {
-  foodCreditRate: 100, // 1 cent = 1 credit for food
-  aiCreditRate: 10, // 10 credits = 1 AI message (~$0.10)
-  bulkDiscounts: [
-    { minAmount: 5000, discount: 5 }, // $50+ = 5% off
-    { minAmount: 10000, discount: 10 }, // $100+ = 10% off
-    { minAmount: 25000, discount: 15 }, // $250+ = 15% off
-    { minAmount: 50000, discount: 20 }, // $500+ = 20% off
-  ],
-};
-
+// Delivery fee
 export const DELIVERY_FEE_CENTS = 1000; // $10 delivery fee
 
-export const SERVICE_AREAS = ['San Francisco'] as const;
+export const SERVICE_AREAS = ['San Francisco', 'SF', 'Bay Area'] as const;
 export type ServiceArea = typeof SERVICE_AREAS[number];
 
 export const subscriptionPlans: SubscriptionPlan[] = [
   {
-    id: 'explorer',
-    name: 'Explorer',
-    price: 9,
-    period: 'month',
-    description: 'Browse menus & get recipes',
-    tagline: 'Perfect for food enthusiasts anywhere',
-    features: [
-      'Browse weekly secret menus',
-      'Chef Antje AI cooking assistant (50 messages/mo)',
-      'Get recipes to cook at home',
-      'Nutrition guidance & meal planning',
-      'Email support',
-    ],
-    popular: false,
-    canViewSecretMenu: true,
-    canOrderDelivery: false,
-    canCustomizeOrders: false,
-    canAccessArchives: false,
-    canAccessSecretSecretMenu: false,
-    canAccessChefAI: true,
-    canCookAtHome: true,
-    includedCredits: 0,
-    aiCreditsIncluded: 50,
-    creditDiscountPercent: 0,
-    deliveryFee: DELIVERY_FEE_CENTS,
-    maxMembers: 1,
-    stripePriceId: 'price_explorer_2026',
-  },
-  {
-    id: 'member',
-    name: 'Member',
+    id: 'access',
+    name: 'Access',
     price: 29,
     period: 'month',
-    description: 'Unlock delivery in SF',
-    tagline: 'Minimum to order delivery',
+    description: 'Unlock the menu + ordering',
+    tagline: 'For anyone who wants in',
     features: [
-      'Everything in Explorer',
-      'Order next week\'s menu for delivery',
-      'Access to secret menu items',
-      'Archive of past weekly menus',
-      '100 AI messages/month',
-      'Priority email support',
+      'Full weekly menu access (members-only)',
+      'Order next week\'s menu (SF Bay Area)',
+      'Menu archives',
+      'Chef AI included',
     ],
+    notIncluded: ['Meals + delivery fees not included'],
     popular: false,
     canViewSecretMenu: true,
     canOrderDelivery: true,
@@ -106,24 +68,24 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     creditDiscountPercent: 0,
     deliveryFee: DELIVERY_FEE_CENTS,
     maxMembers: 1,
-    stripePriceId: 'price_member_2026',
+    ctaText: 'Unlock Access',
+    stripePriceId: 'price_access_2026',
   },
   {
-    id: 'pro',
-    name: 'Pro',
+    id: 'plus',
+    name: 'Plus',
     price: 79,
     period: 'month',
-    description: 'Credits included',
-    tagline: 'Best value for regular ordering',
+    description: 'Includes a meal + delivery',
+    tagline: 'Best for trying it without thinking',
     features: [
-      'Everything in Member',
-      '$50 universal credits (food or AI)',
-      'Customize orders after payment',
-      'Access to secret secret menu',
-      '200 AI messages/month',
-      'Direct chef communication',
-      'Flexible delivery windows',
+      'Everything in Access',
+      'Monthly meal credit (~1 meal)',
+      'Delivery included for credited meal',
+      'Early access to limited items',
+      'Chef AI included',
     ],
+    notIncluded: ['Additional meals paid at checkout'],
     popular: true,
     canViewSecretMenu: true,
     canOrderDelivery: true,
@@ -132,29 +94,27 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     canAccessSecretSecretMenu: true,
     canAccessChefAI: true,
     canCookAtHome: true,
-    includedCredits: 5000, // $50
+    includedCredits: 3500, // ~$35 for 1 meal + delivery
     aiCreditsIncluded: 200,
     creditDiscountPercent: 0,
-    deliveryFee: DELIVERY_FEE_CENTS,
+    deliveryFee: DELIVERY_FEE_CENTS, // But first delivery covered by credits
     maxMembers: 2,
-    stripePriceId: 'price_pro_2026',
+    ctaText: 'Start Plus',
+    stripePriceId: 'price_plus_2026',
   },
   {
-    id: 'developer',
-    name: 'Developer',
+    id: 'solodev',
+    name: 'Solo Dev',
     price: 399,
     period: 'month',
-    description: 'Feed a developer',
-    tagline: '~2 meals/day, 5 days/week',
+    description: 'Power user plan (1 person)',
+    tagline: 'For the "I want this handled" lifestyle',
     features: [
-      'Everything in Pro',
-      '$350 in universal credits',
-      '10% credit discount on orders',
-      'Unlimited AI messages',
-      'Custom dietary profiles',
-      'VIP delivery scheduling',
-      'Free delivery',
-      'Dedicated support line',
+      'Everything in Plus',
+      'Larger monthly meal credit',
+      'Priority customization + VIP delivery',
+      'Direct support line',
+      'Chef AI (4x usage, buy more anytime)',
     ],
     popular: false,
     canViewSecretMenu: true,
@@ -165,29 +125,27 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     canAccessChefAI: true,
     canCookAtHome: true,
     includedCredits: 35000, // $350 worth
-    aiCreditsIncluded: -1, // Unlimited
+    aiCreditsIncluded: 400, // 4x base (100 * 4)
     creditDiscountPercent: 10,
     deliveryFee: 0, // Free delivery
     maxMembers: 2,
-    stripePriceId: 'price_developer_2026',
+    ctaText: 'Go Solo Dev',
+    stripePriceId: 'price_solodev_2026',
   },
   {
-    id: 'startup',
-    name: 'Startup',
+    id: 'hackerhouse',
+    name: 'Hacker House',
     price: 999,
     period: 'month',
-    description: 'Hacker house & teams',
-    tagline: 'Feed your whole team',
+    description: 'Feed the house',
+    tagline: 'Built for teams / group living',
     features: [
-      'Everything in Developer',
-      '$900 in universal credits',
-      'Unlimited team members',
-      '20% credit discount on all orders',
-      'Team credit allocation',
-      'On-demand ordering for members',
-      'Unlimited AI for all members',
-      'Dedicated account manager',
-      'Custom event catering',
+      'Everything in Solo Dev',
+      'Multiple house members (shared access)',
+      'Shared credit pool + per-person dietary profiles',
+      'House-level delivery coordination',
+      'Dedicated concierge support',
+      'Chef AI (8x usage for all, buy more anytime)',
     ],
     popular: false,
     canViewSecretMenu: true,
@@ -198,11 +156,12 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     canAccessChefAI: true,
     canCookAtHome: true,
     includedCredits: 90000, // $900 worth
-    aiCreditsIncluded: -1, // Unlimited
+    aiCreditsIncluded: 800, // 8x base (100 * 8)
     creditDiscountPercent: 20,
     deliveryFee: 0, // Free delivery
     maxMembers: -1, // Unlimited
-    stripePriceId: 'price_startup_2026',
+    ctaText: 'Run a Hacker House',
+    stripePriceId: 'price_hackerhouse_2026',
   },
 ];
 
@@ -259,12 +218,11 @@ export const getMinimumDeliveryPlan = (): SubscriptionPlan | undefined => {
 };
 
 export const planBenefits = [
-  'Curated by Chef Antje, world-class private chef',
-  'Fresh, locally-sourced ingredients from Bay Area farms',
-  'Complete dietary modifications available',
-  'Cancel or pause anytime, no commitments',
-  'New menu every week, forever',
-  'Eco-friendly packaging and delivery',
+  'Weekly menu drops curated by Chef Antje',
+  'Chef AI included in every plan',
+  'Order ahead for next week (fresh sourcing)',
+  'Cancel or pause anytime',
+  'SF Bay Area delivery ($10, or free on higher plans)',
 ];
 
 // Tier comparison for access control
@@ -283,11 +241,10 @@ export const canAccessFeature = (
 
 // Check if user is in a delivery service area
 export const isInServiceArea = (city: string): boolean => {
-  return SERVICE_AREAS.some(area =>
-    area.toLowerCase() === city.toLowerCase() ||
-    city.toLowerCase().includes('san francisco') ||
-    city.toLowerCase() === 'sf'
-  );
+  const normalized = city.toLowerCase();
+  return normalized.includes('san francisco') ||
+    normalized === 'sf' ||
+    normalized.includes('bay area');
 };
 
 // Calculate delivery fee for a tier

@@ -38,7 +38,7 @@ export const pageSEO: Record<string, SEOHeadProps> = {
   },
   pricing: {
     title: 'Membership & Pricing | SF Secret Menu',
-    description: 'Join the inner circle. Explorer $9/mo (browse & cook), Member $29/mo (delivery), Pro $79/mo ($50 credits), Developer $399/mo (feed yourself), Startup $999/mo (teams). Cancel anytime.',
+    description: 'Subscribe from $29/mo for full menu access and SF delivery. Plus $79/mo includes a meal + delivery. Solo Dev $399/mo for power users. Hacker House $999/mo for teams. Cancel anytime.',
     keywords: 'meal plan pricing, organic meal subscription cost, private chef pricing, weekly meal delivery cost',
   },
   compare: {

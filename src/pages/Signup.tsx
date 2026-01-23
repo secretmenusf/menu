@@ -79,8 +79,8 @@ const Signup = () => {
     } else {
       setSuccess(true);
       toast({
-        title: 'Welcome to the order',
-        description: 'Check your email to confirm your entry',
+        title: 'Account created',
+        description: 'Check your email to verify your account',
       });
     }
 
@@ -99,11 +99,11 @@ const Signup = () => {
         <main className="pt-32 pb-20">
           <div className="container mx-auto px-6 max-w-md text-center">
             <h1 className="font-display text-3xl tracking-[0.2em] text-mystical mb-4">
-              INITIATION BEGUN
+              CHECK YOUR EMAIL
             </h1>
             <p className="font-body text-muted-foreground mb-8">
-              Check your email at <span className="text-foreground">{email}</span> to confirm your
-              entry into the order.
+              We sent a verification link to <span className="text-foreground">{email}</span>.
+              Click the link to activate your account.
             </p>
             <Link to={loginLink}>
               <Button variant="outline" className="font-display tracking-wider">
@@ -125,12 +125,11 @@ const Signup = () => {
         <div className="container mx-auto px-6 max-w-md">
           {/* Header */}
           <div className="text-center mb-12">
-            <span className="text-foreground text-3xl mb-4 block">❂</span>
             <h1 className="font-display text-3xl md:text-4xl tracking-[0.2em] text-mystical mb-2">
-              JOIN THE ORDER
+              CREATE ACCOUNT
             </h1>
             <p className="font-body text-muted-foreground">
-              Begin your journey into culinary alchemy
+              Get access to weekly menus and SF delivery
             </p>
           </div>
 
@@ -254,10 +253,10 @@ const Signup = () => {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    INITIATING...
+                    CREATING...
                   </>
                 ) : (
-                  'SEEK ENTRY'
+                  'CREATE ACCOUNT'
                 )}
               </Button>
             </form>
@@ -276,9 +275,9 @@ const Signup = () => {
 
           {/* Login Link */}
           <p className="text-center mt-8 font-body text-muted-foreground">
-            Already initiated?{' '}
+            Already have an account?{' '}
             <Link to={loginLink} className="text-foreground hover:underline">
-              Enter here
+              Sign in
             </Link>
           </p>
         </div>

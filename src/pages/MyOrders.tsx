@@ -72,7 +72,7 @@ const MyOrders = () => {
               YOUR ORDERS
             </h1>
             <p className="font-body text-muted-foreground">
-              A chronicle of your culinary journey
+              Track your orders and delivery history
             </p>
           </div>
 
@@ -87,7 +87,7 @@ const MyOrders = () => {
                 NO ORDERS YET
               </h2>
               <p className="font-body text-muted-foreground mb-6">
-                Your journey has yet to begin
+                You haven't placed any orders yet
               </p>
               <Link to="/order">
                 <Button className="font-display tracking-wider">

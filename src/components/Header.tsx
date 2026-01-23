@@ -42,8 +42,8 @@ const Header = () => {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const goToOrder = () => {
-    navigate('/order');
+  const goToMenu = () => {
+    navigate('/menu');
   };
 
   return (
@@ -95,12 +95,6 @@ const Header = () => {
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
                   CHEF
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={goToOrder}
-                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
-                >
-                  ORDER
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => navigate('/invite')}
@@ -166,10 +160,10 @@ const Header = () => {
             CHEF
           </button>
           <button
-            onClick={goToOrder}
+            onClick={goToMenu}
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
-            ORDER
+            MENU
           </button>
           <Link
             to="/invite"
@@ -219,10 +213,10 @@ const Header = () => {
                   CHEF
                 </button>
                 <button
-                  onClick={goToOrder}
+                  onClick={goToMenu}
                   className="font-display text-sm tracking-[0.2em] text-foreground text-left"
                 >
-                  ORDER
+                  MENU
                 </button>
                 <Link
                   to="/invite"
