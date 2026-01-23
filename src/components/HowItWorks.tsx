@@ -24,10 +24,10 @@ const steps: Step[] = [
     number: '01',
     icon: Sparkles,
     title: 'Choose Your Plan',
-    description: 'Select from Essential, Standard, or Premium membership',
+    description: 'Select Access, Plus, Solo Dev, or Hacker House',
     details: [
-      '3, 5, or 7 meals per week',
-      'Flexible scheduling',
+      'From $29/mo',
+      'Meal credits included on higher tiers',
       'Cancel anytime',
     ],
   },
