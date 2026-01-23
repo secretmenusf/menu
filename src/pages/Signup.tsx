@@ -149,7 +149,7 @@ const Signup = () => {
             <div className="mb-8 p-4 border border-foreground/30 rounded-lg bg-card/50 text-center">
               <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-1">SELECTED PLAN</p>
               <p className="font-display text-xl tracking-[0.15em] text-foreground">{selectedPlan.name.toUpperCase()}</p>
-              <p className="font-body text-muted-foreground">${selectedPlan.price}/mo · {selectedPlan.mealsPerWeek} meals/week</p>
+              <p className="font-body text-muted-foreground">${selectedPlan.price}/mo · {selectedPlan.description}</p>
             </div>
           )}
 
