@@ -69,12 +69,7 @@ export function AdminGuard({ children }: AdminGuardProps) {
   }
 
   if (!isAdmin) {
-    // For development, allow access without auth check
-    // In production, uncomment the redirect below
-    // return <Navigate to="/entry" state={{ from: location }} replace />;
-
-    // Development mode: allow access
-    return <>{children}</>;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

@@ -92,16 +92,10 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 
-// Admin route wrapper (checks for admin role)
+// Admin route wrapper - uses AdminGuard for proper role checking
+import { AdminGuard } from '@/components/admin/AdminGuard';
 const AdminRoute = ({ children }: { children: ReactNode }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) return <PageLoader />;
-  if (!user) return <Navigate to="/login" replace />;
-  // For now, allow all authenticated users to access admin
-  // In production, check user_roles table for admin role
-
-  return <>{children}</>;
+  return <AdminGuard>{children}</AdminGuard>;
 };
 
 const AppRoutes = () => (
