@@ -79,7 +79,7 @@ const GiftMealPlan = () => {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <p className="font-display text-sm tracking-wider text-foreground">{p.name.toUpperCase()}</p>
-                          <p className="font-body text-xs text-muted-foreground">{p.mealsPerWeek} meals/week</p>
+                          <p className="font-body text-xs text-muted-foreground">{p.description}</p>
                         </div>
                         <p className="font-display text-lg text-foreground">${p.price}/mo</p>
                       </div>

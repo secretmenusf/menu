@@ -133,9 +133,14 @@ export function StripeCheckout({ plan, customerEmail, onSuccess, onCancel }: Str
               {plan.name.toUpperCase()} PLAN
             </h3>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-muted-foreground">{plan.mealsPerWeek} meals per week</span>
-              <span className="font-display text-2xl text-mystical">${plan.price}/month</span>
+              <span className="text-muted-foreground">{plan.description}</span>
+              <span className="font-display text-2xl text-mystical">${plan.price}/mo</span>
             </div>
+            {plan.includedCredits > 0 && (
+              <p className="text-sm text-mystical/80 mb-2">
+                Includes ${plan.includedCredits / 100} in universal credits
+              </p>
+            )}
             <div className="space-y-1 text-sm text-muted-foreground">
               {plan.features.slice(0, 3).map((feature, index) => (
                 <div key={index} className="flex items-center gap-2">

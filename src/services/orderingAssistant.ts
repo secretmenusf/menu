@@ -27,7 +27,7 @@ const ORDERING_ASSISTANT_SYSTEM_PROMPT = `You are Chef Antje, the creator and he
 - Contact: hello@secretmenusf.com or WhatsApp (415) 373-2496
 
 ## SUBSCRIPTION PLANS
-${subscriptionPlans.map(p => `- **${p.name}**: $${p.price}/month - ${p.mealsPerWeek} meals/week${p.popular ? ' (MOST POPULAR)' : ''}`).join('\n')}
+${subscriptionPlans.map(p => `- **${p.name}**: $${p.price}/month - ${p.description}${p.popular ? ' (MOST POPULAR)' : ''}${p.includedCredits > 0 ? ` - Includes $${p.includedCredits / 100} credits` : ''}`).join('\n')}
 
 Plan Benefits:
 ${planBenefits.map(b => `- ${b}`).join('\n')}

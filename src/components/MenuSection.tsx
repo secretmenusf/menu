@@ -191,7 +191,7 @@ const MenuSection = () => {
                     <span className="text-sm text-muted-foreground">/mo</span>
                   </p>
                   <p className="font-body text-xs text-muted-foreground/60">
-                    {plan.mealsPerWeek} meals/week
+                    {plan.description}
                   </p>
                 </div>
               </Link>
