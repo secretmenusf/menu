@@ -33,12 +33,12 @@ export const pageSEO: Record<string, SEOHeadProps> = {
   },
   order: {
     title: 'Order Meals | SF Secret Menu',
-    description: 'Start your culinary journey. Choose from Essential, Standard, or Premium meal plans. Flexible scheduling, same-day delivery available. 98% organic, chef-prepared meals.',
+    description: 'Start your culinary journey. Subscribe from $9/mo to access Chef Antje\'s secret weekly menus. Member ($29/mo) unlocks SF delivery. Chef-prepared organic meals with universal credits.',
     keywords: 'order meals san francisco, meal subscription sf, organic meal plan, healthy food delivery, weekly meal delivery',
   },
   pricing: {
-    title: 'Pricing & Plans | SF Secret Menu',
-    description: 'Choose your perfect meal plan from $395/month. Essential (3 meals/week), Standard (5 meals/week), or Premium (7 meals/week). All plans include organic ingredients and free delivery.',
+    title: 'Membership & Pricing | SF Secret Menu',
+    description: 'Join the inner circle. Explorer $9/mo (browse & cook), Member $29/mo (delivery), Pro $79/mo ($50 credits), Developer $399/mo (feed yourself), Startup $999/mo (teams). Cancel anytime.',
     keywords: 'meal plan pricing, organic meal subscription cost, private chef pricing, weekly meal delivery cost',
   },
   compare: {

@@ -154,7 +154,7 @@ const Support = () => {
     },
     {
       question: 'How do subscriptions work?',
-      answer: 'Subscribe to receive automatic weekly deliveries. Choose from Essential (2 meals), Standard (3 meals), or Premium (5 meals) plans. Cancel or pause anytime with no commitment.',
+      answer: 'Subscribe to access Chef Antje\'s weekly menus. Explorer ($9/mo) lets you browse and cook at home with AI help. Member ($29/mo) unlocks delivery in SF. Pro ($79/mo) includes $50 in credits. Developer ($399/mo) and Startup ($999/mo) are for power users and teams. Cancel or pause anytime.',
     },
     {
       question: 'What payment methods do you accept?',
