@@ -111,7 +111,7 @@ const Join = () => {
                   <div>
                     <h3 className="font-display text-sm tracking-wider mb-1">SF BAY AREA DELIVERY</h3>
                     <p className="font-body text-sm text-muted-foreground">
-                      Temperature-controlled, same-day delivery
+                      Order by Friday, delivered next week
                     </p>
                   </div>
                 </div>

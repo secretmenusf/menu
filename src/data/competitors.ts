@@ -520,7 +520,7 @@ export const valueProps = [
   },
   {
     title: 'Never Compromised',
-    description: 'Made fresh daily and delivered same-day. No microwave required, no freezer burn, no compromises.',
+    description: 'Made fresh with real prep time. No microwave required, no freezer burn, no compromises.',
     icon: 'Flame',
     image: '/images/fresh-meat.jpg',
   },

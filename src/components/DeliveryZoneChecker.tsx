@@ -267,7 +267,7 @@ export function DeliveryZoneChecker({ className, compact = false }: DeliveryZone
         )}
 
         <p className="text-xs text-muted-foreground/60 text-center mt-4">
-          SF Bay Area • Same-day delivery • 8am - 1am
+          SF Bay Area • Order by Friday for next week delivery
         </p>
       </div>
     </div>
