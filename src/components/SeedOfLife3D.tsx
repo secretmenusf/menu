@@ -96,12 +96,13 @@ const SeedOfLifeGeometry = () => {
   );
 };
 
-// Golden glowing geometry for light mode - WITH ROTATION
-const SeedOfLifeGeometryGold = () => {
+// Light mode geometry - White glowing core, golden outer rings
+const SeedOfLifeGeometryLight = () => {
   const groupRef = useRef<THREE.Group>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const whiteMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const goldMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
 
-  // Light mode: rotation, breathing, and golden glow pulse
+  // Light mode: rotation, breathing, and glow pulse
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const PHI = 1.618033988749;
@@ -118,10 +119,16 @@ const SeedOfLifeGeometryGold = () => {
       groupRef.current.scale.setScalar(breathe);
     }
 
-    // Golden glow pulse
-    if (materialRef.current) {
-      const pulse = 1.2 + Math.sin(t * 0.8) * 0.3;
-      materialRef.current.emissiveIntensity = pulse;
+    // White core pulse - bright and ethereal
+    if (whiteMaterialRef.current) {
+      const pulse = 1.8 + Math.sin(t * 1.2) * 0.4;
+      whiteMaterialRef.current.emissiveIntensity = pulse;
+    }
+
+    // Golden rings pulse - warm and rich
+    if (goldMaterialRef.current) {
+      const pulse = 1.4 + Math.sin(t * 0.8) * 0.3;
+      goldMaterialRef.current.emissiveIntensity = pulse;
     }
   });
 
@@ -134,30 +141,46 @@ const SeedOfLifeGeometryGold = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Golden glowing material
-  const goldMaterial = useMemo(() => {
+  // Bright white glowing material for center
+  const whiteMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
-      color: '#d4a574',
-      emissive: '#ffd700',
-      emissiveIntensity: 1.2,
-      metalness: 0.8,
-      roughness: 0.2,
+      color: '#ffffff',
+      emissive: '#ffffff',
+      emissiveIntensity: 1.8,
+      metalness: 0.1,
+      roughness: 0.1,
       toneMapped: false,
     });
     return mat;
   }, []);
 
-  // Store ref for animation
+  // Rich golden material for outer rings
+  const goldMaterial = useMemo(() => {
+    const mat = new THREE.MeshStandardMaterial({
+      color: '#daa520',
+      emissive: '#ffa500',
+      emissiveIntensity: 1.4,
+      metalness: 0.9,
+      roughness: 0.15,
+      toneMapped: false,
+    });
+    return mat;
+  }, []);
+
+  // Store refs for animation
   useEffect(() => {
-    materialRef.current = goldMaterial;
-  }, [goldMaterial]);
+    whiteMaterialRef.current = whiteMaterial;
+    goldMaterialRef.current = goldMaterial;
+  }, [whiteMaterial, goldMaterial]);
 
   return (
     <group ref={groupRef}>
+      {/* Center torus - white glowing core */}
       <mesh>
         <torusGeometry args={[r, tubeRadius, 32, 100]} />
-        <primitive object={goldMaterial} attach="material" />
+        <primitive object={whiteMaterial} attach="material" />
       </mesh>
+      {/* Outer 6 tori - golden rings */}
       {positions.map((pos, i) => (
         <mesh key={i} position={pos}>
           <torusGeometry args={[r, tubeRadius, 32, 100]} />
@@ -191,7 +214,7 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
     return () => observer.disconnect();
   }, [theme]);
 
-  // In light mode, show golden glowing version
+  // In light mode, show white core with golden rings
   if (!isDarkMode) {
     return (
       <div
@@ -202,13 +225,34 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
           position: 'relative',
         }}
       >
-        {/* Outer golden glow layer */}
+        {/* Outer warm glow layer */}
         <div
           className="absolute animate-pulse-glow"
           style={{
-            inset: '-20%',
-            filter: 'blur(25px)',
-            opacity: 0.6,
+            inset: '-25%',
+            filter: 'blur(30px)',
+            opacity: 0.5,
+          }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, 2.5], fov: 40 }}
+            gl={{ alpha: true, antialias: true }}
+            frameloop="always"
+            dpr={[1, 1]}
+          >
+            <ambientLight intensity={2.5} />
+            <Center>
+              <SeedOfLifeGeometryLight />
+            </Center>
+          </Canvas>
+        </div>
+        {/* Inner bright glow layer */}
+        <div
+          className="absolute"
+          style={{
+            inset: '-12%',
+            filter: 'blur(12px)',
+            opacity: 0.35,
           }}
         >
           <Canvas
@@ -219,32 +263,11 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
           >
             <ambientLight intensity={2} />
             <Center>
-              <SeedOfLifeGeometryGold />
+              <SeedOfLifeGeometryLight />
             </Center>
           </Canvas>
         </div>
-        {/* Inner golden glow layer */}
-        <div
-          className="absolute"
-          style={{
-            inset: '-10%',
-            filter: 'blur(10px)',
-            opacity: 0.4,
-          }}
-        >
-          <Canvas
-            camera={{ position: [0, 0, 2.5], fov: 40 }}
-            gl={{ alpha: true, antialias: true }}
-            frameloop="always"
-            dpr={[1, 1]}
-          >
-            <ambientLight intensity={1.5} />
-            <Center>
-              <SeedOfLifeGeometryGold />
-            </Center>
-          </Canvas>
-        </div>
-        {/* Main layer */}
+        {/* Main layer with enhanced lighting */}
         <div style={{ position: 'absolute', inset: 0 }}>
           <Canvas
             camera={{ position: [0, 0, 2.5], fov: 40 }}
@@ -252,12 +275,16 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
             frameloop="always"
             dpr={[1, 2]}
           >
-            <ambientLight intensity={0.8} />
-            <pointLight position={[0, 0, 4]} intensity={2.0} color="#ffd700" />
-            <pointLight position={[2, 2, 3]} intensity={1.0} color="#ffaa00" />
-            <pointLight position={[-2, -2, 3]} intensity={1.0} color="#ffcc00" />
+            <ambientLight intensity={1.2} />
+            {/* Key light - warm white from front */}
+            <pointLight position={[0, 0, 5]} intensity={3.0} color="#fffaf0" />
+            {/* Fill lights - golden accents */}
+            <pointLight position={[3, 2, 3]} intensity={1.5} color="#ffd700" />
+            <pointLight position={[-3, -2, 3]} intensity={1.5} color="#ffb347" />
+            {/* Rim light - adds depth */}
+            <pointLight position={[0, 3, -2]} intensity={1.0} color="#ffffff" />
             <Center>
-              <SeedOfLifeGeometryGold />
+              <SeedOfLifeGeometryLight />
             </Center>
           </Canvas>
         </div>
