@@ -78,29 +78,54 @@ const Header = () => {
                 className="w-56 bg-card border-border"
               >
                 <DropdownMenuItem
-                  onClick={() => navigate('/')}
-                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
-                >
-                  HOME
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-border" />
-                <DropdownMenuItem
                   onClick={() => navigate('/menu')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  WEEKLY MENU
+                  MENU
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => navigate('/chef')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  CHEF
+                  THE CHEF
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => navigate('/invite')}
+                  onClick={() => navigate('/about')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  SHARE
+                  ABOUT
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/reviews')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  REVIEWS
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem
+                  onClick={() => navigate('/compare')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  COMPARE
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/pricing')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  PRICING
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem
+                  onClick={() => navigate('/referrals')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  REFERRALS
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/gift-cards')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  GIFT CARDS
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -154,23 +179,17 @@ const Header = () => {
         {/* Desktop navigation */}
         <div className="hidden md:flex items-center gap-2">
           <button
-            onClick={() => navigate('/chef')}
-            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
-          >
-            CHEF
-          </button>
-          <button
             onClick={goToMenu}
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             MENU
           </button>
-          <Link
-            to="/invite"
+          <button
+            onClick={() => navigate('/pricing')}
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
-            SHARE
-          </Link>
+            PRICING
+          </button>
           <button
             onClick={() => {
               const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
@@ -205,25 +224,58 @@ const Header = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-72 bg-background border-border">
-              <div className="flex flex-col gap-6 mt-8">
+              <div className="flex flex-col gap-4 mt-8">
                 <button
-                  onClick={() => navigate('/chef')}
-                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
-                >
-                  CHEF
-                </button>
-                <button
-                  onClick={goToMenu}
+                  onClick={() => navigate('/menu')}
                   className="font-display text-sm tracking-[0.2em] text-foreground text-left"
                 >
                   MENU
                 </button>
-                <Link
-                  to="/invite"
-                  className="font-display text-sm tracking-[0.2em] text-foreground"
+                <button
+                  onClick={() => navigate('/chef')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
                 >
-                  SHARE
-                </Link>
+                  THE CHEF
+                </button>
+                <button
+                  onClick={() => navigate('/about')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  ABOUT
+                </button>
+                <button
+                  onClick={() => navigate('/reviews')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  REVIEWS
+                </button>
+                <div className="border-t border-border my-2" />
+                <button
+                  onClick={() => navigate('/compare')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  COMPARE
+                </button>
+                <button
+                  onClick={() => navigate('/pricing')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  PRICING
+                </button>
+                <div className="border-t border-border my-2" />
+                <button
+                  onClick={() => navigate('/referrals')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  REFERRALS
+                </button>
+                <button
+                  onClick={() => navigate('/gift-cards')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  GIFT CARDS
+                </button>
+                <div className="border-t border-border my-2" />
                 <button
                   onClick={() => {
                     const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
@@ -246,7 +298,7 @@ const Header = () => {
                   {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
                   {theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}
                 </button>
-                <div className="border-t border-border pt-6">
+                <div className="border-t border-border pt-4">
                   <UserMenu />
                 </div>
               </div>
