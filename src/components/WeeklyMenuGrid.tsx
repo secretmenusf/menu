@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft, ChevronLeft, ChevronRight, Star, ChevronDown, Truck, Shield, Lock, ChefHat, Calendar, Globe } from 'lucide-react';
+import { Leaf, X, Plus, Minus, Check, MessageSquare, ArrowLeft, ChevronLeft, ChevronRight, Star, ChevronDown, Truck, Shield, Lock, ChefHat, Calendar, Globe, CreditCard } from 'lucide-react';
 import { galleryMenuItems, type MenuItem, type MenuItemOption, dietaryInfo } from '@/data/menus';
 import SeedOfLife from '@/components/SeedOfLife';
 import FishIcon from '@/components/FishIcon';
@@ -523,7 +523,7 @@ const MenuDetailModal = ({
                       <button
                         onClick={() => {
                           onClose();
-                          navigate(user ? '/pricing' : '/login', { state: { from: { pathname: '/menu' } } });
+                          navigate(user ? '/pricing' : '/join');
                         }}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-medium hover:bg-emerald-700 transition-colors"
                       >
@@ -711,11 +711,11 @@ const MenuDetailModal = ({
               {/* CTA based on subscription status */}
               {!user ? (
                 <button
-                  onClick={(e) => { e.stopPropagation(); navigate('/login'); }}
-                  className="flex-1 max-w-md py-4 px-6 bg-muted text-foreground rounded-full font-semibold text-base md:text-lg hover:bg-muted/80 transition-colors shadow-lg flex items-center justify-center gap-2"
+                  onClick={(e) => { e.stopPropagation(); navigate('/join'); }}
+                  className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg flex items-center justify-center gap-2"
                 >
-                  <Lock size={18} />
-                  Sign in to Order
+                  <CreditCard size={18} />
+                  Join to Order
                 </button>
               ) : !isSubscribed ? (
                 <button
