@@ -36,8 +36,8 @@ const extendedStats: Stat[] = [
   ...stats,
   {
     icon: Clock,
-    value: '8am-1am',
-    label: 'Delivery Hours',
+    value: 'Weekly',
+    label: 'Fresh Delivery',
   },
   {
     icon: TrendingUp,

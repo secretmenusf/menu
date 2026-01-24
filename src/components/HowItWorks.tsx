@@ -46,7 +46,7 @@ const steps: Step[] = [
     number: '03',
     icon: ChefHat,
     title: 'We Prepare Fresh',
-    description: 'Your meals are crafted same-day with organic ingredients',
+    description: 'Your meals are crafted with organic ingredients',
     details: [
       'Sourced from local farms',
       'Made fresh, never frozen',
@@ -57,10 +57,10 @@ const steps: Step[] = [
     number: '04',
     icon: Truck,
     title: 'Delivered to You',
-    description: 'Receive your meals at your preferred time',
+    description: 'Receive your meals the following week',
     details: [
-      'Same-day delivery',
-      '8am - 1am availability',
+      'Order by Friday',
+      'Delivered next week',
       'Temperature-controlled',
     ],
   },

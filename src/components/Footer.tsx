@@ -148,7 +148,7 @@ const Footer = () => {
                 </a>
               </li>
               <li className="text-muted-foreground/60">
-                Delivery: 8am – 1am daily
+                Order by Friday for next week
               </li>
               <li className="text-muted-foreground/60">
                 San Francisco, CA

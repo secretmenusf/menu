@@ -77,7 +77,7 @@ const Support = () => {
       
       const responses = {
         "menu": "Our current weekly menu features artisanal dishes made with fresh, local ingredients. Check our Menu page for this week's offerings, or I can help you with specific dietary preferences!",
-        "delivery": "We deliver throughout the SF Bay Area from 8am-1am daily. Most orders arrive within 45-90 minutes. Would you like to check if we deliver to your area?",
+        "delivery": "We deliver throughout the SF Bay Area weekly. Order by Friday for delivery the following week - fresh sourced, real prep time! Would you like to check if we deliver to your area?",
         "payment": "We accept credit cards (preferred), Zelle, Venmo, CashApp. All payments are secure and processed instantly.",
         "subscription": "Our meal plans range from $89-299/week. Essential (2 meals), Standard (3 meals), or Premium (5 meals). Cancel anytime!",
         "default": "I'd be happy to help! For detailed assistance, I can connect you with our support team at support@secretmenusf.com or you can start a live chat."
@@ -365,7 +365,7 @@ const Support = () => {
                     </div>
                     <div className="space-y-2 font-body text-sm text-muted-foreground">
                       <p>San Francisco Bay Area</p>
-                      <p>Daily: 8AM - 1AM</p>
+                      <p>Order by Friday for next week</p>
                       <div className="pt-2 border-t border-border/30 text-xs">
                         <span>Free delivery on orders over $75</span>
                       </div>
