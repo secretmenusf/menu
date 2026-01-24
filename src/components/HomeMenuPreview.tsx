@@ -522,7 +522,7 @@ const MenuDetailModal = ({
                       <button
                         onClick={() => {
                           onClose();
-                          navigate(user ? '/pricing' : '/login', { state: { from: { pathname: '/' } } });
+                          navigate(user ? '/pricing' : '/join');
                         }}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-medium hover:bg-emerald-700 transition-colors"
                       >
@@ -715,7 +715,7 @@ const MenuDetailModal = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     onClose();
-                    navigate(user ? '/pricing' : '/login', { state: { from: { pathname: '/' } } });
+                    navigate(user ? '/pricing' : '/join');
                   }}
                   className="flex-1 max-w-md py-4 px-6 bg-emerald-600 text-white rounded-full font-semibold text-base md:text-lg hover:bg-emerald-700 transition-colors shadow-lg flex items-center justify-center gap-2"
                 >
