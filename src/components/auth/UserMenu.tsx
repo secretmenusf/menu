@@ -39,7 +39,7 @@ export function UserMenu() {
   };
 
   const openSignUp = () => {
-    navigate('/signup');
+    navigate('/join');
   };
 
   // Get initials for avatar fallback

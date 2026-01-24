@@ -6,7 +6,7 @@ import AboutSection from '@/components/AboutSection';
 import Footer from '@/components/Footer';
 import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 import { TrustBadgesSection } from '@/components/social-proof/TrustBadges';
-import { HowItWorksSection } from '@/components/HowItWorks';
+import { WhyMembersJoinSection, SimpleHowItWorksSection } from '@/components/WhyJoinSection';
 import { DeliveryZoneChecker } from '@/components/DeliveryZoneChecker';
 import { GuaranteeBadges } from '@/components/social-proof/TrustBadges';
 import StandardsSection from '@/components/StandardsSection';
@@ -34,11 +34,14 @@ const Home = () => {
         <HomeMenuPreview />
 
 
+        {/* Why Members Join */}
+        <WhyMembersJoinSection className="py-16" />
+
+        {/* How It Works - Simple 4 steps */}
+        <SimpleHowItWorksSection className="py-16 bg-card/30" />
+
         {/* Our Standards & Bay Area Suppliers */}
         <StandardsSection />
-
-        {/* How It Works - 5 step process */}
-        <HowItWorksSection />
 
         {/* Delivery Zone Checker */}
         <section className="py-16 bg-gradient-to-b from-card/50 to-background">
