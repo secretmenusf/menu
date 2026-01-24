@@ -96,11 +96,12 @@ const SeedOfLifeGeometry = () => {
   );
 };
 
-// Black geometry for light mode - WITH ROTATION
-const SeedOfLifeGeometryBlack = () => {
+// Golden glowing geometry for light mode - WITH ROTATION
+const SeedOfLifeGeometryGold = () => {
   const groupRef = useRef<THREE.Group>(null);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
-  // Light mode: rotation and breathing
+  // Light mode: rotation, breathing, and golden glow pulse
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const PHI = 1.618033988749;
@@ -116,6 +117,12 @@ const SeedOfLifeGeometryBlack = () => {
       const breathe = 1 + Math.sin(t * (1 / PHI) * 0.5) * 0.025;
       groupRef.current.scale.setScalar(breathe);
     }
+
+    // Golden glow pulse
+    if (materialRef.current) {
+      const pulse = 1.2 + Math.sin(t * 0.8) * 0.3;
+      materialRef.current.emissiveIntensity = pulse;
+    }
   });
 
   const r = 0.35;
@@ -127,28 +134,34 @@ const SeedOfLifeGeometryBlack = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Matte black material
-  const blackMaterial = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
-      color: '#1a1a1a',
-      emissive: '#000000',
-      emissiveIntensity: 0,
-      metalness: 0.3,
-      roughness: 0.7,
-      toneMapped: true,
+  // Golden glowing material
+  const goldMaterial = useMemo(() => {
+    const mat = new THREE.MeshStandardMaterial({
+      color: '#d4a574',
+      emissive: '#ffd700',
+      emissiveIntensity: 1.2,
+      metalness: 0.8,
+      roughness: 0.2,
+      toneMapped: false,
     });
+    return mat;
   }, []);
+
+  // Store ref for animation
+  useEffect(() => {
+    materialRef.current = goldMaterial;
+  }, [goldMaterial]);
 
   return (
     <group ref={groupRef}>
       <mesh>
         <torusGeometry args={[r, tubeRadius, 32, 100]} />
-        <primitive object={blackMaterial} attach="material" />
+        <primitive object={goldMaterial} attach="material" />
       </mesh>
       {positions.map((pos, i) => (
         <mesh key={i} position={pos}>
           <torusGeometry args={[r, tubeRadius, 32, 100]} />
-          <primitive object={blackMaterial} attach="material" />
+          <primitive object={goldMaterial} attach="material" />
         </mesh>
       ))}
     </group>
@@ -178,7 +191,7 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
     return () => observer.disconnect();
   }, [theme]);
 
-  // In light mode, show black spinning version
+  // In light mode, show golden glowing version
   if (!isDarkMode) {
     return (
       <div
@@ -189,6 +202,48 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
           position: 'relative',
         }}
       >
+        {/* Outer golden glow layer */}
+        <div
+          className="absolute animate-pulse-glow"
+          style={{
+            inset: '-20%',
+            filter: 'blur(25px)',
+            opacity: 0.6,
+          }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, 2.5], fov: 40 }}
+            gl={{ alpha: true, antialias: true }}
+            frameloop="always"
+            dpr={[1, 1]}
+          >
+            <ambientLight intensity={2} />
+            <Center>
+              <SeedOfLifeGeometryGold />
+            </Center>
+          </Canvas>
+        </div>
+        {/* Inner golden glow layer */}
+        <div
+          className="absolute"
+          style={{
+            inset: '-10%',
+            filter: 'blur(10px)',
+            opacity: 0.4,
+          }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, 2.5], fov: 40 }}
+            gl={{ alpha: true, antialias: true }}
+            frameloop="always"
+            dpr={[1, 1]}
+          >
+            <ambientLight intensity={1.5} />
+            <Center>
+              <SeedOfLifeGeometryGold />
+            </Center>
+          </Canvas>
+        </div>
         {/* Main layer */}
         <div style={{ position: 'absolute', inset: 0 }}>
           <Canvas
@@ -197,12 +252,12 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
             frameloop="always"
             dpr={[1, 2]}
           >
-            <ambientLight intensity={1.0} />
-            <pointLight position={[0, 0, 4]} intensity={1.5} color="#ffffff" />
-            <pointLight position={[2, 2, 3]} intensity={0.8} color="#ffffff" />
-            <pointLight position={[-2, -2, 3]} intensity={0.8} color="#ffffff" />
+            <ambientLight intensity={0.8} />
+            <pointLight position={[0, 0, 4]} intensity={2.0} color="#ffd700" />
+            <pointLight position={[2, 2, 3]} intensity={1.0} color="#ffaa00" />
+            <pointLight position={[-2, -2, 3]} intensity={1.0} color="#ffcc00" />
             <Center>
-              <SeedOfLifeGeometryBlack />
+              <SeedOfLifeGeometryGold />
             </Center>
           </Canvas>
         </div>

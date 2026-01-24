@@ -133,6 +133,7 @@ const AppRoutes = () => (
       <Route path="/global" element={<Global />} />
       <Route path="/invite" element={<Invite />} />
       <Route path="/subscription/success" element={<SubscriptionSuccess />} />
+      <Route path="/subscription" element={<Navigate to="/pricing" replace />} />
       <Route path="/onboarding" element={<Onboarding />} />
 
       {/* Protected user routes */}

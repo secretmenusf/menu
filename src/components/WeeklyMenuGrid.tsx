@@ -936,10 +936,10 @@ const WeeklyMenuGrid = () => {
   // Get selected item from index
   const selectedItem = selectedIndex !== null ? filteredItems[selectedIndex] : null;
 
-  // Navigation handlers - redirect non-logged-in users to pricing
+  // Navigation handlers - redirect non-logged-in users to join
   const handleSelectItem = useCallback((item: MenuItem) => {
     if (!user) {
-      navigate('/pricing');
+      navigate('/join');
       return;
     }
     const index = filteredItems.findIndex(i => i.id === item.id);
