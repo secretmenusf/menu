@@ -3,7 +3,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Check, ArrowRight, Loader2, AlertCircle, ChefHat, Calendar, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { getPlanById } from '@/data/plans';
+import { getPlanById, SubscriptionTier } from '@/data/plans';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -17,7 +17,7 @@ const SubscriptionSuccess = () => {
 
   const sessionId = searchParams.get('session_id');
   const planId = searchParams.get('plan');
-  const plan = planId ? getPlanById(planId as any) : null;
+  const plan = planId ? getPlanById(planId as SubscriptionTier) : null;
 
   useEffect(() => {
     const verifySession = async () => {
