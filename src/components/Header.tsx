@@ -101,6 +101,12 @@ const Header = () => {
                 >
                   REVIEWS
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/zoo-ngo')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  HEALING FARM
+                </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-border" />
                 <DropdownMenuItem
                   onClick={() => navigate('/compare')}

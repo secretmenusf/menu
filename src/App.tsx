@@ -39,6 +39,8 @@ const GiftMealPlan = lazy(() => import("./pages/GiftMealPlan"));
 const Global = lazy(() => import("./pages/Global"));
 const Invite = lazy(() => import("./pages/Invite"));
 const Join = lazy(() => import("./pages/Join"));
+const ZooNgo = lazy(() => import("./pages/ZooNgo"));
+const Donate = lazy(() => import("./pages/Donate"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Login = lazy(() => import("./pages/Login"));
@@ -132,6 +134,8 @@ const AppRoutes = () => (
       <Route path="/gift-meal-plan" element={<GiftMealPlan />} />
       <Route path="/global" element={<Global />} />
       <Route path="/invite" element={<Invite />} />
+      <Route path="/zoo-ngo" element={<ZooNgo />} />
+      <Route path="/donate" element={<Donate />} />
       <Route path="/subscription/success" element={<SubscriptionSuccess />} />
       <Route path="/subscription" element={<Navigate to="/pricing" replace />} />
       <Route path="/onboarding" element={<Onboarding />} />
