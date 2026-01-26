@@ -13,6 +13,7 @@ const IRS_LETTER_URL = '/zoo-ngo/zoolabs-irs-letter.jpg';
 const Donate = () => {
   const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [frequency, setFrequency] = useState<'one_time' | 'monthly'>('monthly');
   const [amount, setAmount] = useState<number>(100);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [email, setEmail] = useState('');
@@ -63,6 +64,7 @@ const Donate = () => {
         body: {
           amount,
           currency: 'usd',
+          frequency,
           email: email || undefined,
           success_url: `${window.location.origin}/donate?status=success`,
           cancel_url: `${window.location.origin}/donate?status=cancelled`,
@@ -111,6 +113,31 @@ const Donate = () => {
 
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-start">
             <div className="rounded-[32px] border border-border bg-card/30 p-10 space-y-8">
+              <div className="flex rounded-2xl border border-border overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setFrequency('monthly')}
+                  className={`flex-1 py-3 text-sm font-medium transition ${
+                    frequency === 'monthly'
+                      ? 'bg-foreground text-background'
+                      : 'bg-transparent text-foreground hover:bg-foreground/5'
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFrequency('one_time')}
+                  className={`flex-1 py-3 text-sm font-medium transition ${
+                    frequency === 'one_time'
+                      ? 'bg-foreground text-background'
+                      : 'bg-transparent text-foreground hover:bg-foreground/5'
+                  }`}
+                >
+                  One-time
+                </button>
+              </div>
+
               <div className="space-y-4">
                 <h2 className="font-display text-2xl tracking-[0.12em]">CHOOSE AN AMOUNT</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -159,7 +186,7 @@ const Donate = () => {
                 onClick={handleDonate}
                 disabled={isLoading}
               >
-                {isLoading ? 'Starting checkout...' : 'Donate now'}
+                {isLoading ? 'Starting checkout...' : frequency === 'monthly' ? 'Donate monthly' : 'Donate now'}
               </Button>
             </div>
 

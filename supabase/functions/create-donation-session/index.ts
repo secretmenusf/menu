@@ -28,22 +28,30 @@ serve(async (req) => {
     }
 
     const unitAmount = Math.round(amount * 100);
+    const isMonthly = payload?.frequency === 'monthly';
+    const mode = isMonthly ? 'subscription' : 'payment';
 
     const params = new URLSearchParams();
-    params.append('mode', 'payment');
+    params.append('mode', mode);
     params.append('payment_method_types[0]', 'card');
     params.append('line_items[0][quantity]', '1');
     params.append('line_items[0][price_data][currency]', currency);
     params.append('line_items[0][price_data][unit_amount]', String(unitAmount));
-    params.append('line_items[0][price_data][product_data][name]', 'Donation — The Zoolabs Foundation');
+    params.append('line_items[0][price_data][product_data][name]',
+      isMonthly ? 'Monthly Donation — The Zoolabs Foundation' : 'Donation — The Zoolabs Foundation',
+    );
     params.append(
       'line_items[0][price_data][product_data][description]',
       '100% tax deductible donation to The Zoolabs Foundation (501(c)(3)). EIN #883538992.',
     );
+    if (isMonthly) {
+      params.append('line_items[0][price_data][recurring][interval]', 'month');
+    }
     params.append('metadata[donation_type]', 'zoo-ngo');
     params.append('metadata[tax_deductible]', 'true');
     params.append('metadata[ein]', '883538992');
     params.append('metadata[organization]', 'The Zoolabs Foundation');
+    params.append('metadata[frequency]', isMonthly ? 'monthly' : 'one_time');
     params.append('success_url', payload?.success_url);
     params.append('cancel_url', payload?.cancel_url);
 

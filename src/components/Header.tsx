@@ -78,10 +78,10 @@ const Header = () => {
                 className="w-56 bg-card border-border"
               >
                 <DropdownMenuItem
-                  onClick={() => navigate('/menu')}
+                  onClick={() => navigate('/')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  MENU
+                  HOME
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => navigate('/chef')}
