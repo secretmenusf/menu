@@ -20,7 +20,7 @@ import SeedOfLife3D from './SeedOfLife3D';
 import ConnectWallet from './ConnectWallet';
 import { UserMenu } from './auth/UserMenu';
 import { useTheme } from '@/components/theme-provider';
-import { Search, Menu, Moon, Sun, Info, Palette, Mail, FileText, Users } from 'lucide-react';
+import { Search, Menu, Moon, Sun, Info, Palette, Mail, FileText, Users, ArrowUpRight } from 'lucide-react';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -75,13 +75,13 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-56 bg-card border-border"
+                className="w-64 bg-card border-border"
               >
                 <DropdownMenuItem
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate(location.pathname === '/' ? '/menu' : '/')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  HOME
+                  {location.pathname === '/' ? <span className="font-bold">ORDER MENU</span> : 'HOME'}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => navigate('/chef')}
@@ -100,12 +100,6 @@ const Header = () => {
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
                   REVIEWS
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => navigate('/zoo-ngo')}
-                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
-                >
-                  HEALING FARM
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-border" />
                 <DropdownMenuItem
@@ -132,6 +126,13 @@ const Header = () => {
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
                   GIFT CARDS
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem
+                  onClick={() => navigate('/zoo-ngo')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  REGEN FARM <span className="text-emerald-500 ml-3">DONATE <ArrowUpRight className="inline h-3 w-3" /></span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
