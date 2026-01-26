@@ -243,8 +243,8 @@ const ZooNgo = () => {
                 are building together.
               </p>
             </div>
-            <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-16">
-              <div className="rounded-[28px] overflow-hidden border border-border bg-card/20">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="rounded-[24px] overflow-hidden border border-border bg-card/20 aspect-[4/3]">
                 <img
                   src={imageUrl(ingredientsImage)}
                   alt="Fresh ingredients"
@@ -252,7 +252,7 @@ const ZooNgo = () => {
                   loading="lazy"
                 />
               </div>
-              <div className="rounded-[28px] overflow-hidden border border-border bg-card/20">
+              <div className="rounded-[24px] overflow-hidden border border-border bg-card/20 aspect-[4/3]">
                 <img
                   src={imageUrl(mushroomImage)}
                   alt="Medicinal mushrooms"
@@ -261,13 +261,13 @@ const ZooNgo = () => {
                 />
               </div>
             </div>
-            <div className="flex gap-8 overflow-x-auto pb-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {imageRail.map((filename) => (
-                <div key={filename} className="min-w-[220px] max-w-[220px] rounded-[22px] overflow-hidden border border-border bg-card/30">
+                <div key={filename} className="rounded-[24px] overflow-hidden border border-border bg-card/20 aspect-square">
                   <img
                     src={imageUrl(filename)}
                     alt={filename.replace(/\.[^/.]+$/, '').replace(/[-_+]+/g, ' ').replace(/\s+/g, ' ').trim()}
-                    className="h-48 w-full object-cover"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                   />
                 </div>
@@ -276,20 +276,29 @@ const ZooNgo = () => {
           </div>
         </section>
 
-        <section className="container mx-auto px-6 max-w-5xl text-center">
-          <div className="space-y-6">
-            <h2 className="font-display text-3xl md:text-4xl tracking-[0.14em]">JOIN THE MOVEMENT</h2>
-            <p className="font-body text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Support land acquisition, chef-led meal distribution, and community education. Together we can make
-              fresh food a shared standard and help the next generation thrive.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild size="lg" className="rounded-full bg-amber-500/20 text-black hover:bg-amber-500/30 border border-amber-500/40">
-                <a href="mailto:hello@zoo.ngo?subject=Volunteer%20opportunities">Volunteer or Collaborate</a>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full border-foreground/20">
-                <Link to="/donate">Donate or Sponsor</Link>
-              </Button>
+        <section className="container mx-auto px-6 max-w-6xl">
+          <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-center">
+            <div className="space-y-6 text-center lg:text-left">
+              <h2 className="font-display text-3xl md:text-4xl tracking-[0.14em]">JOIN THE MOVEMENT</h2>
+              <p className="font-body text-muted-foreground max-w-2xl leading-relaxed">
+                Support land acquisition, chef-led meal distribution, and community education. Together we can make
+                fresh food a shared standard and help the next generation thrive.
+              </p>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                <Button asChild size="lg" className="rounded-full bg-amber-500/20 text-black hover:bg-amber-500/30 border border-amber-500/40">
+                  <a href="mailto:hello@zoo.ngo?subject=Volunteer%20opportunities">Volunteer or Collaborate</a>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="rounded-full border-foreground/20">
+                  <Link to="/donate">Donate or Sponsor</Link>
+                </Button>
+              </div>
+            </div>
+            <div className="hidden lg:block">
+              <img
+                src="/images/mangosteam.png"
+                alt="Seed of Life — Mangosteen"
+                className="w-48 h-48 object-contain opacity-70"
+              />
             </div>
           </div>
         </section>

@@ -157,11 +157,11 @@ const Pricing = () => {
         {/* Back link */}
         <div className="container mx-auto px-6 mb-8">
           <Link
-            to="/"
+            to="/menu"
             className="inline-flex items-center gap-2 font-display text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft size={16} />
-            BACK TO HOME
+            SEE MENU
           </Link>
         </div>
 

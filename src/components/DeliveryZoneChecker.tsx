@@ -156,25 +156,23 @@ export function DeliveryZoneChecker({ className, compact = false }: DeliveryZone
   }
 
   return (
-    <div className={cn('w-full max-w-xl mx-auto', className)}>
-      <div className="p-6 border border-border/30 rounded-xl bg-card/30">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-full bg-mystical/10">
-            <Truck className="h-5 w-5 text-mystical" />
-          </div>
-          <div>
-            <h3 className="font-display text-sm tracking-wider text-foreground">
-              GET STARTED
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              Enter your email and ZIP to check delivery
-            </p>
-          </div>
-        </div>
+    <div className={cn('w-full', className)}>
+      <div className="text-center mb-10">
+        <p className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-2">
+          DELIVERY
+        </p>
+        <h2 className="font-display text-2xl md:text-3xl tracking-[0.15em] text-foreground mb-3">
+          CHECK YOUR AREA
+        </h2>
+        <p className="font-body text-sm text-muted-foreground max-w-md mx-auto">
+          Enter your email and ZIP code to see if we deliver to you.
+        </p>
+      </div>
 
-        <div className="space-y-3">
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className="max-w-2xl mx-auto">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="email"
               placeholder="Your email"
@@ -185,56 +183,53 @@ export function DeliveryZoneChecker({ className, compact = false }: DeliveryZone
                 setError(null);
               }}
               onKeyDown={handleKeyDown}
-              className="pl-10 bg-background/50"
+              className="pl-11 h-12 rounded-full bg-card/50 border-border/30 text-sm"
             />
           </div>
-
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="ZIP code"
-                value={zip}
-                onChange={(e) => {
-                  setZip(e.target.value.replace(/\D/g, '').slice(0, 5));
-                  setStatus('idle');
-                  setError(null);
-                }}
-                onKeyDown={handleKeyDown}
-                maxLength={5}
-                className="pl-10 bg-background/50"
-              />
-            </div>
-            <Button
-              onClick={handleCheck}
-              disabled={status === 'checking' || !email || !zip}
-              className="font-display tracking-wider px-6"
-            >
-              {status === 'checking' ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  CHECK
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
+          <div className="relative sm:w-36">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="ZIP code"
+              value={zip}
+              onChange={(e) => {
+                setZip(e.target.value.replace(/\D/g, '').slice(0, 5));
+                setStatus('idle');
+                setError(null);
+              }}
+              onKeyDown={handleKeyDown}
+              maxLength={5}
+              className="pl-11 h-12 rounded-full bg-card/50 border-border/30 text-sm"
+            />
           </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <Button
+            onClick={handleCheck}
+            disabled={status === 'checking' || !email || !zip}
+            className="h-12 px-8 rounded-full font-display text-xs tracking-[0.2em]"
+          >
+            {status === 'checking' ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                CHECK DELIVERY
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
         </div>
 
+        {error && <p className="text-red-500 text-sm text-center mt-3">{error}</p>}
+
         {status === 'yes' && (
-          <div className="mt-4 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3">
-            <div className="p-1 rounded-full bg-emerald-500/20">
-              <Check className="h-4 w-4 text-emerald-500" />
+          <div className="mt-6 p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-4">
+            <div className="p-2 rounded-full bg-emerald-500/20">
+              <Check className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
-              <p className="font-display text-sm tracking-wider text-emerald-400 mb-1">
-                WE DELIVER TO YOU!
+              <p className="font-display text-sm tracking-[0.15em] text-emerald-400 mb-0.5">
+                WE DELIVER TO YOU
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="font-body text-sm text-muted-foreground">
                 Redirecting to set up your meal plan...
               </p>
             </div>
@@ -242,33 +237,38 @@ export function DeliveryZoneChecker({ className, compact = false }: DeliveryZone
         )}
 
         {status === 'no' && (
-          <div className="mt-4 p-4 rounded-lg bg-zinc-500/10 border border-zinc-500/30">
-            <div className="flex items-start gap-3 mb-3">
-              <div className="p-1 rounded-full bg-zinc-500/20">
-                <X className="h-4 w-4 text-zinc-500" />
+          <div className="mt-6 p-5 rounded-2xl bg-muted/30 border border-border/30">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-2 rounded-full bg-muted">
+                <X className="h-5 w-5 text-muted-foreground" />
               </div>
               <div>
-                <p className="font-display text-sm tracking-wider text-zinc-400 mb-1">
+                <p className="font-display text-sm tracking-[0.15em] text-foreground mb-0.5">
                   NOT IN DELIVERY AREA YET
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  We're currently serving the SF Bay Area. Join the waitlist to be notified when we expand.
+                <p className="font-body text-sm text-muted-foreground">
+                  We're expanding soon. Join the waitlist to get notified.
                 </p>
               </div>
             </div>
             <Button
               variant="outline"
               onClick={handleJoinWaitlist}
-              className="w-full font-display tracking-wider"
+              className="w-full rounded-full font-display text-xs tracking-[0.2em]"
             >
               JOIN WAITLIST
             </Button>
           </div>
         )}
 
-        <p className="text-xs text-muted-foreground/60 text-center mt-4">
-          SF Bay Area • Order by Friday for next week delivery
-        </p>
+        <div className="flex items-center justify-center gap-6 mt-8">
+          <div className="flex items-center gap-2">
+            <Truck className="h-4 w-4 text-muted-foreground/60" />
+            <span className="font-body text-xs text-muted-foreground/60">SF Bay Area</span>
+          </div>
+          <span className="text-muted-foreground/30">·</span>
+          <span className="font-body text-xs text-muted-foreground/60">Order by Friday for next week delivery</span>
+        </div>
       </div>
     </div>
   );

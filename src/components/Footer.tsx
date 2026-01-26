@@ -162,10 +162,17 @@ const Footer = () => {
 
         {/* Bottom Row */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-xs text-muted-foreground/50 italic">
-            "What is concealed shall be revealed to those who seek"
-          </p>
-          
+          <div className="flex items-center gap-4">
+            <img
+              src="/images/bluelight.png"
+              alt="Seed of Life"
+              className="w-10 h-10 object-contain opacity-40"
+            />
+            <p className="font-body text-xs text-muted-foreground/50 italic">
+              "What is concealed shall be revealed to those who seek"
+            </p>
+          </div>
+
           <p className="font-body text-xs text-muted-foreground/30">
             © {new Date().getFullYear()} Secret Menu · All mysteries reserved
           </p>
