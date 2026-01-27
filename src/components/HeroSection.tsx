@@ -18,7 +18,7 @@ const HeroSection = () => {
       <div className="w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-0 items-end lg:min-h-screen">
           {/* Left side - Text content */}
-          <div className="relative z-10 animate-reveal px-6 lg:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:pr-12 py-20 lg:py-0 lg:self-center">
+          <div className="relative z-10 animate-reveal px-6 lg:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:pr-12 pt-28 pb-20 lg:py-0 lg:self-center">
             {/* Rating Badge - Links to reviews page */}
             <div className="flex mb-6">
               <Link

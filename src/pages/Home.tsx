@@ -60,7 +60,7 @@ const Home = () => {
               <div className="grid md:grid-cols-[1fr_1.2fr] items-center">
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src="/zoo-ngo/nourish.jpg.webp"
+                    src="/zoo-ngo/biodynamic-med-herbfarm.jpg"
                     alt="Regenerative Healing Farm"
                     className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
                   />
@@ -69,15 +69,15 @@ const Home = () => {
                   <div className="flex items-center gap-2">
                     <Sprout className="h-5 w-5 text-emerald-500" />
                     <p className="font-display text-xs tracking-[0.3em] text-muted-foreground">
-                      ZOO NGO
+                      ZOO NGO x SECRET MENU
                     </p>
                   </div>
                   <h3 className="font-display text-xl md:text-2xl tracking-[0.12em] text-foreground">
                     REGENERATIVE HEALING FARM
                   </h3>
                   <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                    We're building a regenerative healing farm to grow medicinal mushrooms, adaptogenic herbs, and
-                    nutrient-dense foods — restoring ecosystems while expanding food access for underserved communities.
+                    We've partnered with Zoo NGO to build a regenerative healing farm to grow medicinal mushrooms, adaptogenic herbs, and nutrient-dense foods
+                    — restoring ecosystems while expanding food access for underserved communities.
                   </p>
                   <div className="flex items-center gap-4 pt-2">
                     <span className="font-display text-xs tracking-[0.2em] text-emerald-500 group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
