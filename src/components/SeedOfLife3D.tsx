@@ -141,20 +141,20 @@ const SeedOfLifeGeometryLight = () => {
     positions.push([r * Math.cos(angle), r * Math.sin(angle), 0]);
   }
 
-  // Bright white glowing material for center
+  // Gold material for center ring
   const whiteMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
-      color: '#ffffff',
-      emissive: '#ffffff',
-      emissiveIntensity: 1.8,
-      metalness: 0.1,
-      roughness: 0.1,
+      color: '#daa520',
+      emissive: '#ffa500',
+      emissiveIntensity: 1.4,
+      metalness: 0.9,
+      roughness: 0.15,
       toneMapped: false,
     });
     return mat;
   }, []);
 
-  // Rich golden material for outer rings
+  // Gold material for outer rings
   const goldMaterial = useMemo(() => {
     const mat = new THREE.MeshStandardMaterial({
       color: '#daa520',
@@ -246,7 +246,7 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
             </Center>
           </Canvas>
         </div>
-        {/* Inner bright glow layer */}
+        {/* Inner glow layer */}
         <div
           className="absolute"
           style={{
@@ -267,7 +267,7 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
             </Center>
           </Canvas>
         </div>
-        {/* Main layer with enhanced lighting */}
+        {/* Main layer */}
         <div style={{ position: 'absolute', inset: 0 }}>
           <Canvas
             camera={{ position: [0, 0, 2.5], fov: 40 }}
@@ -276,12 +276,9 @@ const SeedOfLife3D = ({ size = 28, className = "" }: SeedOfLife3DProps) => {
             dpr={[1, 2]}
           >
             <ambientLight intensity={1.2} />
-            {/* Key light - warm white from front */}
             <pointLight position={[0, 0, 5]} intensity={3.0} color="#fffaf0" />
-            {/* Fill lights - golden accents */}
             <pointLight position={[3, 2, 3]} intensity={1.5} color="#ffd700" />
             <pointLight position={[-3, -2, 3]} intensity={1.5} color="#ffb347" />
-            {/* Rim light - adds depth */}
             <pointLight position={[0, 3, -2]} intensity={1.0} color="#ffffff" />
             <Center>
               <SeedOfLifeGeometryLight />

@@ -1,3 +1,6 @@
+import { Globe, Leaf, Heart, Sparkles, WheatOff, Brain } from 'lucide-react';
+import chefPortrait from '@/assets/chef-antje.jpg';
+
 const AboutSection = () => {
   return (
     <section id="about" className="relative py-32 bg-card sacred-geometry">
@@ -14,7 +17,7 @@ const AboutSection = () => {
               {/* Image container */}
               <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-border">
                 <img
-                  src="/images/antje-chef.jpg"
+                  src={chefPortrait}
                   alt="Chef Antje"
                   className="w-full h-full object-cover"
                 />
@@ -62,9 +65,12 @@ const AboutSection = () => {
             <div className="pt-6 border-t border-border">
               <p className="font-display text-xs tracking-[0.2em] text-muted-foreground mb-4">ESSENCE</p>
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                <span className="border border-border px-4 py-2">Global Kitchen</span>
-                <span className="border border-border px-4 py-2">Organic</span>
-                <span className="border border-border px-4 py-2">Healing Foods</span>
+                <span className="flex items-center gap-2 border border-border px-4 py-2 rounded-full"><Globe className="h-4 w-4" /> Global Kitchen</span>
+                <span className="flex items-center gap-2 border border-border px-4 py-2 rounded-full"><Leaf className="h-4 w-4" /> Organic</span>
+                <span className="flex items-center gap-2 border border-border px-4 py-2 rounded-full"><Heart className="h-4 w-4" /> Healing Foods</span>
+                <span className="flex items-center gap-2 border border-border px-4 py-2 rounded-full"><Sparkles className="h-4 w-4" /> Fusion</span>
+                <span className="flex items-center gap-2 border border-border px-4 py-2 rounded-full"><WheatOff className="h-4 w-4" /> Gluten Free</span>
+                <span className="flex items-center gap-2 border border-border px-4 py-2 rounded-full"><Brain className="h-4 w-4" /> Focus-Enhancing</span>
               </div>
             </div>
           </div>
