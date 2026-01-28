@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Star, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { EmailZipCapture } from '@/components/onboarding/EmailZipCapture';
 
@@ -19,18 +19,6 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-0 items-end lg:min-h-screen">
           {/* Left side - Text content */}
           <div className="relative z-10 animate-reveal px-6 lg:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:pr-12 pt-28 pb-20 lg:py-0 lg:self-center">
-            {/* Rating Badge - Links to reviews page */}
-            <div className="flex mb-6">
-              <Link
-                to="/reviews"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-foreground/20 hover:bg-foreground/10 transition-colors cursor-pointer"
-              >
-                <Star className="h-4 w-4 text-foreground fill-foreground" />
-                <span className="font-display text-sm text-foreground">4.9</span>
-                <span className="text-xs text-muted-foreground">• 127 Reviews</span>
-              </Link>
-            </div>
-
             <p className="font-body text-xs tracking-[0.4em] text-muted-foreground mb-6 uppercase">
               San Francisco's Gastronomic Meal Service
             </p>

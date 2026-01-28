@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Sprout, ArrowRight } from 'lucide-react';
+import { Sprout, ArrowRight, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import HomeMenuPreview from '@/components/HomeMenuPreview';
@@ -37,6 +37,17 @@ const Home = () => {
         {/* Menu Preview - condensed view */}
         <HomeMenuPreview />
 
+        {/* Rating Badge - Always after menu */}
+        <div className="py-8 flex justify-center">
+          <Link
+            to="/reviews"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-foreground/20 hover:bg-foreground/10 transition-colors cursor-pointer"
+          >
+            <Star className="h-4 w-4 text-foreground fill-foreground" />
+            <span className="font-display text-sm text-foreground">4.9</span>
+            <span className="text-xs text-muted-foreground">• 127 Reviews</span>
+          </Link>
+        </div>
 
         {/* Why Members Join */}
         <WhyMembersJoinSection className="py-16" />
