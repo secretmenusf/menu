@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { stripeService, getStripePriceId } from '@/services/stripeService';
+import { supabase } from '@/integrations/supabase/client';
 import type { SubscriptionPlan } from '@/data/plans';
 
 interface PlanCardProps {
@@ -19,25 +19,23 @@ const PlanCard = ({ plan, compact = false }: PlanCardProps) => {
   const handleSubscribeClick = async () => {
     setIsLoading(true);
     try {
-      const priceId = getStripePriceId(plan.id);
-      if (!priceId) {
-        throw new Error('Invalid plan configuration');
-      }
-
-      // Go directly to Stripe Checkout - no login required
-      // Stripe will collect email during checkout
-      const { url } = await stripeService.createCheckoutSession({
-        priceId,
-        successUrl: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan.id}`,
-        cancelUrl: `${window.location.origin}/pricing`,
-        metadata: {
-          planId: plan.id,
-          source: 'secretmenusf',
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: {
+          plan_id: plan.id,
+          plan_name: plan.name,
+          price: plan.price,
+          success_url: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan.id}`,
+          cancel_url: `${window.location.origin}/pricing`,
         },
       });
 
-      // Redirect to Stripe Checkout
-      window.location.href = url;
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('Checkout URL missing');
+      }
     } catch (error) {
       console.error('Failed to start checkout:', error);
       toast({

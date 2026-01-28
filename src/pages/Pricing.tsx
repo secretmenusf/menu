@@ -8,7 +8,7 @@ import { subscriptionPlans, planBenefits } from '@/data/plans';
 import { ShareButton } from '@/components/social/ShareButton';
 import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 import { Button } from '@/components/ui/button';
-import { stripeService, getStripePriceId } from '@/services/stripeService';
+import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const HowItWorksStep = ({
@@ -112,23 +112,26 @@ const Pricing = () => {
   const handleDirectCheckout = async (planId: string) => {
     setIsLoading(planId);
     try {
-      const priceId = getStripePriceId(planId);
-      if (!priceId) {
-        throw new Error('Invalid plan configuration');
-      }
+      const plan = subscriptionPlans.find(p => p.id === planId);
+      if (!plan) throw new Error('Invalid plan');
 
-      // Go directly to Stripe Checkout - no login required
-      const { url } = await stripeService.createCheckoutSession({
-        priceId,
-        successUrl: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
-        cancelUrl: `${window.location.origin}/pricing`,
-        metadata: {
-          planId,
-          source: 'secretmenusf',
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: {
+          plan_id: plan.id,
+          plan_name: plan.name,
+          price: plan.price,
+          success_url: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
+          cancel_url: `${window.location.origin}/pricing`,
         },
       });
 
-      window.location.href = url;
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('Checkout URL missing');
+      }
     } catch (error) {
       console.error('Failed to start checkout:', error);
       toast({
