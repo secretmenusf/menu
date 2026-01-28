@@ -31,7 +31,7 @@ const galleryImages = [
 const ZooNgo = () => {
   const imageUrl = (filename: string) => encodeURI(`/zoo-ngo/${filename}`);
 
-  const heroImage = 'healingfarm.tiff';
+  const heroImage = 'healingfarm.jpg';
   const farmImage = 'nourish.jpg.webp';
   const herbImage = galleryImages[15];
   const mushroomImage = galleryImages[10];
