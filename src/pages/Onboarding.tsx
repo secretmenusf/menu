@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { stripeService, getStripePriceId } from '@/services/stripeService';
+import { stripeService, getStripePriceId, getStripe } from '@/services/stripeService';
 import { subscriptionPlans } from '@/data/plans';
 import Header from '@/components/Header';
 
@@ -54,8 +54,9 @@ const INITIAL_DATA: OnboardingData = {
   textUpdates: true,
 };
 
-// Step components
-const STEPS = ['plan', 'preferences', 'delivery', 'payment'] as const;
+// Step components - Simplified flow: Plan → Delivery → Payment
+// Preferences are collected AFTER successful payment on the success page
+const STEPS = ['plan', 'delivery', 'payment'] as const;
 type Step = typeof STEPS[number];
 
 // Meal count options mapped to plans
@@ -249,7 +250,7 @@ function PlanStep({
         size="lg"
         className="w-full rounded-lg font-display tracking-wider"
       >
-        Next: Meal Preferences
+        Next: Delivery Info
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
     </div>
@@ -548,7 +549,7 @@ function DeliveryStep({
   );
 }
 
-// Step 4: Payment
+// Step 3: Payment
 function PaymentStep({
   data,
   onBack,
@@ -567,34 +568,36 @@ function PaymentStep({
         throw new Error('Invalid plan configuration');
       }
 
-      // Store onboarding data for post-payment processing
+      // Store onboarding data for post-payment processing (preferences will be collected after payment)
       localStorage.setItem('onboarding_data', JSON.stringify(data));
 
-      // Create checkout session
-      const { url } = await stripeService.createCheckoutSession({
-        priceId,
-        customerEmail: data.email,
+      // Use client-side Stripe checkout (works without backend API)
+      const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error('Stripe not loaded. Please check your connection and try again.');
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
         successUrl: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${data.planId}&onboarding=true`,
         cancelUrl: `${window.location.origin}/onboarding`,
-        metadata: {
-          planId: data.planId,
-          mealCount: String(data.mealCount),
-          source: 'onboarding',
-          fullName: data.fullName,
-          phone: data.phone,
-          address: `${data.streetAddress}, ${data.aptSuite ? data.aptSuite + ', ' : ''}${data.city}, ${data.state} ${data.zip}`,
-          diets: data.diets.join(','),
-          allergies: data.allergies.join(','),
-          caloriePreference: data.caloriePreference,
-        },
+        customerEmail: data.email,
       });
 
-      window.location.href = url;
+      if (error) {
+        throw error;
+      }
     } catch (error) {
       console.error('Payment error:', error);
       toast({
         title: 'Payment Error',
-        description: 'Failed to start checkout. Please try again.',
+        description: error instanceof Error ? error.message : 'Failed to start checkout. Please try again.',
         variant: 'destructive',
       });
       setIsLoading(false);
@@ -654,19 +657,12 @@ function PaymentStep({
         </p>
       </div>
 
-      {/* Preferences */}
-      {(data.diets.length > 0 || data.allergies.length > 0 || data.caloriePreference !== 'none') && (
-        <div className="bg-card border border-border/30 rounded-xl p-6 mb-8">
-          <h2 className="font-display text-lg tracking-wider mb-2">Your Preferences</h2>
-          <div className="text-sm text-muted-foreground space-y-1">
-            {data.caloriePreference !== 'none' && (
-              <p>Calories: {CALORIE_OPTIONS.find(c => c.value === data.caloriePreference)?.label}</p>
-            )}
-            {data.diets.length > 0 && <p>Diets: {data.diets.join(', ')}</p>}
-            {data.allergies.length > 0 && <p>Allergies: {data.allergies.join(', ')}</p>}
-          </div>
-        </div>
-      )}
+      {/* Note about preferences */}
+      <div className="bg-mystical/10 border border-mystical/30 rounded-xl p-4 mb-8">
+        <p className="font-body text-sm text-muted-foreground">
+          <span className="text-foreground font-medium">Note:</span> You'll customize your dietary preferences and meal selections after completing your subscription.
+        </p>
+      </div>
 
       <div className="flex gap-3">
         <Button
@@ -764,7 +760,6 @@ export default function Onboarding() {
           <ProgressBar currentStep={currentStep} />
           <div className="flex justify-between mt-2 text-xs text-muted-foreground">
             <span className={currentStep === 'plan' ? 'text-mystical' : ''}>Plan</span>
-            <span className={currentStep === 'preferences' ? 'text-mystical' : ''}>Preferences</span>
             <span className={currentStep === 'delivery' ? 'text-mystical' : ''}>Delivery</span>
             <span className={currentStep === 'payment' ? 'text-mystical' : ''}>Payment</span>
           </div>
@@ -776,9 +771,6 @@ export default function Onboarding() {
             <div>
               {currentStep === 'plan' && (
                 <PlanStep data={data} onUpdate={updateData} onNext={nextStep} />
-              )}
-              {currentStep === 'preferences' && (
-                <PreferencesStep data={data} onUpdate={updateData} onNext={nextStep} onBack={prevStep} />
               )}
               {currentStep === 'delivery' && (
                 <DeliveryStep data={data} onUpdate={updateData} onNext={nextStep} onBack={prevStep} />
