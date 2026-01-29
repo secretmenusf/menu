@@ -185,8 +185,8 @@ export const galleryMenuItems: MenuItem[] = [
   {
     id: 'sunday-roast',
     name: 'Sunday Roast',
-    description: 'Traditional herb-crusted roast beef with smashed potatoes, roasted vegetables, and gravy',
-    ingredients: ['grass-fed beef roast', 'smashed potatoes', 'carrots', 'roasted potatoes', 'Brussels sprouts', 'beef drippings', 'fresh herbs', 'butter', 'olive oil', 'red wine', 'flour', 'salt', 'black pepper'],
+    description: 'Traditional herb-crusted roast beef with fingerling potatoes, roasted vegetables, and gravy',
+    ingredients: ['grass-fed beef roast', 'fingerling potatoes', 'carrots', 'roasted potatoes', 'Brussels sprouts', 'beef drippings', 'fresh herbs', 'butter', 'olive oil', 'red wine', 'flour', 'salt', 'black pepper'],
     tags: ['gf'],
     price: 40,
     sortPriority: 17,
@@ -199,9 +199,9 @@ export const galleryMenuItems: MenuItem[] = [
     options: [
       { id: 'yorkshire-pudding', name: 'Add Yorkshire Pudding', priceModifier: 12, category: 'add-on', image: '/images/menu/plated/yorkshirepudding.png' },
       { id: 'extra-gravy', name: 'Extra Gravy', priceModifier: 3, category: 'add-on' },
-      { id: 'sub-mashed-potatoes', name: 'Substitute Smashed Potatoes for Mashed Potatoes', priceModifier: 2, category: 'side' },
-      { id: 'sub-fingerling-potatoes', name: 'Substitute Smashed Potatoes for Crispy Fingerling Potatoes', priceModifier: 2, category: 'side' },
-      { id: 'sub-polenta', name: 'Substitute Smashed Potatoes for Creamy Polenta', priceModifier: 2, category: 'side' },
+      { id: 'sub-mashed-potatoes', name: 'Substitute Fingerling Potatoes for Mashed Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-smashed-potatoes', name: 'Substitute Fingerling Potatoes for Smashed Potatoes', priceModifier: 2, category: 'side' },
+      { id: 'sub-polenta', name: 'Substitute Fingerling Potatoes for Creamy Polenta', priceModifier: 2, category: 'side' },
       { id: 'half-portion', name: '1/2 Portion of Meat', priceModifier: -8, category: 'portion' },
       { id: 'double-portion', name: 'Double Portion of Meat', priceModifier: 16, category: 'portion' },
       { id: 'artisan-bread', name: 'Add Artisan Bread Slice', priceModifier: 2, category: 'side' }
