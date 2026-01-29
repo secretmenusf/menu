@@ -8,7 +8,7 @@ import { subscriptionPlans, planBenefits } from '@/data/plans';
 import { ShareButton } from '@/components/social/ShareButton';
 import { SEOHead, pageSEO, schemas } from '@/components/seo/SEOHead';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { getStripe, getStripePriceId } from '@/services/stripeService';
 import { useToast } from '@/hooks/use-toast';
 
 const HowItWorksStep = ({
@@ -112,31 +112,37 @@ const Pricing = () => {
   const handleDirectCheckout = async (planId: string) => {
     setIsLoading(planId);
     try {
-      const plan = subscriptionPlans.find(p => p.id === planId);
-      if (!plan) throw new Error('Invalid plan');
+      const priceId = getStripePriceId(planId);
+      if (!priceId) {
+        throw new Error('Invalid plan configuration');
+      }
 
-      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-        body: {
-          plan_id: plan.id,
-          plan_name: plan.name,
-          price: plan.price,
-          success_url: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
-          cancel_url: `${window.location.origin}/pricing`,
-        },
+      // Use client-side Stripe checkout
+      const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error('Stripe not loaded. Please check your connection and try again.');
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
+        successUrl: `${window.location.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
+        cancelUrl: `${window.location.origin}/pricing`,
       });
 
-      if (error) throw error;
-
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('Checkout URL missing');
+      if (error) {
+        throw error;
       }
     } catch (error) {
       console.error('Failed to start checkout:', error);
       toast({
         title: 'Checkout Error',
-        description: 'Failed to start checkout. Please try again.',
+        description: error instanceof Error ? error.message : 'Failed to start checkout. Please try again.',
         variant: 'destructive',
       });
       setIsLoading(null);

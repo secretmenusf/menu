@@ -1,11 +1,47 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Loader2, AlertCircle, ChefHat, Calendar, Bot } from 'lucide-react';
+import { Check, ArrowRight, Loader2, AlertCircle, ChefHat, Calendar, Bot, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { getPlanById, SubscriptionTier } from '@/data/plans';
+import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+
+// Preference options
+const CALORIE_OPTIONS = [
+  { value: 'none', label: 'No Preference' },
+  { value: 'low', label: 'Low Calorie (~400-500 cal)' },
+  { value: 'medium', label: 'Medium (~500-700 cal)' },
+  { value: 'high', label: 'High (~700-900 cal)' },
+  { value: 'very-high', label: 'Very High (~900+ cal)' },
+];
+
+const DIET_OPTIONS = [
+  'Vegetarian',
+  'Pescatarian',
+  'Gluten Free',
+  'Dairy Free',
+  'Low Carb',
+  'Nut Free',
+  'Not Spicy',
+  'Keto',
+  'Paleo',
+];
+
+const COMMON_ALLERGIES = [
+  'Peanuts',
+  'Tree Nuts',
+  'Milk',
+  'Eggs',
+  'Fish',
+  'Shellfish',
+  'Soy',
+  'Wheat',
+  'Sesame',
+];
 
 const SubscriptionSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -15,9 +51,33 @@ const SubscriptionSuccess = () => {
   const [error, setError] = useState<string | null>(null);
   const [customerEmail, setCustomerEmail] = useState<string | null>(null);
 
+  // Preferences state (collected after payment)
+  const [showPreferences, setShowPreferences] = useState(false);
+  const [preferencesSaved, setPreferencesSaved] = useState(false);
+  const [caloriePreference, setCaloriePreference] = useState('none');
+  const [diets, setDiets] = useState<string[]>([]);
+  const [allergies, setAllergies] = useState<string[]>([]);
+
   const sessionId = searchParams.get('session_id');
   const planId = searchParams.get('plan');
+  const isFromOnboarding = searchParams.get('onboarding') === 'true';
   const plan = planId ? getPlanById(planId as SubscriptionTier) : null;
+
+  const toggleDiet = (diet: string) => {
+    setDiets(prev => prev.includes(diet) ? prev.filter(d => d !== diet) : [...prev, diet]);
+  };
+
+  const toggleAllergy = (allergy: string) => {
+    setAllergies(prev => prev.includes(allergy) ? prev.filter(a => a !== allergy) : [...prev, allergy]);
+  };
+
+  const savePreferences = () => {
+    // Save preferences to localStorage (in production, would save to backend)
+    const preferences = { caloriePreference, diets, allergies };
+    localStorage.setItem('user_preferences', JSON.stringify(preferences));
+    setPreferencesSaved(true);
+    setShowPreferences(false);
+  };
 
   useEffect(() => {
     const verifySession = async () => {
@@ -185,6 +245,135 @@ const SubscriptionSuccess = () => {
                 We sent a sign-in link to <span className="text-foreground">{customerEmail}</span>.
                 <br />
                 Click the link to access your account and start ordering.
+              </p>
+            </div>
+          )}
+
+          {/* Preferences Form - shown after onboarding */}
+          {isFromOnboarding && !preferencesSaved && (
+            <div className="border border-border/30 rounded-lg p-8 mb-8 text-left">
+              {showPreferences ? (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <Sparkles className="w-6 h-6 text-mystical mx-auto mb-2" />
+                    <h2 className="font-display text-lg tracking-wider text-foreground mb-2">
+                      SET YOUR PREFERENCES
+                    </h2>
+                    <p className="font-body text-sm text-muted-foreground">
+                      Help us personalize your menu recommendations
+                    </p>
+                  </div>
+
+                  {/* Calorie Preference */}
+                  <div>
+                    <label className="font-display text-xs tracking-wider text-muted-foreground mb-2 block">
+                      CALORIE PREFERENCE
+                    </label>
+                    <Select value={caloriePreference} onValueChange={setCaloriePreference}>
+                      <SelectTrigger className="rounded-lg">
+                        <SelectValue placeholder="Select preference" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CALORIE_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Diets */}
+                  <div>
+                    <label className="font-display text-xs tracking-wider text-muted-foreground mb-2 block">
+                      DIETARY PREFERENCES
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {DIET_OPTIONS.map((diet) => (
+                        <button
+                          key={diet}
+                          type="button"
+                          onClick={() => toggleDiet(diet)}
+                          className={cn(
+                            'px-3 py-1.5 rounded-full border text-sm transition-all',
+                            diets.includes(diet)
+                              ? 'border-mystical bg-mystical/10 text-mystical'
+                              : 'border-border/50 hover:border-border'
+                          )}
+                        >
+                          {diet}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Allergies */}
+                  <div>
+                    <label className="font-display text-xs tracking-wider text-muted-foreground mb-2 block">
+                      ALLERGIES
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {COMMON_ALLERGIES.map((allergy) => (
+                        <button
+                          key={allergy}
+                          type="button"
+                          onClick={() => toggleAllergy(allergy)}
+                          className={cn(
+                            'px-3 py-1.5 rounded-full border text-sm transition-all',
+                            allergies.includes(allergy)
+                              ? 'border-red-500 bg-red-500/10 text-red-500'
+                              : 'border-border/50 hover:border-border'
+                          )}
+                        >
+                          {allergy}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowPreferences(false)}
+                      className="flex-1"
+                    >
+                      Skip for Now
+                    </Button>
+                    <Button
+                      onClick={savePreferences}
+                      className="flex-1 bg-mystical hover:bg-mystical/90"
+                    >
+                      Save Preferences
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <Sparkles className="w-6 h-6 text-mystical mx-auto mb-2" />
+                  <h2 className="font-display text-lg tracking-wider text-foreground mb-2">
+                    PERSONALIZE YOUR EXPERIENCE
+                  </h2>
+                  <p className="font-body text-sm text-muted-foreground mb-4">
+                    Set your dietary preferences to get personalized menu recommendations
+                  </p>
+                  <Button
+                    onClick={() => setShowPreferences(true)}
+                    variant="outline"
+                    className="font-display tracking-wider"
+                  >
+                    Set Preferences
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Preferences saved confirmation */}
+          {preferencesSaved && (
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-8">
+              <p className="font-body text-sm text-green-400 flex items-center justify-center gap-2">
+                <Check className="w-4 h-4" />
+                Preferences saved! Your menu will be personalized.
               </p>
             </div>
           )}
