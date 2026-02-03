@@ -3,6 +3,7 @@ import { X, Sparkles, Flame, Wrench, Leaf, Cookie, Waves } from 'lucide-react';
 import { SECRET_SECRET_MENU, SECRET_CATEGORIES, type SecretMenuItem } from '@/data/secretSecretMenu';
 import { Button } from '@/components/ui/button';
 import { NutritionLabel } from '@/components/NutritionLabel';
+import { withBasePath } from '@/lib/utils';
 
 // Get theme colors and icons based on category
 const getCategoryTheme = (category: SecretMenuItem['category']) => {
@@ -92,7 +93,7 @@ const SecretItemCard = ({ item }: { item: SecretMenuItem }) => {
         <div className={`absolute inset-0 ${theme.radialGradient}`} />
         {item.image && !imageError ? (
           <img
-            src={item.image}
+            src={withBasePath(item.image)}
             alt={item.name}
             className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${isHovered ? 'scale-110' : 'scale-100'}`}
             onError={() => setImageError(true)}

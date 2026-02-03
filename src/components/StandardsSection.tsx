@@ -1,6 +1,6 @@
 import { suppliers, certifications } from '@/data/suppliers';
 import { supplierLogos, certificationLogos } from '@/components/supplier-logos';
-import { cn } from '@/lib/utils';
+import { cn, withBasePath } from '@/lib/utils';
 
 // Bento card with background image
 const BentoCard = ({
@@ -33,7 +33,7 @@ const BentoCard = ({
       {/* Background image */}
       <div className="absolute inset-0">
         <img
-          src={image}
+          src={withBasePath(image)}
           alt={label}
           className="w-full h-full object-cover"
         />

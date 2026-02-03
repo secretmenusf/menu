@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { EmailZipCapture } from '@/components/onboarding/EmailZipCapture';
+import { withBasePath } from '@/lib/utils';
 
 const heroImage = {
   src: '/images/menu/plated/hero-pasta-hand.png',
@@ -84,13 +85,13 @@ const HeroSection = () => {
           <Link to="/menu" className="hidden lg:block fixed bottom-0 right-0 z-0 group cursor-pointer">
             {/* Default image */}
             <img
-              src={heroImage.src}
+              src={withBasePath(heroImage.src)}
               alt={heroImage.alt}
               className="h-[90vh] w-auto object-contain transition-opacity duration-300 group-hover:opacity-0"
             />
             {/* Hover image */}
             <img
-              src={heroImage.hoverSrc}
+              src={withBasePath(heroImage.hoverSrc)}
               alt={heroImage.alt}
               className="h-[90vh] w-auto object-contain absolute bottom-0 right-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
@@ -100,7 +101,7 @@ const HeroSection = () => {
           <div className="lg:hidden px-6">
             <div className="overflow-hidden">
               <img
-                src={heroImage.src}
+                src={withBasePath(heroImage.src)}
                 alt={heroImage.alt}
                 className="w-full h-auto object-cover"
               />
