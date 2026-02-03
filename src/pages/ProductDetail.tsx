@@ -18,7 +18,7 @@ import {
   Leaf,
   MessageSquare
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, withBasePath } from '@/lib/utils';
 
 // FAQ Data
 const faqs = [
@@ -258,9 +258,9 @@ const ProductDetail = () => {
 
   // Mock images for gallery (using same image repeated for demo)
   const images = [
-    item.image || '/images/menu/plated/default.png',
-    item.image || '/images/menu/plated/default.png',
-    item.image || '/images/menu/plated/default.png',
+    withBasePath(item.image || '/placeholder.svg'),
+    withBasePath(item.image || '/placeholder.svg'),
+    withBasePath(item.image || '/placeholder.svg'),
   ];
 
   return (

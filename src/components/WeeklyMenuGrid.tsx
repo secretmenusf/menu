@@ -8,6 +8,7 @@ import FishIcon from '@/components/FishIcon';
 import { useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
+import { withBasePath } from '@/lib/utils';
 
 // Star Rating Component
 const StarRating = ({ rating }: { rating: number }) => (
@@ -387,7 +388,7 @@ const MenuDetailModal = ({
           <div className="relative h-[50vh] lg:h-auto lg:sticky lg:top-0 lg:self-start bg-muted">
             {item.image ? (
               <img
-                src={item.image}
+                src={withBasePath(item.image)}
                 alt={item.name}
                 className="w-full h-full lg:h-screen object-cover"
               />
@@ -816,7 +817,7 @@ const MenuCard = ({ item, onClick }: { item: MenuItem; onClick: () => void }) =>
         >
           {item.image ? (
             <img
-              src={item.image}
+              src={withBasePath(item.image)}
               alt={item.name}
               className="w-full h-full object-cover transition-transform duration-300"
               style={{

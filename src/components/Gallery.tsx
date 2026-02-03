@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { withBasePath } from '@/lib/utils';
 
 // Gallery items using new menu images from public folder
 const galleryItems = [
@@ -189,7 +190,7 @@ const Gallery = () => {
 
                 {/* Image - object-contain to show full bowl without cropping */}
                 <img
-                  src={item.src}
+                  src={withBasePath(item.src)}
                   alt={item.title}
                   className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 p-2"
                 />
