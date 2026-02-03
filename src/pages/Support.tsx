@@ -162,7 +162,7 @@ const Support = () => {
     },
     {
       question: 'Can I modify or cancel my order?',
-      answer: 'Orders can be modified or cancelled up to 2 hours before scheduled delivery. Contact support or manage orders through your account dashboard.',
+      answer: 'Orders can be modified or cancelled up to 72 hours before scheduled delivery. Contact support or manage orders through your account dashboard.',
     },
     {
       question: 'What is your refund policy?',

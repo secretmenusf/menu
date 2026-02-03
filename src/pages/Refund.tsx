@@ -80,8 +80,8 @@ const Refund = () => {
               <h2 className="font-display text-xl tracking-[0.15em] text-foreground mb-4">ORDER CANCELLATION</h2>
               <div className="font-body text-muted-foreground space-y-4">
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Orders may be cancelled up to 24 hours before scheduled delivery</li>
-                  <li>Cancellations made less than 24 hours in advance may incur a 50% fee</li>
+                  <li>Orders may be cancelled up to 72 hours before scheduled delivery</li>
+                  <li>Cancellations made less than 72 hours in advance may incur a 50% fee</li>
                   <li>Same-day cancellations are non-refundable</li>
                 </ul>
               </div>
