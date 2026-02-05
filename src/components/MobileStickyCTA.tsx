@@ -14,8 +14,8 @@ export function MobileStickyCTA({ className }: MobileStickyCTAProps) {
   const location = useLocation();
 
   // Pages where CTA should not appear
-  const hiddenPaths = ['/pricing', '/checkout', '/login', '/signup', '/admin'];
-  const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path));
+  const hiddenPaths = ['/pricing', '/checkout', '/login', '/signup', '/admin', '/weekly/iframe', '/menu/iframe'];
+  const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path)) || window.self !== window.top;
 
   useEffect(() => {
     if (shouldHide || isDismissed) {
@@ -96,8 +96,8 @@ export function FloatingOrderButton({ className }: { className?: string }) {
   const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
 
-  const hiddenPaths = ['/pricing', '/checkout', '/login', '/signup', '/admin'];
-  const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path));
+  const hiddenPaths = ['/pricing', '/checkout', '/login', '/signup', '/admin', '/weekly/iframe', '/menu/iframe'];
+  const shouldHide = hiddenPaths.some(path => location.pathname.startsWith(path)) || window.self !== window.top;
 
   useEffect(() => {
     if (shouldHide) {
