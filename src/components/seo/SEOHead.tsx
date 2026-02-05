@@ -15,7 +15,7 @@ const defaultMeta = {
   title: 'SF Secret Menu | Premium Organic Meal Delivery in San Francisco',
   description: 'Chef-crafted organic meals delivered fresh daily. 98% organic, locally-sourced ingredients. Healing food as medicine. Bay Area\'s premier private chef experience.',
   keywords: 'meal delivery san francisco, organic meal delivery, private chef sf, healthy meal prep, luxury meal service, bay area food delivery, farm to table delivery',
-  image: 'https://secretmenusf.com/og-image.png',
+  image: 'https://secretmenusf.com/og-weekly.png',
   url: 'https://secretmenusf.com',
 };
 
