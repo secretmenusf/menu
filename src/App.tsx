@@ -112,7 +112,7 @@ const AppRoutes = () => (
       <Route path="/" element={<Index />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/weekly" element={<WeeklySchedule />} />
-      <Route path="/menu/iframe" element={<MenuIframe />} />
+      <Route path="/weekly/iframe" element={<MenuIframe />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/chef" element={<Chef />} />
       <Route path="/entry" element={<Entry />} />
