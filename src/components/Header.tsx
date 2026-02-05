@@ -43,7 +43,7 @@ const Header = () => {
   };
 
   const goToMenu = () => {
-    navigate('/menu');
+    navigate('/weekly');
   };
 
   return (
@@ -78,11 +78,24 @@ const Header = () => {
                 className="w-64 bg-card border-border"
               >
                 <DropdownMenuItem
-                  onClick={() => navigate(location.pathname === '/' ? '/menu' : '/')}
+                  onClick={() => navigate('/')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  {location.pathname === '/' ? <span className="font-bold">ORDER MENU</span> : 'HOME'}
+                  HOME
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/weekly')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  WEEKLY MENU
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate('/menu')}
+                  className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
+                >
+                  FULL MENU
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border" />
                 <DropdownMenuItem
                   onClick={() => navigate('/chef')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
