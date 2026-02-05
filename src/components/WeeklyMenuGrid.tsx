@@ -998,6 +998,15 @@ const WeeklyMenuGrid = () => {
             55+ rotating gourmet meals to choose from
           </p>
 
+          {/* Link to Next Week's Menu */}
+          <Link
+            to="/weekly"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white rounded-full text-sm font-medium hover:bg-zinc-800 transition-colors mb-6"
+          >
+            <Calendar size={16} />
+            See Next Week's Menu
+          </Link>
+
           {/* Non-subscriber upsell */}
           {!user && (
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-mystical/10 border border-mystical/20 rounded-full mb-6">
