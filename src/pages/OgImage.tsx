@@ -9,6 +9,31 @@ const weeklyMenu = [
   { day: 'Fri', lunch: '4-Cheese Truffle Gnocchi', dinner: 'Beef Ragu Lasagne', lunchImg: '/menu-gnocchi.png', dinnerImg: '/menu-lasagne.png' },
 ];
 
+// Seed of Life SVG component
+const SeedOfLifeLogo = ({ size = 40 }: { size?: number }) => {
+  const r = size * 0.2;
+  const cx = size / 2;
+  const cy = size / 2;
+
+  const outerCircles = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * 60 - 90) * (Math.PI / 180);
+    outerCircles.push({
+      cx: cx + r * Math.cos(angle),
+      cy: cy + r * Math.sin(angle),
+    });
+  }
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
+      <circle cx={cx} cy={cy} r={r} stroke="#d4a574" strokeWidth="1.5" opacity="0.9" />
+      {outerCircles.map((circle, i) => (
+        <circle key={i} cx={circle.cx} cy={circle.cy} r={r} stroke="#d4a574" strokeWidth="1.5" opacity="0.9" />
+      ))}
+    </svg>
+  );
+};
+
 const OgImage = () => {
   return (
     <div
@@ -26,19 +51,22 @@ const OgImage = () => {
     >
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <div>
-          <h1 style={{ fontSize: 36, fontWeight: 700, margin: 0, letterSpacing: '0.1em' }}>
-            SECRET MENU
-          </h1>
-          <p style={{ fontSize: 14, color: '#888', margin: '4px 0 0', letterSpacing: '0.2em' }}>
-            SF BAY AREA
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <SeedOfLifeLogo size={44} />
+          <div>
+            <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0, letterSpacing: '0.15em', color: '#fff' }}>
+              SECRET MENU
+            </h1>
+            <p style={{ fontSize: 11, color: '#888', margin: '2px 0 0', letterSpacing: '0.25em' }}>
+              SF BAY AREA
+            </p>
+          </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: 20, fontWeight: 600, margin: 0, color: '#10b981' }}>
+          <p style={{ fontSize: 20, fontWeight: 600, margin: 0, color: '#fff' }}>
             Next Week's Menu
           </p>
-          <p style={{ fontSize: 12, color: '#666', margin: '4px 0 0' }}>
+          <p style={{ fontSize: 12, color: '#888', margin: '4px 0 0' }}>
             Order by Thursday • Delivered Twice Weekly
           </p>
         </div>
@@ -61,10 +89,10 @@ const OgImage = () => {
             <div style={{
               fontSize: 14,
               fontWeight: 700,
-              color: '#10b981',
+              color: '#fff',
               marginBottom: 8,
               textAlign: 'center',
-              borderBottom: '1px solid rgba(16,185,129,0.3)',
+              borderBottom: '1px solid rgba(255,255,255,0.2)',
               paddingBottom: 6
             }}>
               {day.day}
@@ -122,10 +150,10 @@ const OgImage = () => {
         paddingTop: 16,
         borderTop: '1px solid rgba(255,255,255,0.1)'
       }}>
-        <p style={{ fontSize: 12, color: '#666', margin: 0 }}>
+        <p style={{ fontSize: 12, color: '#888', margin: 0 }}>
           secretmenusf.com/weekly
         </p>
-        <p style={{ fontSize: 12, color: '#10b981', margin: 0, fontWeight: 600 }}>
+        <p style={{ fontSize: 12, color: '#fff', margin: 0, fontWeight: 600 }}>
           10 Chef-Prepared Meals • Mon-Fri
         </p>
       </div>
