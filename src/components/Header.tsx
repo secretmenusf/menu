@@ -199,22 +199,34 @@ const Header = () => {
         {/* Desktop navigation */}
         <div className="hidden md:flex items-center gap-2">
           <button
+            onClick={() => navigate('/about')}
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
+          >
+            ABOUT
+          </button>
+          <button
+            onClick={() => navigate('/chef')}
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
+          >
+            CHEF
+          </button>
+          <button
             onClick={goToMenu}
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             MENU
           </button>
           <button
+            onClick={() => navigate('/reviews')}
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
+          >
+            REVIEWS
+          </button>
+          <button
             onClick={() => navigate('/weekly')}
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             WEEKLY
-          </button>
-          <button
-            onClick={() => navigate('/pricing')}
-            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
-          >
-            PRICING
           </button>
           <button
             onClick={() => {
