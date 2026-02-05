@@ -971,31 +971,11 @@ const WeeklyMenuGrid = () => {
           <SeedOfLife size={40} className="mx-auto mb-6 text-foreground" />
 
           <h2 className="text-3xl md:text-4xl font-light text-foreground mb-3 tracking-tight">
-            Menu for week of {dayOfWeek}, {month}/{day}
+            Explore Our Menu
           </h2>
 
-          {/* Week ordering context */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
-            <Badge variant="outline" className="text-xs">
-              <Calendar size={12} className="mr-1" />
-              This Week: {currentWeek?.label}
-            </Badge>
-            {canOrderDelivery && nextWeek && (
-              <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-xs">
-                <Truck size={12} className="mr-1" />
-                Order for: {nextWeek.label}
-              </Badge>
-            )}
-            {!canOrderDelivery && isSubscribed && (
-              <Badge variant="secondary" className="text-xs">
-                <ChefHat size={12} className="mr-1" />
-                Cook at Home Mode
-              </Badge>
-            )}
-          </div>
-
-          <p className="text-sm text-muted-foreground mb-4">
-            55+ rotating gourmet meals to choose from
+          <p className="text-sm text-muted-foreground mb-6">
+            55+ rotating gourmet meals to choose from. Customize any dish to your liking.
           </p>
 
           {/* Link to Next Week's Menu */}
@@ -1004,7 +984,7 @@ const WeeklyMenuGrid = () => {
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white rounded-full text-sm font-medium hover:bg-zinc-800 transition-colors mb-6"
           >
             <Calendar size={16} />
-            See Next Week's Menu
+            View Next Week's Menu
           </Link>
 
           {/* Non-subscriber upsell */}
