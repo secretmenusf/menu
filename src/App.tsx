@@ -16,6 +16,7 @@ import { Suspense, lazy, ReactNode } from 'react';
 // Core pages (eager loaded)
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
+import WeeklySchedule from "./pages/WeeklySchedule";
 import Order from "./pages/Order";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
@@ -41,6 +42,7 @@ const Invite = lazy(() => import("./pages/Invite"));
 const Join = lazy(() => import("./pages/Join"));
 const ZooNgo = lazy(() => import("./pages/ZooNgo"));
 const Donate = lazy(() => import("./pages/Donate"));
+const MenuIframe = lazy(() => import("./pages/MenuIframe"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Login = lazy(() => import("./pages/Login"));
@@ -109,6 +111,8 @@ const AppRoutes = () => (
       {/* Public routes */}
       <Route path="/" element={<Index />} />
       <Route path="/menu" element={<Menu />} />
+      <Route path="/weekly" element={<WeeklySchedule />} />
+      <Route path="/menu/iframe" element={<MenuIframe />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/chef" element={<Chef />} />
       <Route path="/entry" element={<Entry />} />
