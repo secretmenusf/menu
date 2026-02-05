@@ -1,0 +1,51 @@
+name: Update Weekly OG Image
+
+on:
+  schedule:
+    # Every Wednesday at 9am UTC (1am PST)
+    - cron: '0 9 * * 3'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  generate-og-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install chromium
+
+      - name: Build the app
+        run: npm run build
+
+      - name: Start preview server
+        run: |
+          npm run preview &
+          sleep 5
+
+      - name: Generate OG Image
+        run: |
+          npx playwright screenshot \
+            --viewport-size="1200,630" \
+            --full-page=false \
+            http://localhost:4173/og-image \
+            public/og-weekly.png
+
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/og-weekly.png
+          git diff --staged --quiet || git commit -m "Update weekly OG image [skip ci]"
+          git push

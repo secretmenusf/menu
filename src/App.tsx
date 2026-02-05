@@ -44,6 +44,7 @@ const ZooNgo = lazy(() => import("./pages/ZooNgo"));
 const Donate = lazy(() => import("./pages/Donate"));
 const MenuIframe = lazy(() => import("./pages/MenuIframe"));
 const WeeklyIframe = lazy(() => import("./pages/WeeklyIframe"));
+const OgImage = lazy(() => import("./pages/OgImage"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Login = lazy(() => import("./pages/Login"));
@@ -115,6 +116,7 @@ const AppRoutes = () => (
       <Route path="/weekly" element={<WeeklySchedule />} />
       <Route path="/weekly/iframe" element={<WeeklyIframe />} />
       <Route path="/menu/iframe" element={<Navigate to="/weekly/iframe" replace />} />
+      <Route path="/og-image" element={<OgImage />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/chef" element={<Chef />} />
       <Route path="/entry" element={<Entry />} />

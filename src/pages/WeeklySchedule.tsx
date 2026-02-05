@@ -312,7 +312,7 @@ const WeeklySchedule = () => {
         title="Next Week's Menu | Secret Menu SF"
         description="Chef-prepared organic meals for next week. 10 delicious lunch & dinner options from Monday to Friday. Grass-fed beef, wild salmon, truffle gnocchi & more. Order by Thursday!"
         keywords="weekly meal menu, organic meal delivery, chef prepared meals, san francisco meal delivery, healthy lunch dinner"
-        image="https://secretmenusf.com/og-image.png"
+        image="https://secretmenusf.com/og-weekly.png"
         url="https://secretmenusf.com/weekly"
         schema={schemas.breadcrumb([
           { name: 'Home', url: 'https://secretmenusf.com' },
