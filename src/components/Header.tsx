@@ -87,7 +87,7 @@ const Header = () => {
                   onClick={() => navigate('/chef')}
                   className="font-display text-xs tracking-[0.2em] cursor-pointer focus:bg-accent"
                 >
-                  THE CHEF
+                  CHEF
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => navigate('/about')}
@@ -242,7 +242,7 @@ const Header = () => {
                   onClick={() => navigate('/chef')}
                   className="font-display text-sm tracking-[0.2em] text-foreground text-left"
                 >
-                  THE CHEF
+                  CHEF
                 </button>
                 <button
                   onClick={() => navigate('/about')}
