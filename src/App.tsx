@@ -43,6 +43,7 @@ const Join = lazy(() => import("./pages/Join"));
 const ZooNgo = lazy(() => import("./pages/ZooNgo"));
 const Donate = lazy(() => import("./pages/Donate"));
 const MenuIframe = lazy(() => import("./pages/MenuIframe"));
+const WeeklyIframe = lazy(() => import("./pages/WeeklyIframe"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Login = lazy(() => import("./pages/Login"));
@@ -112,7 +113,8 @@ const AppRoutes = () => (
       <Route path="/" element={<Index />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/weekly" element={<WeeklySchedule />} />
-      <Route path="/weekly/iframe" element={<MenuIframe />} />
+      <Route path="/weekly/iframe" element={<WeeklyIframe />} />
+      <Route path="/menu/iframe" element={<Navigate to="/weekly/iframe" replace />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/chef" element={<Chef />} />
       <Route path="/entry" element={<Entry />} />
