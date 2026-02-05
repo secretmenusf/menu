@@ -43,7 +43,7 @@ const Header = () => {
   };
 
   const goToMenu = () => {
-    navigate('/weekly');
+    navigate('/menu');
   };
 
   return (
@@ -203,6 +203,12 @@ const Header = () => {
             className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
           >
             MENU
+          </button>
+          <button
+            onClick={() => navigate('/weekly')}
+            className={`font-display text-xs tracking-[0.15em] text-foreground/70 hover:text-foreground transition-colors px-4 py-2 rounded-full ${scrolled ? 'hover:bg-foreground/5' : ''}`}
+          >
+            WEEKLY
           </button>
           <button
             onClick={() => navigate('/pricing')}
