@@ -51,7 +51,7 @@ const SeedOfLifeGeometry = () => {
   });
 
   const r = 0.35;
-  const tubeRadius = 0.025; // Thinner lines for more elegant look
+  const tubeRadius = 0.04; // Thicker for more depth
 
   const positions: [number, number, number][] = [];
   for (let i = 0; i < 6; i++) {
@@ -133,7 +133,7 @@ const SeedOfLifeGeometryLight = () => {
   });
 
   const r = 0.35;
-  const tubeRadius = 0.028;
+  const tubeRadius = 0.04; // Thicker for more depth
 
   const positions: [number, number, number][] = [];
   for (let i = 0; i < 6; i++) {
