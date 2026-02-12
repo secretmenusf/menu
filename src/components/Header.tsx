@@ -315,6 +315,13 @@ const Header = () => {
                 </button>
                 <div className="border-t border-border my-2" />
                 <button
+                  onClick={() => navigate('/zoo-ngo')}
+                  className="font-display text-sm tracking-[0.2em] text-foreground text-left"
+                >
+                  REGEN FARM <span className="text-emerald-500 ml-3">DONATE <ArrowUpRight className="inline h-3 w-3" /></span>
+                </button>
+                <div className="border-t border-border my-2" />
+                <button
                   onClick={() => {
                     const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
                     document.dispatchEvent(event);
