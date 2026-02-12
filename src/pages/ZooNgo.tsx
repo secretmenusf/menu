@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Leaf, Sprout, HeartHandshake, MapPin, Sparkles, CookingPot } from 'lucide-react';
+import { Leaf, Sprout, HeartHandshake, MapPin, Sparkles, CookingPot, Wheat, Utensils, Truck, CircleCheck, Heart } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -154,6 +154,70 @@ const ZooNgo = () => {
           </div>
         </section>
 
+        {/* Farm-Fresh Medicinal Meals */}
+        <section className="container mx-auto px-6 max-w-6xl">
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-16 items-center">
+            <div className="space-y-6">
+              <p className="font-display text-xs tracking-[0.4em] text-muted-foreground">FROM FARM TO FORK</p>
+              <h2 className="font-display text-3xl md:text-4xl tracking-[0.12em]">FARM‑FRESH MEDICINAL MEALS</h2>
+              <p className="font-body text-muted-foreground leading-relaxed">
+                We've teamed up with a local nonprofit, The Zoo Foundation, to create a healing farm that brings you
+                true farm‑to‑table meals—cooked with medicinal, nutrient‑dense ingredients grown right here in the Bay Area.
+              </p>
+              <p className="font-body text-muted-foreground leading-relaxed">
+                Our partner farm grows medicinal herbs, greens, and specialty crops chosen for everyday wellness
+                and long‑term health. We build our menus around their harvests so your meals are as fresh and seasonal
+                as it gets.
+              </p>
+            </div>
+            <div className="rounded-[32px] overflow-hidden border border-border bg-card/20">
+              <img
+                src={imageUrl('harvest.jpg')}
+                alt="Farm to table harvest"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="container mx-auto px-6 max-w-6xl">
+          <div className="space-y-6 text-center max-w-2xl mx-auto mb-16">
+            <p className="font-display text-xs tracking-[0.4em] text-muted-foreground">THE PROCESS</p>
+            <h2 className="font-display text-3xl md:text-4xl tracking-[0.12em]">HOW IT WORKS</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-16">
+            <div className="p-8 rounded-[28px] border border-border bg-card/30 space-y-4 my-12">
+              <Wheat className="h-8 w-8 text-amber-400" />
+              <p className="font-display text-sm tracking-[0.2em] text-muted-foreground">01</p>
+              <h3 className="font-display text-lg tracking-[0.12em]">THE FARM GROWS</h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                Medicinal and nutrient‑dense crops are grown in hyperlocal vertical and community farms, just miles
+                from your door.
+              </p>
+            </div>
+            <div className="p-8 rounded-[28px] border border-border bg-card/30 space-y-4 my-12">
+              <Utensils className="h-8 w-8 text-emerald-400" />
+              <p className="font-display text-sm tracking-[0.2em] text-muted-foreground">02</p>
+              <h3 className="font-display text-lg tracking-[0.12em]">WE COOK</h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                Our chefs design dishes around each week's harvest, balancing flavor, comfort, and nutrition into
+                meals you'll actually crave.
+              </p>
+            </div>
+            <div className="p-8 rounded-[28px] border border-border bg-card/30 space-y-4 my-12">
+              <Truck className="h-8 w-8 text-sky-400" />
+              <p className="font-display text-sm tracking-[0.2em] text-muted-foreground">03</p>
+              <h3 className="font-display text-lg tracking-[0.12em]">YOU ENJOY</h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                Ready‑to‑heat meals arrive at your door, turning "food as medicine" into something you can actually
+                stick with.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="container mx-auto px-6 max-w-6xl">
           <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-16 items-center">
             <div className="space-y-6">
@@ -188,6 +252,18 @@ const ZooNgo = () => {
                 loading="lazy"
               />
             </div>
+          </div>
+        </section>
+
+        {/* Good for You, Good for the City */}
+        <section className="container mx-auto px-6 max-w-6xl">
+          <div className="rounded-[36px] border border-border bg-card/20 p-10 md:p-14 text-center space-y-6">
+            <Heart className="h-8 w-8 text-rose-400 mx-auto" />
+            <h2 className="font-display text-3xl md:text-4xl tracking-[0.12em]">GOOD FOR YOU, GOOD FOR THE CITY</h2>
+            <p className="font-body text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Every farm‑to‑table order helps fund subsidized produce and prepared meals for low‑income and medically
+              at‑risk neighbors. When you eat better, someone else can too.
+            </p>
           </div>
         </section>
 
@@ -228,6 +304,50 @@ const ZooNgo = () => {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* What You Can Expect + CTA */}
+        <section className="container mx-auto px-6 max-w-6xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6">
+              <p className="font-display text-xs tracking-[0.4em] text-muted-foreground">WHAT TO EXPECT</p>
+              <h2 className="font-display text-3xl md:text-4xl tracking-[0.12em]">YOUR FARM‑TO‑TABLE BOX</h2>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <CircleCheck className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+                  <p className="font-body text-muted-foreground leading-relaxed">Rotating menus based on what's in season</p>
+                </div>
+                <div className="flex items-start gap-4">
+                  <CircleCheck className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+                  <p className="font-body text-muted-foreground leading-relaxed">Medicinal‑forward ingredients, no fuss</p>
+                </div>
+                <div className="flex items-start gap-4">
+                  <CircleCheck className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+                  <p className="font-body text-muted-foreground leading-relaxed">Clear sourcing from our nonprofit partner farm</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-[28px] border border-border bg-card/30 p-8 md:p-10 space-y-6">
+              <h3 className="font-display text-2xl tracking-[0.12em]">TRY OUR FARM‑TO‑TABLE MEALS (COMING SOON)</h3>
+              <p className="font-body text-muted-foreground leading-relaxed">
+                Choose the Farm‑to‑Table option at checkout to fill your box with dishes built around the latest harvest.
+              </p>
+              <p className="font-body text-muted-foreground leading-relaxed">
+                Make a charitable donation to the Farm Project and you will be eligible for a tax‑deductible donation.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Button size="lg" className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700 cursor-default" disabled>
+                  Order Farm Fresh (Coming Soon)
+                </Button>
+                <Button asChild size="lg" className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700">
+                  <Link to="/donate">Charitable Donation to the Farm</Link>
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                100% tax deductible via The Zoolabs Foundation (501(c)(3)). EIN #883538992.
+              </p>
             </div>
           </div>
         </section>
