@@ -341,8 +341,8 @@ const ZooNgo = () => {
                 <Button size="lg" className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700 cursor-default" disabled>
                   Order Farm Fresh (Coming Soon)
                 </Button>
-                <Button asChild size="lg" className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700">
-                  <Link to="/donate">Charitable Donation to the Farm</Link>
+                <Button asChild size="lg" className="rounded-full bg-black text-white hover:bg-black/85">
+                  <Link to="/donate">Make Donation to the Farm</Link>
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
