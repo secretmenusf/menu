@@ -1863,7 +1863,7 @@ const week10: WeekMenu = {
   ]
 };
 
-export const allMenus: WeekMenu[] = [week1, week2, week3, week4]; // Additional weeks can be added
+export const allMenus: WeekMenu[] = [week1, week2, week3, week4, week5, week6, week7, week8, week9, week10];
 
 export const getCurrentWeekMenu = (): WeekMenu => {
   const today = new Date();
