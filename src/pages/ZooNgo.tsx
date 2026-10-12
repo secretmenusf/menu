@@ -59,9 +59,9 @@ const ZooNgo = () => {
 
           <div className="container mx-auto px-6 max-w-6xl relative">
             <div className="min-h-[560px] md:min-h-[640px] flex items-center">
-              <div className="max-w-2xl space-y-8 text-white">
+              <div className="min-w-0 max-w-2xl space-y-8 text-white">
                 <p className="font-display text-xs tracking-[0.5em] text-white/80">SECRET MENU x ZOO NGO</p>
-                <h1 className="font-display font-semibold text-4xl md:text-6xl tracking-[0.12em] text-white">
+                <h1 className="font-display font-semibold text-[clamp(1.5rem,7.5vw,2.25rem)] md:text-6xl tracking-[0.12em] text-white">
                   REGENERATIVE HEALING FARM
                 </h1>
                 <p className="font-body text-lg md:text-xl text-white/80 leading-relaxed">
